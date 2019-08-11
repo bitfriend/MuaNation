@@ -65,6 +65,7 @@
 		16419D79D97941579684E788 /* libLRDRCTSimpleToast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D9C3F761097455BB839CE9A /* libLRDRCTSimpleToast.a */; };
 		AC2DAE40B66341F3A58B071D /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 48226FE5AB384E92A7620882 /* libRCTVideo.a */; };
 		FE510E87EB11451C8A5A023E /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0EF98ACE854EE99B4DCD3D /* libRCTFBSDK.a */; };
+		809DBA2A009F4AF785612FDC /* libRNCSlider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2826B3B06C4E66B06596B2 /* libRNCSlider.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -406,6 +407,8 @@
 		48226FE5AB384E92A7620882 /* libRCTVideo.a */ = {isa = PBXFileReference; name = "libRCTVideo.a"; path = "libRCTVideo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		66FF60723A9548A986D278C5 /* RCTFBSDK.xcodeproj */ = {isa = PBXFileReference; name = "RCTFBSDK.xcodeproj"; path = "../node_modules/react-native-fbsdk/ios/RCTFBSDK.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		CE0EF98ACE854EE99B4DCD3D /* libRCTFBSDK.a */ = {isa = PBXFileReference; name = "libRCTFBSDK.a"; path = "libRCTFBSDK.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D3D545BD3BDE4F589CAB931B /* RNCSlider.xcodeproj */ = {isa = PBXFileReference; name = "RNCSlider.xcodeproj"; path = "../node_modules/@react-native-community/slider/ios/RNCSlider.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		2A2826B3B06C4E66B06596B2 /* libRNCSlider.a */ = {isa = PBXFileReference; name = "libRNCSlider.a"; path = "libRNCSlider.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -442,6 +445,7 @@
 				16419D79D97941579684E788 /* libLRDRCTSimpleToast.a in Frameworks */,
 				AC2DAE40B66341F3A58B071D /* libRCTVideo.a in Frameworks */,
 				FE510E87EB11451C8A5A023E /* libRCTFBSDK.a in Frameworks */,
+				809DBA2A009F4AF785612FDC /* libRNCSlider.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,6 +645,7 @@
 				75FF492C1F1D41E0BF4709B2 /* LRDRCTSimpleToast.xcodeproj */,
 				F5BBE522725A4D15919CC669 /* RCTVideo.xcodeproj */,
 				66FF60723A9548A986D278C5 /* RCTFBSDK.xcodeproj */,
+				D3D545BD3BDE4F589CAB931B /* RNCSlider.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1321,6 +1326,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Debug;
@@ -1354,6 +1360,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Release;
@@ -1384,6 +1391,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Debug;
@@ -1413,6 +1421,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Release;
@@ -1454,6 +1463,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Debug;
@@ -1495,6 +1505,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Release;
@@ -1535,6 +1546,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Debug;
@@ -1575,6 +1587,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-simple-toast\ios\LRDRCTSimpleToast",
 					"$(SRCROOT)\..\node_modules\react-native-video\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-fbsdk\ios\RCTFBSDK/**",
+					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 				);
 			};
 			name = Release;

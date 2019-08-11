@@ -173,7 +173,6 @@ const customStyles = StyleSheet.create({
   },
   drawerWrapper: {
     width: '100%',
-    height: 40,
     padding: 16,
     alignItems: 'center'
   },

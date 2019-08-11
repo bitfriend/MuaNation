@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.CallbackManager;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactSliderPackage(),
             new FBSDKPackage(mCallbackManager),
             new ReactVideoPackage(),
             new MapsPackage(),

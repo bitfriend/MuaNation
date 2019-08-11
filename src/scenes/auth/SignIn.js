@@ -53,6 +53,7 @@ class SignIn extends Component {
   }
 
   onClickInstagram = () => {
+    // this.props.navigation.navigate('ChooseRole');
     this.props.navigation.navigate('AppTabNav');
   }
 
