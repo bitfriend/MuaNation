@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Dimensions, Easing, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slider from '@react-native-community/slider';
 import StarRating from 'react-native-star-rating';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { Button, Input } from 'react-native-elements';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import SliderMarker from '../../components/SliderMarker';
-import { getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
+import { fetchNeighbours, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
 import styles from './styles';
 
 class Discover extends Component {
   state = {
+    location: undefined,
     drawed: false,
     editingCriterion: '',
     criteria: {
@@ -30,6 +32,16 @@ class Discover extends Component {
   animatedValue = new Animated.Value(0);
 
   componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      location => {
+        console.log('location', location);
+        this.setState({ location });
+        this.props.fetchNeighbours(location.coords.latitude, location.coords.longitude);
+      },
+      error => {
+        Alert.alert(error.message);
+      }
+    );
     this.props.getCriteria();
   }
 
@@ -224,7 +236,46 @@ class Discover extends Component {
       <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <View style={customStyles.container}>
-          <MapView style={customStyles.map} />
+          <MapView
+            style={customStyles.map}
+            initialRegion={this.state.location && {
+              latitude: this.state.location.coords.latitude,
+              longitude: this.state.location.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            {this.state.location && (
+              <Marker
+                coordinate={{
+                  latitude: this.state.location.coords.latitude,
+                  longitude: this.state.location.coords.longitude
+                }}
+                pinColor="#4c39e8"
+                centerOffset={{ x: 0, y: 60 }}
+                style={{ width: 120, height: 120 }}
+              >
+                <View style={customStyles.outerCircle} />
+                <View style={customStyles.innerCircle} />
+                <Image source={require('../../../assets/images/map-marker-blue.png')} style={{
+                  width: 24,
+                  height: 28,
+                  top: 48,
+                  left: 48
+                }} />
+              </Marker>
+            )}
+            {this.props.neighbours.map((neighbour, index) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: neighbour.latitude,
+                  longitude: neighbour.longitude
+                }}
+                image={require('../../../assets/images/map-marker-pink.png')}
+              />
+            ))}
+          </MapView>
         </View>
         <Animated.View style={{
           width: '100%',
@@ -375,6 +426,26 @@ const customStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  outerCircle: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#4c39e8',
+    opacity: 0.08
+  },
+  innerCircle: {
+    position: 'absolute',
+    left: 32,
+    top: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#4c39e8',
+    opacity: 0.12
   }
 });
 
@@ -431,12 +502,13 @@ const buttonStyle = StyleSheet.create({
 });
 
 const mapStateToProps = ({
-  discover: { criteria }
+  discover: { neighbours, criteria }
 }) => ({
-  criteria
+  neighbours, criteria
 });
 
 const mapDispatchToProps = (dispacth) => ({
+  fetchNeighbours: (latitude, longitude) => dispacth(fetchNeighbours(latitude, longitude)),
   getCriteria: () => dispacth(getCriteria()),
   selectCategory: (category) => dispacth(selectCategory(category)),
   deselectCategory: (category) => dispacth(deselectCategory(category)),

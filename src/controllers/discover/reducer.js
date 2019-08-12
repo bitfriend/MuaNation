@@ -1,6 +1,7 @@
 import * as types from './types';
 
 const initialState = {
+  neighbours: [],
   criteria: {
     category: {
       selected: [],
@@ -20,9 +21,17 @@ const initialState = {
 };
 
 export default discoverReducer = (state = initialState, action) => {
-  let selected, deselected;
-
   switch (action.type) {
+    case types.FETCH_NEIGHBOURS_SUCCESS:
+      return {
+        ...state,
+        neighbours: action.payload
+      };
+    case types.FETCH_NEIGHBOURS_FAILURE:
+      return {
+        ...state,
+        neighbours: []
+      };
     case types.GET_CRITERIA_SUCCESS:
       return {
         ...state,
@@ -34,25 +43,27 @@ export default discoverReducer = (state = initialState, action) => {
         criteria: initialState.criteria
       };
     case types.SELECT_CATEGORY_SUCCESS:
-      selected = state.criteria.category.selected.concat(action.payload);
-      deselected = state.criteria.category.deselected.filter(category => category !== action.payload);
       return {
         ...state,
         criteria: {
           ...state.criteria,
-          category: { selected, deselected }
+          category: {
+            selected: [...state.criteria.category.selected, action.payload],
+            deselected: state.criteria.category.deselected.filter(category => category !== action.payload)
+          }
         }
       };
     case types.SELECT_CATEGORY_FAILURE:
       return state;
     case types.DESELECT_CATEGORY_SUCCESS:
-      selected = state.criteria.category.selected.filter(category => category !== action.payload);
-      deselected = state.criteria.category.deselected.concat(action.payload);
       return {
         ...state,
         criteria: {
           ...state.criteria,
-          category: { selected, deselected }
+          category: {
+            selected: state.criteria.category.selected.filter(category => category !== action.payload),
+            deselected: [...state.criteria.category.deselected, action.payload]
+          }
         }
       };
     case types.DESELECT_CATEGORY_FAILURE:

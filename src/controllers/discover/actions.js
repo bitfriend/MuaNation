@@ -3,6 +3,26 @@ import faker from 'faker';
 import * as types from './types';
 import { setLoading, clearLoading } from '../app/actions';
 
+export const fetchNeighbours = (latitude, longitude) => {
+  return (dispatch) => {
+    dispatch(setLoading());
+    try {
+      let neighbours = [];
+      for (let i = 0; i < 10; i++) {
+        neighbours.push({
+          latitude: latitude + faker.random.number({ min: 0, max: 0.0922, precision: 0.00001 }),
+          longitude: longitude + faker.random.number({ min: 0, max: 0.0421, precision: 0.00001 })
+        });
+      }
+      dispatch({ type: types.FETCH_NEIGHBOURS_SUCCESS, payload: neighbours });
+      dispatch(clearLoading());
+    } catch (error) {
+      dispatch({ type: types.FETCH_NEIGHBOURS_FAILURE });
+      dispatch(clearLoading());
+    }
+  }
+}
+
 export const getCriteria = () => {
   return (dispatch) => {
     dispatch(setLoading());
