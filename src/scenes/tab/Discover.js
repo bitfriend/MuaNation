@@ -40,7 +40,8 @@ class Discover extends Component {
       },
       error => {
         Alert.alert(error.message);
-      }
+      },
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
     );
     this.props.getCriteria();
   }
@@ -244,6 +245,12 @@ class Discover extends Component {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            ref={(c) => this.mapView = c}
+            onRegionChange={region => {
+              this.mapView.getCamera().then(camera => {
+                console.log('compass angle', camera.heading);
+              });
+            }}
           >
             {this.state.location && (
               <Marker
@@ -251,16 +258,15 @@ class Discover extends Component {
                   latitude: this.state.location.coords.latitude,
                   longitude: this.state.location.coords.longitude
                 }}
-                pinColor="#4c39e8"
-                centerOffset={{ x: 0, y: 60 }}
                 style={{ width: 120, height: 120 }}
+                anchor={{ x: 0.5, y: 0.5 }}
               >
                 <View style={customStyles.outerCircle} />
                 <View style={customStyles.innerCircle} />
                 <Image source={require('../../../assets/images/map-marker-blue.png')} style={{
                   width: 24,
                   height: 28,
-                  top: 48,
+                  top: 32,
                   left: 48
                 }} />
               </Marker>
@@ -272,8 +278,12 @@ class Discover extends Component {
                   latitude: neighbour.latitude,
                   longitude: neighbour.longitude
                 }}
-                image={require('../../../assets/images/map-marker-pink.png')}
-              />
+              >
+                <Image source={require('../../../assets/images/map-marker-pink.png')} style={{
+                  width: 24,
+                  height: 28
+                }} />
+              </Marker>
             ))}
           </MapView>
         </View>
