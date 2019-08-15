@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
@@ -16,7 +15,7 @@ class SignIn extends Component {
   onClickFacebook = () => {
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       (result) => {
-        console.log('facebook login successful');
+        console.log('facebook login successful', result);
         if (result.isCancelled) {
           console.log('facebook login cancelled');
         } else {

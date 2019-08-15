@@ -1,4 +1,4 @@
-package com.muanation;
+package com.muanation.app;
 
 import android.app.Application;
 
