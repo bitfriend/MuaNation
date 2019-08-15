@@ -10,12 +10,12 @@ import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import SliderMarker from '../../components/SliderMarker';
-import { fetchNeighbours, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
+import { setLoading, clearLoading } from '../../controllers/app/actions';
+import { getLocation, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
 import styles from './styles';
 
 class Discover extends Component {
   state = {
-    location: undefined,
     drawed: false,
     editingCriterion: '',
     criteria: {
@@ -32,18 +32,11 @@ class Discover extends Component {
   animatedValue = new Animated.Value(0);
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      location => {
-        console.log('location', location);
-        this.setState({ location });
-        this.props.fetchNeighbours(location.coords.latitude, location.coords.longitude);
-      },
-      error => {
-        Alert.alert(error.message);
-      },
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
-    );
+    this.props.getLocation((error) => Alert.alert(error.message));
     this.props.getCriteria();
+
+    // Start the map loading
+    this.props.setLoading();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -239,24 +232,25 @@ class Discover extends Component {
         <View style={customStyles.container}>
           <MapView
             style={customStyles.map}
-            initialRegion={this.state.location && {
-              latitude: this.state.location.coords.latitude,
-              longitude: this.state.location.coords.longitude,
+            initialRegion={this.props.location && {
+              latitude: this.props.location.coords.latitude,
+              longitude: this.props.location.coords.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
             ref={(c) => this.mapView = c}
+            onMapReady={() => this.props.clearLoading()}
             onRegionChange={region => {
               this.mapView.getCamera().then(camera => {
                 console.log('compass angle', camera.heading);
               });
             }}
           >
-            {this.state.location && (
+            {this.props.location && (
               <Marker
                 coordinate={{
-                  latitude: this.state.location.coords.latitude,
-                  longitude: this.state.location.coords.longitude
+                  latitude: this.props.location.coords.latitude,
+                  longitude: this.props.location.coords.longitude
                 }}
                 style={{ width: 120, height: 120 }}
                 anchor={{ x: 0.5, y: 0.5 }}
@@ -512,13 +506,15 @@ const buttonStyle = StyleSheet.create({
 });
 
 const mapStateToProps = ({
-  discover: { neighbours, criteria }
+  discover: { location, neighbours, criteria }
 }) => ({
-  neighbours, criteria
+  location, neighbours, criteria
 });
 
 const mapDispatchToProps = (dispacth) => ({
-  fetchNeighbours: (latitude, longitude) => dispacth(fetchNeighbours(latitude, longitude)),
+  setLoading: () => dispacth(setLoading()),
+  clearLoading: () => dispacth(clearLoading()),
+  getLocation: () => dispacth(getLocation()),
   getCriteria: () => dispacth(getCriteria()),
   selectCategory: (category) => dispacth(selectCategory(category)),
   deselectCategory: (category) => dispacth(deselectCategory(category)),

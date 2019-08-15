@@ -3,6 +3,27 @@ import faker from 'faker';
 import * as types from './types';
 import { setLoading, clearLoading } from '../app/actions';
 
+export const getLocation = (callback) => {
+  return (dispatch) => {
+    dispatch(setLoading());
+    navigator.geolocation.getCurrentPosition(
+      location => {
+        dispatch({ type: types.GET_LOCATION_SUCCESS, payload: location });
+        dispatch(fetchNeighbours(location.coords.latitude, location.coords.longitude));
+        dispatch(clearLoading());
+      },
+      error => {
+        dispatch({ type: types.GET_LOCATION_FAILURE });
+        dispatch(clearLoading());
+        if (callback) {
+          callback(error);
+        }
+      },
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
+    );
+  }
+}
+
 export const fetchNeighbours = (latitude, longitude) => {
   return (dispatch) => {
     dispatch(setLoading());
