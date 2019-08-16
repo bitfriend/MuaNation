@@ -2,52 +2,16 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import { AccessToken, GraphRequest, LoginManager } from 'react-native-fbsdk';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
 import styles from './styles';
+import { signInWithFacebook } from '../../controllers/auth/actions';
 
 class SignIn extends Component {
-  facebookToken = null;
-  instagramToken = null;
-
   onClickFacebook = () => {
-    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
-      (result) => {
-        console.log('facebook login successful', result);
-        if (result.isCancelled) {
-          console.log('facebook login cancelled');
-        } else {
-          AccessToken.getCurrentAccessToken().then(
-            (result) => {
-              this.facebookToken = result.accessToken;
-              const infoRequest = new GraphRequest('/me', {
-                accessToken: this.facebookToken,
-                parameters: {
-                  fields: { string: 'email,name,first_name,middle_name,last_name' }
-                }
-              }, (error, result) => {
-                if (error) {
-                  console.log('facebook get info failed', error);
-                  Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-                } else {
-                  console.log('facebook login successful', result);
-                }
-              });
-            },
-            (reason) => {
-              console.log('facebook get token failed', reason);
-              Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
-            }
-          );
-        }
-      },
-      (reason) => {
-        console.log('facebook login failed', reason);
-      }
-    ).catch(reason => {
-      console.log('facebook login failed', reason);
+    this.props.signInWithFacebook((error) => {
+      Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
     });
   }
 
@@ -171,4 +135,8 @@ const mapStateToProps = (state) => {
   return { user }
 };
 
-export default connect(mapStateToProps)(SignIn);
+const mapDispatchToProps = (dispacth) => ({
+  signInWithFacebook: (onError) => dispacth(signInWithFacebook(onError))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

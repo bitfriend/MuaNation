@@ -1,7 +1,77 @@
+import { AccessToken, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk';
 import qs from 'qs';
 
 import * as types from './types';
 import { setLoading, clearLoading } from '../app/actions';
+
+export const signInWithFacebook = (onError) => {
+  return (dispatch) => {
+    dispatch(setLoading());
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      (result) => {
+        if (result.isCancelled) {
+          console.log('facebook login cancelled');
+          dispatch(clearLoading());
+          dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
+          return;
+        }
+        AccessToken.getCurrentAccessToken().then(
+          (result) => {
+            console.log('get token successful', result.accessToken);
+            const fields = [
+              'email',
+              'name',
+              'first_name',
+              'middle_name',
+              'last_name'
+            ];
+            const request = new GraphRequest('/me', {
+              accessToken: result.accessToken,
+              parameters: {
+                fields: { string: fields.join(',') }
+              }
+            }, (error, result) => {
+              if (error) {
+                console.log('facebook get info failed', error);
+                dispatch(clearLoading());
+                dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
+                if (onError) {
+                  onError(error);
+                }
+                return;
+              }
+              console.log('facebook login successful', result);
+              dispatch(clearLoading());
+              dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_SUCCESS, payload: result });
+            });
+            new GraphRequestManager().addRequest(request).start();
+          },
+          (reason) => {
+            console.log('facebook get token failed', reason);
+            dispatch(clearLoading());
+            dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
+            if (onError) {
+              onError(reason);
+            }
+          }
+        );
+      },
+      (reason) => {
+        console.log('facebook login failed', reason);
+        dispatch(clearLoading());
+        dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
+      }
+    ).catch(reason => {
+      console.log('facebook login failed', reason);
+      dispatch(clearLoading());
+      dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
+    });
+  }
+}
+
+export const loginWithInstagram = () => {
+  return (dispatch) => {}
+}
 
 export const signIn = (username, password) => {
   return (dispatch) => {

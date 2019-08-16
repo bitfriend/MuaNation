@@ -1,11 +1,23 @@
 import * as types from './types';
 
 const initialState = {
+  facebook: {},
+  instagrame: {},
   user: null
 };
 
 export default authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.SIGN_IN_WITH_FACEBOOK_SUCCESS:
+      return {
+        ...state,
+        facebook: action.payload
+      };
+    case types.SIGN_IN_WITH_FACEBOOK_FAILURE:
+      return {
+        ...state,
+        facebook: null
+      };
     case types.SIGN_IN_SUCCESS:
       return {
         ...state,
