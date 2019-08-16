@@ -3,7 +3,7 @@ import faker from 'faker';
 import * as types from './types';
 import { setLoading, clearLoading } from '../app/actions';
 
-export const getLocation = (callback) => {
+export const getLocation = (onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     navigator.geolocation.getCurrentPosition(
@@ -15,8 +15,8 @@ export const getLocation = (callback) => {
       error => {
         dispatch({ type: types.GET_LOCATION_FAILURE });
         dispatch(clearLoading());
-        if (callback) {
-          callback(error);
+        if (onError) {
+          onError(error);
         }
       },
       { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }

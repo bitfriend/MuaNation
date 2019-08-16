@@ -239,7 +239,10 @@ class Discover extends Component {
               longitudeDelta: 0.0421,
             }}
             ref={(c) => this.mapView = c}
-            onMapReady={() => this.props.clearLoading()}
+            onMapReady={() => {
+              // End the map loading
+              this.props.clearLoading();
+            }}
             onRegionChange={region => {
               this.mapView.getCamera().then(camera => {
                 console.log('compass angle', camera.heading);
@@ -514,7 +517,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispacth) => ({
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
-  getLocation: () => dispacth(getLocation()),
+  getLocation: (onError) => dispacth(getLocation(onError)),
   getCriteria: () => dispacth(getCriteria()),
   selectCategory: (category) => dispacth(selectCategory(category)),
   deselectCategory: (category) => dispacth(deselectCategory(category)),
