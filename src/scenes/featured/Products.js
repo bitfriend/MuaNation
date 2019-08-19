@@ -1,9 +1,9 @@
 import React, { Component, PureComponent } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 
 class Products extends Component {
   render() {
@@ -16,10 +16,7 @@ class Products extends Component {
 
     return (
       <View style={customStyles.container}>
-        <ImageCacheProvider
-          urlsToPreload={images}
-          onPreloadComplete={() => console.log('images cached')}
-        >
+        <ImageCacheProvider urlsToPreload={images}>
           <FlatList
             data={this.props.products}
             keyExtractor={(item, index) => index.toString()}

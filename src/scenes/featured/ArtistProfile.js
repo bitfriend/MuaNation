@@ -1,8 +1,8 @@
 import React, { Component, PureComponent } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { connect } from 'react-redux';
 import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
+import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import TabBar from '../../components/TabBar';
@@ -134,10 +134,7 @@ class ArtistProfile extends Component {
           onSelect={(value) => this.onTabChange(value)}
         />
         <View style={customStyles.container}>
-          <ImageCacheProvider
-            urlsToPreload={images}
-            onPreloadComplete={() => console.log('images cached')}
-          >
+          <ImageCacheProvider urlsToPreload={images}>
             <FlatList
               data={this.props.artistProducts}
               keyExtractor={(item, index) => index.toString()}

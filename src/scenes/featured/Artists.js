@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, PureComponent } from 'react';
 import { Animated, Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import { connect } from 'react-redux';
 
 import Carousel from '../../components/carousel';
@@ -12,6 +13,49 @@ class Artists extends Component {
     this.props.navigation.navigate('ArtistProfile');
   }
 
+  render() {
+    const { width: windowWidth } = Dimensions.get('window');
+
+    let images = [];
+    this.props.artists.map((artist) => images.push(artist.avatar));
+
+    return (
+      <View style={styles.container}>
+        <View style={{ paddingVertical: 24, justifyContent: 'center' }}>
+          <ImageCacheProvider urlsToPreload={images}>
+            <Carousel
+              data={this.props.artists}
+              renderItem={({ item, index, animatedValue }) => (
+                <TouchableOpacity activeOpacity={1} onPress={this.onPressCard}>
+                  <Artist {...item} animatedValue={animatedValue} />
+                </TouchableOpacity>
+              )}
+              sliderWidth={windowWidth}
+              itemWidth={windowWidth * 0.7}
+              slideInterpolatedStyle={this.getAnimatedStyle}
+              contentContainerCustomStyle={{ alignItems: 'center' }}
+            />
+          </ImageCacheProvider>
+        </View>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <ImageCacheProvider urlsToPreload={images}>
+            <FlatList
+              data={this.props.artists}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index, separators }) => (
+                <TouchableOpacity>
+                  <Product {...item} />
+                </TouchableOpacity>
+              )}
+            />
+          </ImageCacheProvider>
+        </View>
+      </View>
+    );
+  }
+}
+
+class Artist extends PureComponent {
   renderScore(score, marginHorizontal) {
     const criteria = [0, 1, 2, 3, 4];
     return (
@@ -23,74 +67,48 @@ class Artists extends Component {
     );
   }
 
-  renderCard(item, index, animatedValue) {
-    const { avatar, checked, tags, score, reviews, products } = item;
+  render() {
+    const { avatar, checked, tags, score, reviews, products, animatedValue } = this.props;
 
     return (
-      <TouchableOpacity activeOpacity={1} onPress={this.onPressCard}>
-        <View style={{ width: 252, height: 189 }}>
-          <Animated.View style={[customStyles.cardOuter, {
-            opacity: animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1]
-            })
-          }]} />
-          <View style={customStyles.cardInner}>
-            <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View style={{ flex: 1, marginBottom: 8 }}>
-                <Image source={{ uri: avatar }} style={customStyles.avatar} />
-              </View>
-              {checked && (
-                <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
-              )}
+      <View style={{ width: 252, height: 189 }}>
+        <Animated.View style={[customStyles.cardOuter, {
+          opacity: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+          })
+        }]} />
+        <View style={customStyles.cardInner}>
+          <View style={{ flexDirection: 'row', width: '100%' }}>
+            <View style={{ flex: 1, marginBottom: 8 }}>
+              <CachedImage source={{ uri: avatar }} style={customStyles.avatar} />
             </View>
-            <Text style={customStyles.cardName}>{getFullName(item)}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
-              {tags.map((tag, subIndex) => (
-                <Text key={subIndex} style={customStyles.tag}>{tag}</Text>
-              ))}
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-              {this.renderScore(score, 2)}
-              <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
-            </View>
+            {checked && (
+              <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
+            )}
+          </View>
+          <Text style={customStyles.cardName}>{getFullName(this.props)}</Text>
+          <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
+            {tags.map((tag, subIndex) => (
+              <Text key={subIndex} style={customStyles.tag}>{tag}</Text>
+            ))}
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            {this.renderScore(score, 2)}
+            <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   }
+}
 
+class Product extends PureComponent {
   render() {
-    const { width: windowWidth } = Dimensions.get('window');
-
     return (
-      <View style={styles.container}>
-        <View style={{ paddingVertical: 24, justifyContent: 'center' }}>
-          <Carousel
-            data={this.props.artists}
-            renderItem={({ item, index, animatedValue }) => this.renderCard(item, index, animatedValue)}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth * 0.7}
-            slideInterpolatedStyle={this.getAnimatedStyle}
-            contentContainerCustomStyle={{ alignItems: 'center' }}
-          />
-        </View>
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <FlatList
-            data={this.props.artists}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index, separators }) => {
-              return (
-                <TouchableOpacity>
-                  <View style={customStyles.listItem}>
-                    <Image source={{ uri: item.avatar }} style={customStyles.avatar} />
-                    <Text style={customStyles.listName}>{getFullName(item)}</Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
+      <View style={customStyles.listItem}>
+        <CachedImage source={{ uri: this.props.avatar }} style={customStyles.avatar} />
+        <Text style={customStyles.listName}>{getFullName(this.props)}</Text>
       </View>
     );
   }
