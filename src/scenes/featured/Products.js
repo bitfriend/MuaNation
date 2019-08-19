@@ -3,6 +3,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
+import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 
 class Products extends Component {
   render() {
@@ -10,27 +11,48 @@ class Products extends Component {
     const imageWidth = (windowWidth - 16 * 3) / 2;
     const imageHeight = Math.floor(imageWidth * 0.8);
 
+    let images = [];
+    this.props.products.map((product) => images.push(product.image));
+
     return (
       <View style={customStyles.container}>
-        <FlatList
-          data={this.props.products}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index, separators }) => {
-            const { image, name, price } = item;
-            return (
+        <ImageCacheProvider
+          urlsToPreload={images}
+          onPreloadComplete={() => console.log('images cached')}
+        >
+          <FlatList
+            data={this.props.products}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index, separators }) => (
               <TouchableOpacity style={customStyles.listItem} onPress={() => {
                 this.props.navigation.navigate('ProductDetails', { id: 0 });
               }}>
-                <Image source={{ uri: image }} style={{ width: imageWidth, height: imageHeight, borderRadius: 4 }} />
-                <View style={customStyles.title}>
-                  <Text style={customStyles.name}>{name}</Text>
-                  <Text style={customStyles.price}>${price}</Text>
-                </View>
+                <Product {...item} />
               </TouchableOpacity>
-            );
-          }}
-          numColumns={2}
-        />
+            )}
+            numColumns={2}
+          />
+        </ImageCacheProvider>
+      </View>
+    );
+  }
+}
+
+class Product extends PureComponent {
+  render() {
+    const { image, name, price } = this.props;
+
+    const { width: windowWidth } = Dimensions.get('window');
+    const imageWidth = (windowWidth - 16 * 3) / 2;
+    const imageHeight = Math.floor(imageWidth * 0.8);
+
+    return (
+      <View>
+        <CachedImage source={{ uri: image }} style={{ width: imageWidth, height: imageHeight, borderRadius: 4 }} />
+        <View style={customStyles.title}>
+          <Text style={customStyles.name}>{name}</Text>
+          <Text style={customStyles.price}>${price}</Text>
+        </View>
       </View>
     );
   }

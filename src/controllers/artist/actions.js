@@ -109,7 +109,7 @@ export const getArtistProducts = (id, category) => {
     dispatch(setLoading());
     try {
       let products = [];
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < 100; j++) {
         products.push({
           image: faker.image.image(),
           name: faker.lorem.word(),

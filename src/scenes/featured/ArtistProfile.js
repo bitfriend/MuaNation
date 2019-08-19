@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 
 import SceneHeader from '../../components/SceneHeader';
 import TabBar from '../../components/TabBar';
@@ -116,9 +117,8 @@ class ArtistProfile extends Component {
     if (tags)
       tags.map((tag, index) => cateogories.push({ label: tag, value: tag }));
 
-    const { width: windowWidth } = Dimensions.get('window');
-    const imageWidth = (windowWidth - 16 * 3) / 2;
-    const imageHeight = Math.floor(imageWidth * 0.8);
+    let images = [];
+    this.props.artistProducts.map((product) => images.push(product.image));
 
     return (
       <View style={styles.container}>
@@ -133,23 +133,43 @@ class ArtistProfile extends Component {
           underlineColor="#17050b"
           onSelect={(value) => this.onTabChange(value)}
         />
-        <FlatList
-          data={this.props.artistProducts}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index, separators }) => {
-            const { image, name, price } = item;
-            return (
-              <TouchableOpacity style={customStyles.listItem}>
-                <Image source={{ uri: image }} style={{ width: imageWidth, height: imageHeight, borderRadius: 4 }} />
-                <View style={customStyles.title}>
-                  <Text style={customStyles.name}>{name}</Text>
-                  <Text style={customStyles.price}>${price}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-          numColumns={2}
-        />
+        <View style={customStyles.container}>
+          <ImageCacheProvider
+            urlsToPreload={images}
+            onPreloadComplete={() => console.log('images cached')}
+          >
+            <FlatList
+              data={this.props.artistProducts}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index, separators }) => (
+                <TouchableOpacity style={customStyles.listItem}>
+                  <Product {...item} />
+                </TouchableOpacity>
+              )}
+              numColumns={2}
+            />
+          </ImageCacheProvider>
+        </View>
+      </View>
+    );
+  }
+}
+
+class Product extends PureComponent {
+  render() {
+    const { image, name, price } = this.props;
+
+    const { width: windowWidth } = Dimensions.get('window');
+    const imageWidth = (windowWidth - 16 * 3) / 2;
+    const imageHeight = Math.floor(imageWidth * 0.8);
+
+    return (
+      <View>
+        <CachedImage source={{ uri: image }} style={{ width: imageWidth, height: imageHeight, borderRadius: 4 }} />
+        <View style={customStyles.title}>
+          <Text style={customStyles.name}>{name}</Text>
+          <Text style={customStyles.price}>${price}</Text>
+        </View>
       </View>
     );
   }
@@ -177,6 +197,10 @@ const customStyles = StyleSheet.create({
     color: '#513a42',
     fontFamily: 'Roboto',
     fontSize: 14
+  },
+  container: {
+    flex: 1,
+    marginHorizontal: 8
   },
   listItem: {
     margin: 8

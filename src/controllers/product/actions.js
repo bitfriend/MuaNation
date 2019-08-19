@@ -8,7 +8,7 @@ export const getProducts = () => {
     dispatch(setLoading());
     try {
       let products = [];
-      for (let j, i = 0; i < 10; i++) {
+      for (let j, i = 0; i < 100; i++) {
         products.push({
           image: faker.image.image(),
           name: faker.lorem.word(),
