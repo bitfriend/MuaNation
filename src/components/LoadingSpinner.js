@@ -27,7 +27,7 @@ class LoadingSpinner extends Component {
 }
 
 const mapStateToProps = ({
-  app: { loading }
+  common: { loading }
 }) => ({
   loading
 });

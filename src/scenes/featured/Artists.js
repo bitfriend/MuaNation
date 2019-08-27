@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import Carousel from '../../components/carousel';
 import styles from './styles';
-import { getFullName } from '../../util';
+import { getFullName } from '../../libs/util';
 
 class Artists extends Component {
   onPressCard = () => {

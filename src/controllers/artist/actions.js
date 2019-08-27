@@ -1,7 +1,7 @@
 import faker from 'faker';
 
 import * as types from './types';
-import { setLoading, clearLoading } from '../app/actions';
+import { setLoading, clearLoading } from '../common/actions';
 
 export const getArtists = () => {
   return (dispatch) => {

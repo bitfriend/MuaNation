@@ -10,7 +10,7 @@ import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import SliderMarker from '../../components/SliderMarker';
-import { setLoading, clearLoading } from '../../controllers/app/actions';
+import { setLoading, clearLoading } from '../../controllers/common/actions';
 import { getLocation, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
 import styles from './styles';
 

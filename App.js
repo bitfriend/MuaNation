@@ -17,6 +17,12 @@ import {
   createSwitchNavigator
 } from 'react-navigation';
 
+import {
+  createReduxContainer,
+  createReactNavigationReduxMiddleware,
+  createNavigationReducer
+} from 'react-navigation-redux-helpers';
+
 import { Icon } from 'react-native-elements';
 
 import Splash from './src/scenes/Splash';
@@ -39,18 +45,13 @@ import Profile from './src/scenes/tab/Profile';
 import Account from './src/scenes/tab/Account';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { getArtists } from './src/controllers/artist/actions';
 import { getProducts } from './src/controllers/product/actions';
-import rootReducer from './src/controllers/reducer';
 
 console.disableYellowBox = true;
-
-const store = createStore(rootReducer, applyMiddleware(thunk));
-store.dispatch(getArtists());
-store.dispatch(getProducts());
 
 const transitionConfig = () => {
   return {
@@ -74,14 +75,14 @@ const transitionConfig = () => {
 };
 
 const AuthStackNav = createStackNavigator({
-  Login: { screen: SignIn },
+  SignIn: { screen: SignIn },
   ChooseRole: { screen: ChooseRole },
   ImportMedia : { screen: ImportMedia },
   AccessLocation: { screen: AccessLocation },
   SuggestedArtists: { screen: SuggestedArtists },
   CreateAccount: { screen: CreateAccount },
 }, {
-  initialRouteName: 'Login',
+  initialRouteName: 'SignIn',
   transitionConfig,
   defaultNavigationOptions: {
     header: null
@@ -217,13 +218,49 @@ const SwitchNav = createSwitchNavigator({
   initialRouteName: 'Splash'
 });
 
-const AppContainer = createAppContainer(SwitchNav);
+// Create the navigation reducer
+const navReducer = createNavigationReducer(SwitchNav);
+
+import { combineReducers } from 'redux';
+
+import commonReducer from './src/controllers/common/reducer';
+import authReducer from './src/controllers/auth/reducer';
+import artistReducer from './src/controllers/artist/reducer';
+import productReducer from './src/controllers/product/reducer';
+import relationReducer from './src/controllers/relation/reducer';
+import reviewReducer from './src/controllers/review/reducer';
+import discoverReducer from './src/controllers/discover/reducer';
+
+const appReducer = combineReducers({
+  nav: navReducer,
+  common: commonReducer,
+  auth: authReducer,
+  artist: artistReducer,
+  product: productReducer,
+  relation: relationReducer,
+  review: reviewReducer,
+  discover: discoverReducer
+});
+
+const middleware = createReactNavigationReduxMiddleware(
+  state => state.nav,
+);
+
+const ReduxContainer = createReduxContainer(SwitchNav);
+const mapStateToProps = (state) => ({
+  state: state.nav,
+});
+const AppWithNavigationState = connect(mapStateToProps)(ReduxContainer);
+
+const store = createStore(appReducer, applyMiddleware(thunk, middleware));
+store.dispatch(getArtists());
+store.dispatch(getProducts());
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer />
+        <AppWithNavigationState />
         <LoadingSpinner />
       </Provider>
     );

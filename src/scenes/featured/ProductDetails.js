@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import FloatingBackButton from '../../components/FloatingBackButton';
 import styles from './styles';
 import { getProductDetails } from '../../controllers/product/actions';
-import { getFullName } from '../../util';
+import { getFullName } from '../../libs/util';
 
 class ProductDetails extends Component {
   state = {

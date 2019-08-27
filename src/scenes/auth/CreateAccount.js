@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import styles from './styles';
+import { joinWithFacebook } from '../../controllers/auth/actions';
 
-export default class CreateAccount extends Component {
+class CreateAccount extends Component {
   state = {
     role: 'artist'
   };
 
   onClickFacebook = () => {
-    this.props.navigation.navigate('ImportMedia');
+    this.props.joinWithFacebook(this.state.role, (msg) => Alert.alert(msg));
   }
 
   onClickInstagram = () => {
-    this.props.navigation.navigate('ImportMedia');
+    this.props.navigation.navigate('ImportMedia', { role: this.state.role });
   }
 
   renderItem({ checked, title, description, onPress }) {
@@ -110,3 +112,9 @@ const customStyles = StyleSheet.create({
     elevation: 20
   }
 });
+
+const mapDispatchToProps = (dispacth) => ({
+  joinWithFacebook: (role, onError) => dispacth(joinWithFacebook(role, onError))
+});
+
+export default connect(null, mapDispatchToProps)(CreateAccount);

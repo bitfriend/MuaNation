@@ -9,7 +9,7 @@ import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
 import Carousel from '../../components/carousel';
 import styles from './styles';
-import { getFullName } from '../../util';
+import { getFullName } from '../../libs/util';
 
 class SuggestedArtists extends Component {
   componentDidMount() {

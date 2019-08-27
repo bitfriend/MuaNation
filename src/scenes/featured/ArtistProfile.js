@@ -8,7 +8,7 @@ import SceneHeader from '../../components/SceneHeader';
 import TabBar from '../../components/TabBar';
 import styles from './styles';
 import { getArtistProfile, getArtistProducts } from '../../controllers/artist/actions';
-import { getFullName } from '../../util';
+import { getFullName } from '../../libs/util';
 
 class ArtistProfile extends Component {
   componentDidMount() {

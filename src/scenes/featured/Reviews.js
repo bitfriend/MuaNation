@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../components/SceneHeader';
 import { getReviews } from '../../controllers/review/actions';
 import styles from './styles';
-import { getFullName } from '../../util';
+import { getFullName } from '../../libs/util';
 
 class Reviews extends Component {
   componentDidMount() {

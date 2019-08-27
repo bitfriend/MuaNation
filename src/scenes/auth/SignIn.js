@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import InstagramLogin from 'react-native-instagram-login';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
@@ -17,7 +18,8 @@ class SignIn extends Component {
 
   onClickInstagram = () => {
     // this.props.navigation.navigate('ChooseRole');
-    this.props.navigation.navigate('AppTabNav');
+    // this.props.navigation.navigate('AppTabNav');
+    this.instagramLogin.show();
   }
 
   onClickSignup = () => {
@@ -92,6 +94,14 @@ class SignIn extends Component {
           titleStyle={styles.socialText}
           onPress={this.onClickInstagram}
           TouchableComponent={TouchableOpacity}
+        />
+        <InstagramLogin
+          ref={c => this.instagramLogin = c}
+          clientId="2862949e166644b3a94fc2c483d744f2"
+          redirectUrl="https://muanation.com/"
+          scopes={['basic']}
+          onLoginSuccess={(token) => console.log('Instagram login succeeded', token)}
+          onLoginFailure={(reason) => console.log('Instagram login failed', reason)}
         />
         <Text style={styles.smallText}>New to the platform?</Text>
         <Button
