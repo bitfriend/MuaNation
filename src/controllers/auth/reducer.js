@@ -2,7 +2,7 @@ import * as types from './types';
 
 const initialState = {
   facebook: {},
-  instagrame: {},
+  instagram: {},
   user: null
 };
 
@@ -17,6 +17,16 @@ export default authReducer = (state = initialState, action) => {
       return {
         ...state,
         facebook: null
+      };
+    case types.SIGN_IN_WITH_INSTAGRAM_SUCCESS:
+      return {
+        ...state,
+        instagram: action.payload
+      };
+    case types.SIGN_IN_WITH_INSTAGRAM_FAILURE:
+      return {
+        ...state,
+        instagram: null
       };
     case types.SIGN_IN_SUCCESS:
       return {

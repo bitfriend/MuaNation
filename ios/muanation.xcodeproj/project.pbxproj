@@ -68,6 +68,7 @@
 		809DBA2A009F4AF785612FDC /* libRNCSlider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2826B3B06C4E66B06596B2 /* libRNCSlider.a */; };
 		E2C1A4B711454D088C445CF3 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B4A1B3B44E48209F2766CD /* libRNFetchBlob.a */; };
 		CCCC9B4E587C407FAB02DC42 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 921C1806C70D465E81E09D14 /* libRNCWebView.a */; };
+		78F9E0455C9C4B3987CFE90C /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4453D37B394CF8A29B97CC /* libRNCookieManagerIOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -415,6 +416,8 @@
 		47B4A1B3B44E48209F2766CD /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		69812FB245FD4A96AD16EB3D /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		921C1806C70D465E81E09D14 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		B5DCDE910A434BD4A14B7FC9 /* RNCookieManagerIOS.xcodeproj */ = {isa = PBXFileReference; name = "RNCookieManagerIOS.xcodeproj"; path = "../node_modules/react-native-cookies/ios/RNCookieManagerIOS.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		ED4453D37B394CF8A29B97CC /* libRNCookieManagerIOS.a */ = {isa = PBXFileReference; name = "libRNCookieManagerIOS.a"; path = "libRNCookieManagerIOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -454,6 +457,7 @@
 				809DBA2A009F4AF785612FDC /* libRNCSlider.a in Frameworks */,
 				E2C1A4B711454D088C445CF3 /* libRNFetchBlob.a in Frameworks */,
 				CCCC9B4E587C407FAB02DC42 /* libRNCWebView.a in Frameworks */,
+				78F9E0455C9C4B3987CFE90C /* libRNCookieManagerIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,6 +660,7 @@
 				D3D545BD3BDE4F589CAB931B /* RNCSlider.xcodeproj */,
 				04205FBB9A5F4C5881B6A5B7 /* RNFetchBlob.xcodeproj */,
 				69812FB245FD4A96AD16EB3D /* RNCWebView.xcodeproj */,
+				B5DCDE910A434BD4A14B7FC9 /* RNCookieManagerIOS.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1325,6 +1330,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1339,6 +1345,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Debug;
@@ -1375,6 +1382,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Release;
@@ -1408,6 +1416,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Debug;
@@ -1440,6 +1449,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Release;
@@ -1484,6 +1494,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Debug;
@@ -1528,6 +1539,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Release;
@@ -1571,6 +1583,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Debug;
@@ -1614,6 +1627,7 @@
 					"$(SRCROOT)\..\node_modules\@react-native-community\slider\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
+					"$(SRCROOT)\..\node_modules\react-native-cookies\ios\RNCookieManagerIOS",
 				);
 			};
 			name = Release;

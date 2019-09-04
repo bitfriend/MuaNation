@@ -28,7 +28,6 @@ import { Icon } from 'react-native-elements';
 import Splash from './src/scenes/Splash';
 
 import SignIn from './src/scenes/auth/SignIn';
-import ChooseRole from './src/scenes/auth/ChooseRole';
 import CreateAccount from './src/scenes/auth/CreateAccount';
 import ImportMedia from './src/scenes/auth/ImportMedia';
 import AccessLocation from './src/scenes/auth/AccessLocation';
@@ -76,7 +75,6 @@ const transitionConfig = () => {
 
 const AuthStackNav = createStackNavigator({
   SignIn: { screen: SignIn },
-  ChooseRole: { screen: ChooseRole },
   ImportMedia : { screen: ImportMedia },
   AccessLocation: { screen: AccessLocation },
   SuggestedArtists: { screen: SuggestedArtists },

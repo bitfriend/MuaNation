@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Input } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import InstagramLogin from 'react-native-instagram-login';
+import CookieManager from 'react-native-cookies';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
 import styles from './styles';
-import { signInWithFacebook } from '../../controllers/auth/actions';
+import { signInWithFacebook, signInWithInstagram } from '../../controllers/auth/actions';
+import * as types from '../../controllers/auth/types';
 
 class SignIn extends Component {
+  state = {
+    modalVisible: false,
+    email: '',
+    token: ''
+  };
+
+  componentDidMount() {
+    // CookieManager.clearAll().then((res) => {
+    //   console.log('CookieManager.clearAll =>', res);
+    // });
+  }
+
   onClickFacebook = () => {
     this.props.signInWithFacebook((error) => {
       Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
@@ -17,7 +31,6 @@ class SignIn extends Component {
   }
 
   onClickInstagram = () => {
-    // this.props.navigation.navigate('ChooseRole');
     // this.props.navigation.navigate('AppTabNav');
     this.instagramLogin.show();
   }
@@ -26,7 +39,7 @@ class SignIn extends Component {
     this.props.navigation.navigate('CreateAccount');
   }
 
-  renderLogo() {
+  renderGallery() {
     return (
       <View style={{
         flex: 1,
@@ -63,10 +76,72 @@ class SignIn extends Component {
     );
   }
 
+  renderModal() {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={this.state.modalVisible}
+      >
+        <View style={{
+          flex: 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          justifyContent: 'center'
+        }}>
+          <View style={{
+            backgroundColor: 'white',
+            marginHorizontal: 10,
+            padding: 5
+          }}>
+            <Text style={{
+              fontSize: 16,
+              padding: 10
+            }}>Please enter the email for Instagram</Text>
+            <Input
+              containerStyle={{ padding: 5 }}
+              leftIcon={{
+                name: 'envelope',
+                type: 'font-awesome',
+                size: 20,
+                color: '#97898e'
+              }}
+              placeholder="Email"
+              placeholderTextColor="#97898e"
+              onChangeText={(email) => this.setState({ email })}
+            />
+            <View style={{ flexDirection: 'row' }}>
+              <Button
+                containerStyle={{
+                  flex: 1,
+                  padding: 5
+                }}
+                title="OK"
+                onPress={() => {
+                  this.setState({ modalVisible: false });
+                  this.props.signInWithInstagram(this.state.token, this.state.email, (reason) => {
+                    Alert.alert(reason);
+                  });
+                }}
+              />
+              <Button
+                containerStyle={{
+                  flex: 1,
+                  padding: 5
+                }}
+                title="Cancel"
+                onPress={() => this.setState({ modalVisible: false })}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
   render() {
     return (
       <View style={[styles.container, { alignItems: 'center' }]}>
-        {this.renderLogo()}
+        {this.renderGallery()}
         <Button
           buttonStyle={styles.loginButton}
           icon={{
@@ -100,8 +175,19 @@ class SignIn extends Component {
           clientId="2862949e166644b3a94fc2c483d744f2"
           redirectUrl="https://muanation.com/"
           scopes={['basic']}
-          onLoginSuccess={(token) => console.log('Instagram login succeeded', token)}
-          onLoginFailure={(reason) => console.log('Instagram login failed', reason)}
+          onLoginSuccess={(token) => {
+            console.log('Instagram login succeeded', token);
+            this.setState({
+              modalVisible: true,
+              token
+            });
+            // this.props.signInWithInstagram(token, (reason) => Alert.alert(reason));
+          }}
+          onLoginFailure={(reason) => {
+            console.log('Instagram login failed', reason);
+            this.props.signInWithInstagramFailure();
+            Alert.alert(reason);
+          }}
         />
         <Text style={styles.smallText}>New to the platform?</Text>
         <Button
@@ -111,8 +197,9 @@ class SignIn extends Component {
           onPress={this.onClickSignup}
           TouchableComponent={TouchableOpacity}
         />
+        {this.renderModal()}
       </View>
-    )
+    );
   }
 }
 
@@ -146,7 +233,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispacth) => ({
-  signInWithFacebook: (onError) => dispacth(signInWithFacebook(onError))
+  signInWithFacebook: (onError) => dispacth(signInWithFacebook(onError)),
+  signInWithInstagram: (token, email, onError) => dispacth(signInWithInstagram(token, email, onError)),
+  signInWithInstagramFailure: () => dispacth({ type: types.SIGN_IN_WITH_INSTAGRAM_FAILURE }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
