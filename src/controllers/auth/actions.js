@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as types from './types';
 import { setLoading, clearLoading } from '../common/actions';
 
+// AsyncStorage.removeItem('mua_token');
+
 export const joinWithFacebook = (role, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
@@ -47,7 +49,8 @@ export const joinWithFacebook = (role, onError) => {
                   username: res.name,
                   email: res.email,
                   password: '1234567890',
-                  facebook_token: result.accessToken
+                  facebook_token: result.accessToken,
+                  role
                 })
               }).then(response => response.json()).then(response => {
                 if (response.message.success) {
@@ -137,12 +140,12 @@ export const signInWithFacebook = (onError) => {
                 return;
               }
               console.log('facebook login successful', res);
-              AsyncStorage.getItem('mua_token').then(token => {
+              AsyncStorage.getItem('mua_token').then(muaToken => {
                 fetch('https://muanation.com/api/users/add.json', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${muaToken}`
                   },
                   body: qs.stringify({
                     type: 'facebook',
@@ -151,7 +154,15 @@ export const signInWithFacebook = (onError) => {
                   })
                 }).then(response => response.json()).then(response => {
                   if (response.message.success) {
-                    dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_SUCCESS });
+                    dispatch({
+                      type: types.SIGN_IN_WITH_FACEBOOK_SUCCESS,
+                      payload: {
+                        facebook_id: res.id,
+                        username: res.name,
+                        email: res.email,
+                        facebook_token: result.accessToken
+                      }
+                    });
                     dispatch(clearLoading());
                     dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
                   } else {
@@ -206,42 +217,52 @@ export const signInWithFacebook = (onError) => {
   }
 }
 
-export const joinWithInstagram = (role, token, onError) => {
+export const joinWithInstagram = (role, token, email, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     fetch(`https://api.instagram.com/v1/users/self/?access_token=${token}`, {
       method: 'GET'
-    }).then(response => {
-      return response.json();
-    }).then(res => {
+    }).then(response => response.json()).then(res => {
       console.log('get user info successful', res.data);
-      fetch('http://muanation.com/api/users/add.json', {
+      fetch('https://muanation.com/api/users/add.json', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Connection': 'keep-alive',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoiamFtZXMxIiwiZW1haWwiOiJtZUB5b3UuY29tIiwibmFtZSI6bnVsbCwibGFzdF9uYW1lIjpudWxsLCJnZW5kZXIiOm51bGwsImFkZHJlc3MiOm51bGwsInN0YXRlIjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJwaG9uZSI6bnVsbCwiZmFjZWJvb2tfdG9rZW4iOm51bGwsImltYWdlX3VybCI6Imh0dHA6XC9cL211YW5hdGlvbi5jb21cL2ltZ1wvdXNlcnNcLyIsImV4cCI6MTU2MTg3MDA5MCwiaWF0IjoxNTU5MjQyMDkwfQ.V2hwf-2JSJuRQoc46shBAkucnS0D_utQjpSBhtlDCII'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: qs.stringify({
+          type: 'instagram',
           instagram_id: res.data.id,
-          username: res.data.full_name, // Use "full_name" field, not "username", in order to keep compatibility with facebook login
-          email: res.data.username,
+          username: res.data.username,
+          email,
           password: '1234567890',
           instagram_token: token,
           role
         })
-      }).then(async (response) => {
-        try {
+      }).then(response => response.json()).then(response => {
+        if (response.message.success) {
           dispatch({ type: types.JOIN_WITH_INSTAGRAM_SUCCESS });
-          dispatch(clearLoading());
-          dispatch(StackActions.push({ routeName: 'ImportMedia' }));
-        } catch (error) {
+          AsyncStorage.setItem('mua_token', response.data.token).then(() => {
+            dispatch(clearLoading());
+            dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+          }).catch(error => {
+            dispatch(clearLoading());
+            if (onError) {
+              onError(error);
+            }
+          });
+        } else {
           dispatch({ type: types.JOIN_WITH_INSTAGRAM_FAILURE });
           dispatch(clearLoading());
+          if (onError) {
+            onError(response.message.msg);
+          }
         }
       }).catch(error => {
         dispatch({ type: types.JOIN_WITH_INSTAGRAM_FAILURE });
         dispatch(clearLoading());
+        if (onError) {
+          onError(error.message);
+        }
       });
     }).catch(reason => {
       console.log('get user info failed', reason);
@@ -259,52 +280,49 @@ export const signInWithInstagram = (token, email, onError) => {
     dispatch(setLoading());
     fetch(`https://api.instagram.com/v1/users/self/?access_token=${token}`, {
       method: 'GET'
-    }).then(response => {
-      return response.json();
-    }).then(res => {
+    }).then(response => response.json()).then(res => {
       console.log('get user info successful', res.data);
-      fetch('http://muanation.com/api/users/token.json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Connection': 'keep-alive',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoiamFtZXMxIiwiZW1haWwiOiJtZUB5b3UuY29tIiwibmFtZSI6bnVsbCwibGFzdF9uYW1lIjpudWxsLCJnZW5kZXIiOm51bGwsImFkZHJlc3MiOm51bGwsInN0YXRlIjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJwaG9uZSI6bnVsbCwiZmFjZWJvb2tfdG9rZW4iOm51bGwsImltYWdlX3VybCI6Imh0dHA6XC9cL211YW5hdGlvbi5jb21cL2ltZ1wvdXNlcnNcLyIsImV4cCI6MTU2MTg3MDA5MCwiaWF0IjoxNTU5MjQyMDkwfQ.V2hwf-2JSJuRQoc46shBAkucnS0D_utQjpSBhtlDCII'
-        },
-        body: qs.stringify({
-          username: res.data.username,
-          password: '1234567890'
-        })
-      }).then(response => {
-        return response.json();
-      }).then(resp => {
-        if (resp.success) {
-          console.log('mua login successful', resp);
-          dispatch({
-            type: types.SIGN_IN_SUCCESS,
-            payload: {
-              instagram_id: res.data.id,
-              username: res.data.username,
-              email,
-              password: '1234567890',
-              instagram_token: token
+      AsyncStorage.getItem('mua_token').then(muaToken => {
+        fetch('https://muanation.com/api/users/token.json', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${muaToken}`
+          },
+          body: qs.stringify({
+            type: 'instagram',
+            instagram_id: res.data.id,
+            email
+          })
+        }).then(response => response.json()).then(resp => {
+          if (resp.success) {
+            console.log('mua login successful', resp);
+            dispatch({
+              type: types.SIGN_IN_SUCCESS,
+              payload: {
+                instagram_id: res.data.id,
+                username: res.data.username,
+                email,
+                instagram_token: token
+              }
+            });
+            dispatch(clearLoading());
+            dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+          } else {
+            console.log('mua login failed', resp);
+            dispatch({ type: types.SIGN_IN_FAILURE });
+            dispatch(clearLoading());
+            if (onError) {
+              onError(resp.data.message);
             }
-          });
-          dispatch(clearLoading());
-          dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
-        } else {
-          console.log('mua login failed', resp);
+          }
+        }).catch(error => {
           dispatch({ type: types.SIGN_IN_FAILURE });
           dispatch(clearLoading());
           if (onError) {
-            onError(resp.data.message);
+            onError(error);
           }
-        }
-      }).catch(error => {
-        dispatch({ type: types.SIGN_IN_FAILURE });
-        dispatch(clearLoading());
-        if (onError) {
-          onError(error);
-        }
+        });
       });
     }).catch(reason => {
       console.log('get user info failed', reason);
@@ -313,33 +331,6 @@ export const signInWithInstagram = (token, email, onError) => {
       if (onError) {
         onError(reason);
       }
-    });
-  }
-}
-
-export const signIn = (username, password) => {
-  return (dispatch) => {
-    dispatch(setLoading());
-    fetch('http://muanation.com/api/users/token.json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Connection': 'keep-alive',
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoiamFtZXMxIiwiZW1haWwiOiJtZUB5b3UuY29tIiwibmFtZSI6bnVsbCwibGFzdF9uYW1lIjpudWxsLCJnZW5kZXIiOm51bGwsImFkZHJlc3MiOm51bGwsInN0YXRlIjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJwaG9uZSI6bnVsbCwiZmFjZWJvb2tfdG9rZW4iOm51bGwsImltYWdlX3VybCI6Imh0dHA6XC9cL211YW5hdGlvbi5jb21cL2ltZ1wvdXNlcnNcLyIsImV4cCI6MTU2MTg3MDA5MCwiaWF0IjoxNTU5MjQyMDkwfQ.V2hwf-2JSJuRQoc46shBAkucnS0D_utQjpSBhtlDCII'
-      },
-      body: qs.stringify({ username, password })
-    }).then(async (response) => {
-      try {
-        // await AsyncStorage.setItem('userToken', '0000');
-        dispatch({ type: types.SIGN_IN_SUCCESS, payload: user });
-        dispatch(clearLoading());
-      } catch (error) {
-        dispatch({ type: types.SIGN_IN_FAILURE });
-        dispatch(clearLoading());
-      }
-    }).catch(error => {
-      dispatch({ type: types.SIGN_IN_FAILURE });
-      dispatch(clearLoading());
     });
   }
 }
@@ -365,32 +356,6 @@ export const signOut = (username, password) => {
       }
     }).catch(error => {
       dispatch({ type: types.SIGN_OUT_FAILURE });
-      dispatch(clearLoading());
-    });
-  }
-}
-
-export const signUp = (username, email, password) => {
-  return (dispatch) => {
-    dispatch(setLoading());
-    fetch('http://muanation.com/api/users/add.json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Connection': 'keep-alive',
-      },
-      body: qs.stringify({ username, password, active: '1', email })
-    }).then(async (response) => {
-      try {
-        // await AsyncStorage.setItem('userToken', '0000');
-        dispatch({ type: types.SIGN_UP_SUCCESS, payload: user });
-        dispatch(clearLoading());
-      } catch (error) {
-        dispatch({ type: types.SIGN_UP_FAILURE });
-        dispatch(clearLoading());
-      }
-    }).catch(error => {
-      dispatch({ type: types.SIGN_UP_FAILURE });
       dispatch(clearLoading());
     });
   }

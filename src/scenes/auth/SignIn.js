@@ -13,9 +13,9 @@ import * as types from '../../controllers/auth/types';
 
 class SignIn extends Component {
   state = {
-    modalVisible: false,
-    email: '',
-    token: ''
+    emailModal: false,
+    instagramEmail: '',
+    instagramToken: ''
   };
 
   componentDidMount() {
@@ -31,7 +31,6 @@ class SignIn extends Component {
   }
 
   onClickInstagram = () => {
-    // this.props.navigation.navigate('AppTabNav');
     this.instagramLogin.show();
   }
 
@@ -81,7 +80,7 @@ class SignIn extends Component {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={this.state.modalVisible}
+        visible={this.state.emailModal}
       >
         <View style={{
           flex: 1,
@@ -107,7 +106,7 @@ class SignIn extends Component {
               }}
               placeholder="Email"
               placeholderTextColor="#97898e"
-              onChangeText={(email) => this.setState({ email })}
+              onChangeText={(instagramEmail) => this.setState({ instagramEmail })}
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
@@ -117,10 +116,8 @@ class SignIn extends Component {
                 }}
                 title="OK"
                 onPress={() => {
-                  this.setState({ modalVisible: false });
-                  this.props.signInWithInstagram(this.state.token, this.state.email, (reason) => {
-                    Alert.alert(reason);
-                  });
+                  this.setState({ emailModal: false });
+                  this.props.signInWithInstagram(this.state.instagramToken, this.state.instagramEmail, (reason) => Alert.alert(reason));
                 }}
               />
               <Button
@@ -129,7 +126,7 @@ class SignIn extends Component {
                   padding: 5
                 }}
                 title="Cancel"
-                onPress={() => this.setState({ modalVisible: false })}
+                onPress={() => this.setState({ emailModal: false })}
               />
             </View>
           </View>
@@ -178,10 +175,9 @@ class SignIn extends Component {
           onLoginSuccess={(token) => {
             console.log('Instagram login succeeded', token);
             this.setState({
-              modalVisible: true,
-              token
+              emailModal: true,
+              instagramToken: token
             });
-            // this.props.signInWithInstagram(token, (reason) => Alert.alert(reason));
           }}
           onLoginFailure={(reason) => {
             console.log('Instagram login failed', reason);
@@ -235,7 +231,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispacth) => ({
   signInWithFacebook: (onError) => dispacth(signInWithFacebook(onError)),
   signInWithInstagram: (token, email, onError) => dispacth(signInWithInstagram(token, email, onError)),
-  signInWithInstagramFailure: () => dispacth({ type: types.SIGN_IN_WITH_INSTAGRAM_FAILURE }),
+  signInWithInstagramFailure: () => dispacth({ type: types.SIGN_IN_WITH_INSTAGRAM_FAILURE })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

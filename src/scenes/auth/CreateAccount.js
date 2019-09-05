@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Icon, Input } from 'react-native-elements';
+import InstagramLogin from 'react-native-instagram-login';
+import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import styles from './styles';
-import { joinWithFacebook } from '../../controllers/auth/actions';
+import { joinWithFacebook, joinWithInstagram } from '../../controllers/auth/actions';
 
 class CreateAccount extends Component {
   state = {
-    role: 'artist'
+    role: 'artist',
+    modalVisible: false,
+    email: '',
+    instagramToken: ''
   };
 
   onClickFacebook = () => {
@@ -17,7 +22,7 @@ class CreateAccount extends Component {
   }
 
   onClickInstagram = () => {
-    this.props.navigation.navigate('ImportMedia', { role: this.state.role });
+    this.instagramLogin.show();
   }
 
   renderItem({ checked, title, description, onPress }) {
@@ -36,6 +41,66 @@ class CreateAccount extends Component {
         </View>
         <Text style={styles.smallText}>{description}</Text>
       </TouchableOpacity>
+    );
+  }
+
+  renderModal() {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={this.state.modalVisible}
+      >
+        <View style={{
+          flex: 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          justifyContent: 'center'
+        }}>
+          <View style={{
+            backgroundColor: 'white',
+            marginHorizontal: 10,
+            padding: 5
+          }}>
+            <Text style={{
+              fontSize: 16,
+              padding: 10
+            }}>Please enter the email for Instagram</Text>
+            <Input
+              containerStyle={{ padding: 5 }}
+              leftIcon={{
+                name: 'envelope',
+                type: 'font-awesome',
+                size: 20,
+                color: '#97898e'
+              }}
+              placeholder="Email"
+              placeholderTextColor="#97898e"
+              onChangeText={(email) => this.setState({ email })}
+            />
+            <View style={{ flexDirection: 'row' }}>
+              <Button
+                containerStyle={{
+                  flex: 1,
+                  padding: 5
+                }}
+                title="OK"
+                onPress={() => {
+                  this.setState({ modalVisible: false });
+                  this.props.joinWithInstagram(this.state.role, this.state.instagramToken, this.state.email, (reason) => Alert.alert(reason));
+                }}
+              />
+              <Button
+                containerStyle={{
+                  flex: 1,
+                  padding: 5
+                }}
+                title="Cancel"
+                onPress={() => this.setState({ modalVisible: false })}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     );
   }
 
@@ -89,8 +154,27 @@ class CreateAccount extends Component {
               onPress={this.onClickInstagram}
               TouchableComponent={TouchableOpacity}
             />
+            <InstagramLogin
+              ref={c => this.instagramLogin = c}
+              clientId="2862949e166644b3a94fc2c483d744f2"
+              redirectUrl="https://muanation.com/"
+              scopes={['basic']}
+              onLoginSuccess={(token) => {
+                console.log('Instagram login succeeded', token);
+                this.setState({
+                  modalVisible: true,
+                  instagramToken: token
+                });
+              }}
+              onLoginFailure={(reason) => {
+                console.log('Instagram login failed', reason);
+                this.props.joinWithInstagramFailure();
+                Alert.alert(reason);
+              }}
+            />
           </View>
         </View>
+        {this.renderModal()}
       </View>
     );
   }
@@ -114,7 +198,9 @@ const customStyles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (dispacth) => ({
-  joinWithFacebook: (role, onError) => dispacth(joinWithFacebook(role, onError))
+  joinWithFacebook: (role, onError) => dispacth(joinWithFacebook(role, onError)),
+  joinWithInstagram: (role, token, email, onError) => dispacth(joinWithInstagram(role, token, email, onError)),
+  joinWithInstagramFailure: () => dispacth({ type: types.JOIN_WITH_INSTAGRAM_FAILURE })
 });
 
 export default connect(null, mapDispatchToProps)(CreateAccount);
