@@ -157,7 +157,7 @@ const FeaturedStackNav = createStackNavigator({
   navigationOptions: ({ navigation }) => {
     let tabBarVisible = true;
     if (navigation.state.routes) {
-      let currentRoute = navigation.state.routes[navigation.state.routes.length - 1].routeName;
+      const currentRoute = navigation.state.routes[navigation.state.routes.length - 1].routeName;
       if (currentRoute === 'ProductDetails')
         tabBarVisible = false;
     }

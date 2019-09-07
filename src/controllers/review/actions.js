@@ -15,8 +15,7 @@ export const getReviews = (userId) => {
         }
         reviews.push({
           avatar: faker.image.avatar(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           overview: faker.lorem.sentence(),
           score: faker.random.number({ min: 0, max: 5 }),
           products

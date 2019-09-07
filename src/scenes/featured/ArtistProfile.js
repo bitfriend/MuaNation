@@ -8,7 +8,6 @@ import SceneHeader from '../../components/SceneHeader';
 import TabBar from '../../components/TabBar';
 import styles from './styles';
 import { getArtistProfile, getArtistProducts } from '../../controllers/artist/actions';
-import { getFullName } from '../../libs/util';
 
 class ArtistProfile extends Component {
   componentDidMount() {
@@ -24,7 +23,7 @@ class ArtistProfile extends Component {
 
   onRelations(category) {
     const id = this.props.navigation.getParam('id');
-    const fullName = getFullName(this.props.artistProfile);
+    const { fullName } = this.props.artistProfile;
     this.props.navigation.navigate('Relations', { id, fullName, category });
   }
 
@@ -112,7 +111,7 @@ class ArtistProfile extends Component {
   }
 
   render() {
-    const { overview, tags, products } = this.props.artistProfile;
+    const { fullName, overview, tags, products } = this.props.artistProfile;
     let cateogories = [{ label: 'All', value: '' }];
     if (tags)
       tags.map((tag, index) => cateogories.push({ label: tag, value: tag }));
@@ -122,7 +121,7 @@ class ArtistProfile extends Component {
 
     return (
       <View style={styles.container}>
-        <SceneHeader title={getFullName(this.props.artistProfile)} />
+        <SceneHeader title={fullName} />
         {this.renderCard()}
         <Text style={customStyles.overview}>{overview}</Text>
         {this.renderActionBar()}

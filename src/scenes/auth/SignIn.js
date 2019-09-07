@@ -61,13 +61,13 @@ class SignIn extends Component {
         }}>
           <Swiper>
             <View>
-              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../assets/images/logo.png')} />
+              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../asset/images/logo.png')} />
             </View>
             <View>
-              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../assets/images/logo.png')} />
+              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../asset/images/logo.png')} />
             </View>
             <View>
-              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../assets/images/logo.png')} />
+              <Image resizeMode="contain" style={customStyles.banner} source={require('../../../asset/images/logo.png')} />
             </View>
           </Swiper>
         </View>

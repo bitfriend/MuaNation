@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../components/SceneHeader';
 import { getReviews } from '../../controllers/review/actions';
 import styles from './styles';
-import { getFullName } from '../../libs/util';
 
 class Reviews extends Component {
   componentDidMount() {
@@ -37,14 +36,14 @@ class Reviews extends Component {
             data={this.props.reviews}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index, separators }) => {
-              const { avatar, score, overview, products } = item;
+              const { avatar, fullName, score, overview, products } = item;
               const criteria = [0, 1, 2, 3, 4];
               return (
                 <View style={cardStyles.container}>
                   <Image source={{ uri: avatar }} style={cardStyles.avatar} />
                   <View style={{ flex: 1, paddingLeft: 16 }}>
                     <View style={{ width: '100%', flexDirection: 'row' }}>
-                      <Text style={cardStyles.name}>{getFullName(item)}</Text>
+                      <Text style={cardStyles.name}>{fullName}</Text>
                       {this.renderScore(score, 16, 2)}
                     </View>
                     <Text style={cardStyles.overview}>{overview}</Text>

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 import Carousel from '../../components/carousel';
 import styles from './styles';
-import { getFullName } from '../../libs/util';
 
 class Artists extends Component {
   onPressCard = () => {
@@ -68,7 +67,7 @@ class Artist extends PureComponent {
   }
 
   render() {
-    const { avatar, checked, tags, score, reviews, products, animatedValue } = this.props;
+    const { avatar, fullName, checked, tags, score, reviews, animatedValue } = this.props;
 
     return (
       <View style={{ width: 252, height: 189 }}>
@@ -87,7 +86,7 @@ class Artist extends PureComponent {
               <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
             )}
           </View>
-          <Text style={customStyles.cardName}>{getFullName(this.props)}</Text>
+          <Text style={customStyles.cardName}>{fullName}</Text>
           <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
             {tags.map((tag, subIndex) => (
               <Text key={subIndex} style={customStyles.tag}>{tag}</Text>
@@ -108,7 +107,7 @@ class Product extends PureComponent {
     return (
       <View style={customStyles.listItem}>
         <CachedImage source={{ uri: this.props.avatar }} style={customStyles.avatar} />
-        <Text style={customStyles.listName}>{getFullName(this.props)}</Text>
+        <Text style={customStyles.listName}>{this.props.fullName}</Text>
       </View>
     );
   }

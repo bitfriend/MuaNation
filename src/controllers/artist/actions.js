@@ -1,7 +1,56 @@
 import faker from 'faker';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 import * as types from './types';
 import { setLoading, clearLoading } from '../common/actions';
+
+export const getFeaturedArtists = () => {
+  return (dispatch) => {
+    dispatch(setLoading());
+    AsyncStorage.getItem('mua_token').then(muaToken => {
+      fetch('http://muanation.com/api/users/featured_artists.json', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${muaToken}`
+        }
+      }).then(response => response.json()).then(response => {
+        if (response.message.success) {
+          let artists = [];
+          response.featured_artists.map(artist => {
+            artists.push({
+              avatar: artist.image,
+              checked: faker.random.boolean(),
+              fullName: artist.username,
+              tags: artist.tags,
+              score: faker.random.number({ min: 0, max: 5 }),
+              reviews: artist.reviews.length
+            });
+          });
+          dispatch({ type: types.GET_FEATURED_ARTISTS_SUCCESS, payload: artists });
+          dispatch(clearLoading());
+        } else {
+          dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+          dispatch(clearLoading());
+          if (onError) {
+            onError(response.message.msg);
+          }
+        }
+      }).catch(error => {
+        dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+        dispatch(clearLoading());
+        if (onError) {
+          onError(error.message);
+        }
+      });
+    }).catch(error => {
+      dispatch(clearLoading());
+      if (onError) {
+        onError(error);
+      }
+    });
+  }
+}
 
 export const getArtists = () => {
   return (dispatch) => {
@@ -20,8 +69,7 @@ export const getArtists = () => {
         artists.push({
           avatar: faker.image.avatar(),
           checked: faker.random.boolean(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           tags,
           score: faker.random.number({ min: 0, max: 5 }),
           reviews: faker.random.number({ min: 0, max: 1000 }),
@@ -54,8 +102,7 @@ export const getSuggestedArtists = () => {
         artists.push({
           avatar: faker.image.avatar(),
           checked: faker.random.boolean(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           tags,
           score: faker.random.number({ min: 0, max: 5 }),
           reviews: faker.random.number({ min: 0, max: 1000 }),
@@ -85,8 +132,7 @@ export const getArtistProfile = (id) => {
       }
       const artistProfile = {
         avatar: faker.image.avatar(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
+        fullName: faker.name.findName(),
         followers: faker.random.number({ min: 0, max: 1000 }),
         following: faker.random.number({ min: 0, max: 1000 }),
         score: faker.random.number({ min: 0, max: 5 }),

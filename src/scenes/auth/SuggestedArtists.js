@@ -9,7 +9,6 @@ import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
 import Carousel from '../../components/carousel';
 import styles from './styles';
-import { getFullName } from '../../libs/util';
 
 class SuggestedArtists extends Component {
   componentDidMount() {
@@ -34,7 +33,7 @@ class SuggestedArtists extends Component {
   }
 
   renderCard(item, index, animatedValue) {
-    const { avatar, checked, tags, score, reviews, products } = item;
+    const { avatar, fullName, checked, tags, score, reviews, products } = item;
 
     return (
       <View style={{ width: 252, height: 253 }}>
@@ -53,7 +52,7 @@ class SuggestedArtists extends Component {
               <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
             )}
           </View>
-          <Text style={customStyles.name}>{getFullName(item)}</Text>
+          <Text style={customStyles.name}>{fullName}</Text>
           <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 12 }}>
             {tags.map((tag, subIndex) => (
               <Text key={subIndex} style={customStyles.tag}>{tag}</Text>

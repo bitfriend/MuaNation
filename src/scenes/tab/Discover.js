@@ -260,7 +260,7 @@ class Discover extends Component {
               >
                 <View style={customStyles.outerCircle} />
                 <View style={customStyles.innerCircle} />
-                <Image source={require('../../../assets/images/map-marker-blue.png')} style={{
+                <Image source={require('../../../asset/images/map-marker-blue.png')} style={{
                   width: 24,
                   height: 28,
                   top: 32,
@@ -276,7 +276,7 @@ class Discover extends Component {
                   longitude: neighbour.longitude
                 }}
               >
-                <Image source={require('../../../assets/images/map-marker-pink.png')} style={{
+                <Image source={require('../../../asset/images/map-marker-pink.png')} style={{
                   width: 24,
                   height: 28
                 }} />

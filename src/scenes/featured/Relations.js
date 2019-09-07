@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../components/SceneHeader';
 import { getFollowers, getFollowing } from '../../controllers/relation/actions';
 import styles from './styles';
-import { getFullName } from '../../libs/util';
 
 class Relations extends Component {
   constructor(props) {

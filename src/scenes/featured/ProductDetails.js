@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import FloatingBackButton from '../../components/FloatingBackButton';
 import styles from './styles';
 import { getProductDetails } from '../../controllers/product/actions';
-import { getFullName } from '../../libs/util';
 
 class ProductDetails extends Component {
   state = {
@@ -59,13 +58,13 @@ class ProductDetails extends Component {
   renderCard() {
     if (!this.props.productDetails.artist)
       return null;
-    const { avatar, score, overview } = this.props.productDetails.artist;
+    const { avatar, fullName, score, overview } = this.props.productDetails.artist;
     return (
       <View style={cardStyles.container}>
         <Image source={{ uri: avatar }} style={cardStyles.avatar} />
         <View style={{ flex: 1, paddingLeft: 16 }}>
           <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={cardStyles.name}>{getFullName(this.props.productDetails.artist)}</Text>
+            <Text style={cardStyles.name}>{fullName}</Text>
             {this.renderScore(score, 16, 2)}
           </View>
           <Text style={cardStyles.overview}>{overview}</Text>

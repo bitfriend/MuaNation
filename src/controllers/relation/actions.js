@@ -11,8 +11,7 @@ export const getFollowers = (userId) => {
       for (let j, i = 0; i < 10; i++) {
         followers.push({
           avatar: faker.image.avatar(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           followed: faker.random.boolean()
         });
       }
@@ -33,8 +32,7 @@ export const getFollowing = (userId) => {
       for (let j, i = 0; i < 10; i++) {
         following.push({
           avatar: faker.image.avatar(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           followed: true
         });
       }

@@ -180,6 +180,7 @@ export const signInWithFacebook = (onError) => {
                   }
                 });
               }).catch(error => {
+                dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
                 dispatch(clearLoading());
                 if (onError) {
                   onError(error);
@@ -232,7 +233,7 @@ export const joinWithInstagram = (role, token, email, onError) => {
         body: qs.stringify({
           type: 'instagram',
           instagram_id: res.data.id,
-          username: res.data.username,
+          username: res.data.full_name,
           email,
           password: '1234567890',
           instagram_token: token,

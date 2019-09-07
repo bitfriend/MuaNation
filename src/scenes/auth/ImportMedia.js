@@ -24,7 +24,7 @@ export default class ImportMedia extends Component {
           <Text style={styles.smallText}>Do you want to import photos of products &amp; services you've performed?</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Image resizeMode="contain" style={customStyles.banner} source={require('../../../assets/images/ph-photos.png')} />
+          <Image resizeMode="contain" style={customStyles.banner} source={require('../../../asset/images/ph-photos.png')} />
           <Button
             buttonStyle={styles.loginButton}
             icon={{

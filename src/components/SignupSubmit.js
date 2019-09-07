@@ -100,7 +100,7 @@ class SignupSubmit extends Component {
             onPress={this.onPress}
             activeOpacity={1}>
             {this.state.isLoading ? (
-              <Image source={require('../../assets/images/loading.gif')} style={styles.image} />
+              <Image source={require('../../asset/images/loading.gif')} style={styles.image} />
             ) : (
               <Text style={styles.text}>SIGNUP</Text>
             )}

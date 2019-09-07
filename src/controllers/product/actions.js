@@ -39,8 +39,7 @@ export const getProductDetails = (id) => {
         overview: faker.lorem.paragraph(3),
         artist: {
           avatar: faker.image.avatar(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
+          fullName: faker.name.findName(),
           score: faker.random.number({ min: 0, max: 5 }),
           overview: faker.lorem.sentence()
         }

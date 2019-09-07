@@ -20,7 +20,7 @@ export default class AccessLocation extends Component {
           <Text style={styles.smallText}>We want to help you find best services around, for that we need to know your current location</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Image resizeMode="contain" style={customStyles.banner} source={require('../../../assets/images/ph-location.png')} />
+          <Image resizeMode="contain" style={customStyles.banner} source={require('../../../asset/images/ph-location.png')} />
           <Button
             buttonStyle={styles.loginButton}
             title="Allow location access"

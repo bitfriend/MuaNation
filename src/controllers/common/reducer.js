@@ -4,7 +4,7 @@ const initialState = {
   loading: 0
 };
 
-export default appReducer = (state = initialState, action) => {
+export default commonReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SET_LOADING:
       return {
