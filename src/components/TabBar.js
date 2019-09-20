@@ -1,53 +1,76 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 
-export default class TabBar extends Component {
-  state = {
-    activeIndex: 0
-  };
+import colors from './theme/colors';
 
-  onPress(activeIndex, value) {
-    this.setState({ activeIndex });
-    this.props.onSelect(value);
+export default class TabBar extends Component {
+  onPress(routeName) {
+    this.props.navigation.navigate(routeName);
+  }
+
+  renderItem(focused, label) {
+    const tabStyle = {
+      ...this.props.tabStyle,
+      flexDirection: 'row'
+    };
+    if (!label) {
+      tabStyle.padding = 4;
+    }
+    const normalLabelStyle = {
+      ...this.props.labelStyle,
+      ...styles.tabItem,
+      color: focused ? this.props.activeTintColor : this.props.inactiveTintColor
+    };
+    const focusedLabelStyle = {
+      ...normalLabelStyle,
+      textDecorationLine: 'underline'
+    };
+    return (
+      <View style={tabStyle}>
+        <View style={{ marginHorizontal: 16, flexDirection: 'row' }}>
+          <Text style={focused ? focusedLabelStyle: normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
+          <Text style={normalLabelStyle}>{label.substring(1)}</Text>
+        </View>
+      </View>
+    );
   }
 
   render() {
+    const { navigationState, getLabelText } = this.props;
+    const { routes } = navigationState;
     return (
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {this.props.tabs.map((tab, index) => (
-            <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
-              <Text style={[customStyles.tabItem, index === this.state.activeIndex ? {
-                color: this.props.activeTabColor,
-                fontWeight: 'bold'
-              } : {
-                color: this.props.inactiveTabColor
-              }]}>{tab.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+      <View style={{ flexDirection: 'row', paddingVertical: 8 }}>
+        {routes.map((route, index) => (
+          <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
+            {this.renderItem(index === navigationState.index, getLabelText({ route }))}
+          </TouchableOpacity>
+        ))}
       </View>
     );
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   tabItem: {
-    fontFamily: 'Roboto',
-    fontSize: 18,
-    marginHorizontal: 16,
-    textTransform: 'capitalize'
+    fontFamily: 'Lato',
+    fontSize: 24,
+    fontWeight: 'bold'
   }
 });
 
 TabBar.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.any
-  })),
-  activeTabColor: PropTypes.string,
-  inactiveTabColor: PropTypes.string,
-  underlineColor: PropTypes.string,
-  onSelect: PropTypes.func
+  style: PropTypes.object,
+  activeTintColor: PropTypes.string,
+  inactiveTintColor: PropTypes.string,
+  tabStyle: PropTypes.object,
+  labelStyle: PropTypes.object,
+  upperCaseLabel: PropTypes.bool,
+  indicatorStyle: PropTypes.object
+}
+
+TabBar.defaultProps = {
+  activeTintColor: colors.mulberry,
+  inactiveTintColor: colors.taupe,
+  upperCaseLabel: false
 }

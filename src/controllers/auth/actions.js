@@ -50,7 +50,8 @@ export const joinWithFacebook = (role, onError) => {
                   email: res.email,
                   password: '1234567890',
                   facebook_token: result.accessToken,
-                  role
+                  role,
+                  active: 1
                 })
               }).then(response => response.json()).then(response => {
                 if (response.message.success) {

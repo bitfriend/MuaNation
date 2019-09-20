@@ -5,7 +5,7 @@ import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
-import TabBar from '../../components/TabBar';
+import CategoryBar from '../../components/CategoryBar';
 import styles from './styles';
 import { getArtistProfile, getArtistProducts } from '../../controllers/artist/actions';
 
@@ -16,7 +16,7 @@ class ArtistProfile extends Component {
     this.props.getArtistProducts(id, '');
   }
 
-  onTabChange(category) {
+  onChangeCategory(category) {
     const id = this.props.navigation.getParam('id');
     this.props.getArtistProducts(id, category);
   }
@@ -125,12 +125,12 @@ class ArtistProfile extends Component {
         {this.renderCard()}
         <Text style={customStyles.overview}>{overview}</Text>
         {this.renderActionBar()}
-        <TabBar
+        <CategoryBar
           tabs={cateogories}
           activeTabColor="#17050b"
           inactiveTabColor="#97898e"
           underlineColor="#17050b"
-          onSelect={(value) => this.onTabChange(value)}
+          onSelect={(value) => this.onChangeCategory(value)}
         />
         <View style={customStyles.container}>
           <ImageCacheProvider urlsToPreload={images}>

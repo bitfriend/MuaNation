@@ -1,25 +1,46 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import Toast from 'react-native-simple-toast';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
 import Carousel from '../../components/carousel';
-import styles from './styles';
+import colors from '../../components/theme/colors';
 
 class SuggestedArtists extends Component {
+  state = {
+    checkedArtists: []
+  }
+
   componentDidMount() {
     this.props.getSuggestedArtists();
   }
 
+  onClickItem(index) {
+    if (this.state.checkedArtists.indexOf(index) === -1) {
+      const checkedArtists = [...this.state.checkedArtists, index];
+      this.setState({ checkedArtists });
+    } else {
+      const checkedArtists = this.state.checkedArtists.filter(item => item !== index);
+      this.setState({ checkedArtists });
+    }
+  }
+
   onClickFollow = () => {
+    if (this.state.checkedArtists.length === 0) {
+      Toast.showWithGravity('Please select the artists to follow.', Toast.SHORT, Toast.CENTER);
+      return;
+    }
     this.props.navigation.navigate('Featured');
   }
 
-  onClickSkip = () => {}
+  onClickSkip = () => {
+    this.props.navigation.navigate('Featured');
+  }
 
   renderScore(score, marginHorizontal) {
     const criteria = [0, 1, 2, 3, 4];
@@ -33,41 +54,44 @@ class SuggestedArtists extends Component {
   }
 
   renderCard(item, index, animatedValue) {
-    const { avatar, fullName, checked, tags, score, reviews, products } = item;
+    const { avatar, fullName, tags, score, reviews, products } = item;
+    const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
       <View style={{ width: 252, height: 253 }}>
-        <Animated.View style={[customStyles.outer, {
+        <Animated.View style={[styles.outer, {
           opacity: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1]
           })
         }]} />
-        <View style={customStyles.inner}>
-          <View style={{ flexDirection: 'row', width: '100%' }}>
-            <View style={{ flex: 1, marginBottom: 8 }}>
-              <Image source={{ uri: avatar }} style={customStyles.avatar} />
+        <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
+          <View style={styles.inner}>
+            <View style={{ flexDirection: 'row', width: '100%' }}>
+              <View style={{ flex: 1, marginBottom: 8 }}>
+                <Image source={{ uri: avatar }} style={styles.avatar} />
+              </View>
+              {checked && (
+                <Icon type="font-awesome" name="check-circle" size={24} color={colors.mulberry} />
+              )}
             </View>
-            {checked && (
-              <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
-            )}
+            <Text style={styles.name}>{fullName}</Text>
+            <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 12 }}>
+              {tags.map((tag, subIndex) => (
+                <Text key={subIndex} style={styles.tag}>{tag}</Text>
+              ))}
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+              {this.renderScore(score, 2)}
+              <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
+            </View>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+              {products.map((product, subIndex) => (
+                <Image key={subIndex} style={{ width: 64, height: 64, borderRadius: 4 }} source={{ uri: product }} />
+              ))}
+            </View>
           </View>
-          <Text style={customStyles.name}>{fullName}</Text>
-          <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 12 }}>
-            {tags.map((tag, subIndex) => (
-              <Text key={subIndex} style={customStyles.tag}>{tag}</Text>
-            ))}
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            {this.renderScore(score, 2)}
-            <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
-          </View>
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-            {products.map((product, subIndex) => (
-              <Image key={subIndex} style={{ width: 64, height: 64, borderRadius: 4 }} source={{ uri: product }} />
-            ))}
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -76,7 +100,7 @@ class SuggestedArtists extends Component {
     const { width: windowWidth } = Dimensions.get('window');
 
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, paddingBottom: 30 }}>
         <SceneHeader />
         <View style={{ marginHorizontal: 50 }}>
           <Text style={styles.titleText}>Suggested artists</Text>
@@ -92,16 +116,16 @@ class SuggestedArtists extends Component {
             contentContainerCustomStyle={{ alignItems: 'center' }}
           />
           <Button
-            buttonStyle={styles.loginButton}
-            title="Follow (1)"
-            titleStyle={styles.socialText}
+            buttonStyle={[styles.button, styles.primaryButton]}
+            title={`Follow (${this.state.checkedArtists.length})`}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickFollow}
             TouchableComponent={TouchableOpacity}
           />
           <Button
-            buttonStyle={styles.loginButton}
+            buttonStyle={[styles.button, styles.secondaryButton]}
             title="Skip for now"
-            titleStyle={styles.socialText}
+            titleStyle={[styles.buttonTitle, { color: colors.mulberry }]}
             onPress={this.onClickSkip}
             TouchableComponent={TouchableOpacity}
           />
@@ -111,12 +135,25 @@ class SuggestedArtists extends Component {
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  titleText: {
+    color: colors.smokyBlack,
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto'
+  },
+  smallText: {
+    color: colors.taupeGray,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    marginTop: 20,
+    marginBottom: 10
+  },
   outer: {
     width: '100%',
     height: '100%',
     backgroundColor: 'white',
-    borderColor: '#ef3475',
+    borderColor: colors.mulberry,
     borderWidth: 2,
     borderRadius: 14
   },
@@ -136,20 +173,48 @@ const customStyles = StyleSheet.create({
     borderRadius: 24
   },
   name: {
-    color: '#17050b',
+    color: colors.taupe,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    color: '#97898e',
-    backgroundColor: '#f6f5f5',
+    color: colors.taupeGray,
+    backgroundColor: colors.isabelline,
     fontSize: 14,
     paddingHorizontal: 4,
     paddingVertical: 2,
     marginHorizontal: 2,
     textTransform: 'capitalize'
+  },
+  button: {
+    width: 254,
+    height: 48,
+    marginTop: 16,
+    borderRadius: 12
+  },
+  primaryButton: {
+    backgroundColor: colors.mulberry,
+    ...Platform.select({
+      ios: {
+        shadowRadius: 16,
+        shadowColor: colors.mulberry,
+        shadowOpacity: 1,
+        shadowOffset: { width: 1, height: 6 }
+      },
+      android: {
+        elevation: 6
+      }
+    })
+  },
+  secondaryButton: {
+    backgroundColor: colors.mulberry + '19' // alpha 10%
+  },
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto'
   }
 });
 

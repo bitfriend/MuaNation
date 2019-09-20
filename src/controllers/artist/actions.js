@@ -5,12 +5,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as types from './types';
 import { setLoading, clearLoading } from '../common/actions';
 
-export const getFeaturedArtists = () => {
+export const getFeaturedArtists = (onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     AsyncStorage.getItem('mua_token').then(muaToken => {
-      fetch('http://muanation.com/api/users/featured_artists.json', {
-        method: 'POST',
+      console.log('muaToken', muaToken);
+      fetch('https://muanation.com/api/users/featured_artists.json', {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${muaToken}`
         }
@@ -44,6 +45,7 @@ export const getFeaturedArtists = () => {
         }
       });
     }).catch(error => {
+      dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
       dispatch(clearLoading());
       if (onError) {
         onError(error);
@@ -52,7 +54,7 @@ export const getFeaturedArtists = () => {
   }
 }
 
-export const getArtists = () => {
+export const getArtists = (onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     try {
@@ -101,7 +103,6 @@ export const getSuggestedArtists = () => {
         }
         artists.push({
           avatar: faker.image.avatar(),
-          checked: faker.random.boolean(),
           fullName: faker.name.findName(),
           tags,
           score: faker.random.number({ min: 0, max: 5 }),

@@ -2,12 +2,23 @@ import React, { Component, Fragment, PureComponent } from 'react';
 import { Animated, Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
+import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
 import Carousel from '../../components/carousel';
-import styles from './styles';
+import colors from '../../components/theme/colors';
+import { getFeaturedArtists, getArtists } from '../../controllers/artist/actions';
 
 class Artists extends Component {
+  componentDidMount() {
+    this.props.getFeaturedArtists(error => {
+      Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+    });
+    this.props.getArtists(error => {
+      Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+    });
+  }
+
   onPressCard = () => {
     this.props.navigation.navigate('ArtistProfile');
   }
@@ -15,15 +26,18 @@ class Artists extends Component {
   render() {
     const { width: windowWidth } = Dimensions.get('window');
 
+    let featuredImages = [];
+    this.props.featuredArtists.map((artist) => featuredImages.push(artist.avatar));
+
     let images = [];
     this.props.artists.map((artist) => images.push(artist.avatar));
 
     return (
       <View style={styles.container}>
         <View style={{ paddingVertical: 24, justifyContent: 'center' }}>
-          <ImageCacheProvider urlsToPreload={images}>
+          <ImageCacheProvider urlsToPreload={featuredImages}>
             <Carousel
-              data={this.props.artists}
+              data={this.props.featuredArtists}
               renderItem={({ item, index, animatedValue }) => (
                 <TouchableOpacity activeOpacity={1} onPress={this.onPressCard}>
                   <Artist {...item} animatedValue={animatedValue} />
@@ -45,6 +59,9 @@ class Artists extends Component {
                 <TouchableOpacity>
                   <Product {...item} />
                 </TouchableOpacity>
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{ height: 1, backgroundColor: colors.isabelline }} />
               )}
             />
           </ImageCacheProvider>
@@ -71,30 +88,34 @@ class Artist extends PureComponent {
 
     return (
       <View style={{ width: 252, height: 189 }}>
-        <Animated.View style={[customStyles.cardOuter, {
+        <Animated.View style={[styles.cardOuter, {
           opacity: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1]
           })
         }]} />
-        <View style={customStyles.cardInner}>
+        <View style={styles.cardInner}>
           <View style={{ flexDirection: 'row', width: '100%' }}>
             <View style={{ flex: 1, marginBottom: 8 }}>
-              <CachedImage source={{ uri: avatar }} style={customStyles.avatar} />
+              {!avatar ? (
+                <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
+              ) : (
+                <CachedImage source={{ uri: avatar }} style={styles.avatar} />
+              )}
             </View>
             {checked && (
               <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
             )}
           </View>
-          <Text style={customStyles.cardName}>{fullName}</Text>
+          <Text style={styles.cardName}>{fullName}</Text>
           <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
             {tags.map((tag, subIndex) => (
-              <Text key={subIndex} style={customStyles.tag}>{tag}</Text>
+              <Text key={subIndex} style={styles.tag}>{tag}</Text>
             ))}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
             {this.renderScore(score, 2)}
-            <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
+            <Text style={styles.review}>{reviews} reviews</Text>
           </View>
         </View>
       </View>
@@ -105,15 +126,19 @@ class Artist extends PureComponent {
 class Product extends PureComponent {
   render() {
     return (
-      <View style={customStyles.listItem}>
-        <CachedImage source={{ uri: this.props.avatar }} style={customStyles.avatar} />
-        <Text style={customStyles.listName}>{this.props.fullName}</Text>
+      <View style={styles.listItem}>
+        <CachedImage source={{ uri: this.props.avatar }} style={styles.avatar} />
+        <Text style={styles.listName}>{this.props.fullName}</Text>
       </View>
     );
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.isabelline
+  },
   avatar: {
     width: 48,
     height: 48,
@@ -123,7 +148,7 @@ const customStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: 'white',
-    borderColor: '#ef3475',
+    borderColor: colors.isabelline,
     borderWidth: 2,
     borderRadius: 14
   },
@@ -138,15 +163,15 @@ const customStyles = StyleSheet.create({
     left: 2
   },
   cardName: {
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    color: '#97898e',
-    backgroundColor: '#f6f5f5',
+    color: colors.taupeGray,
+    backgroundColor: colors.isabelline,
     fontSize: 14,
     paddingHorizontal: 4,
     paddingVertical: 2,
@@ -156,24 +181,32 @@ const customStyles = StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderBottomColor: '#dcd7d9',
-    borderBottomWidth: 1
+    padding: 16
   },
   listName: {
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 16,
     textTransform: 'capitalize'
+  },
+  review: {
+    color: colors.taupeGray,
+    fontSize: 10,
+    marginLeft: 4
   }
 });
 
 const mapStateToProps = ({
-  artist: { artists }
+  artist: { featuredArtists, artists }
 }) => ({
-  artists
+  featuredArtists, artists
 });
 
-export default connect(mapStateToProps)(Artists);
+const mapDispatchToProps = (dispacth) => ({
+  getFeaturedArtists: (onError) => dispacth(getFeaturedArtists(onError)),
+  getArtists: (onError) => dispacth(getArtists(onError))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Artists);

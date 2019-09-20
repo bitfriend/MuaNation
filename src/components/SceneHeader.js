@@ -4,6 +4,8 @@ import { Header } from 'react-native-elements';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
 
+import colors from './theme/colors';
+
 class SceneHeader extends Component {
   render() {
     return (
@@ -12,7 +14,7 @@ class SceneHeader extends Component {
         leftComponent={{
           icon: 'arrow-back',
           type: 'ionicons',
-          color: '#17050b',
+          color: colors.smokyBlack,
           size: 20,
           iconStyle: { padding: 10 },
           containerStyle: { marginLeft: 0 },

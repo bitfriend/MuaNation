@@ -28,7 +28,7 @@ export default class Splash extends Component {
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
-        colors={['#ed7d3a', '#ef3475']}
+        colors={['#ed7d3a', '#ce4d82']}
         style={{
           flex: 1,
           alignItems: 'center',

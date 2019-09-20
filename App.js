@@ -7,7 +7,8 @@
  */
 
 import React, { Component } from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated, Easing, Platform, Text } from 'react-native';
+import { ThemeProvider } from 'react-native-elements';
 
 import {
   createAppContainer,
@@ -25,6 +26,8 @@ import {
 
 import { Icon } from 'react-native-elements';
 
+import colors from './src/components/theme/colors';
+
 import Splash from './src/scenes/Splash';
 
 import SignIn from './src/scenes/auth/SignIn';
@@ -33,12 +36,15 @@ import ImportMedia from './src/scenes/auth/ImportMedia';
 import AccessLocation from './src/scenes/auth/AccessLocation';
 import SuggestedArtists from './src/scenes/auth/SuggestedArtists';
 
+import TabBar from './src/components/TabBar';
 import Artists from './src/scenes/featured/Artists';
+import Products from './src/scenes/featured/Products';
+
 import ArtistProfile from './src/scenes/featured/ArtistProfile';
 import Relations from './src/scenes/featured/Relations';
 import Reviews from './src/scenes/featured/Reviews';
-import Products from './src/scenes/featured/Products';
-import ProductDetails from './src/scenes/featured/ProductDetails';
+import SaleProduct from './src/scenes/featured/SaleProduct';
+import PopularProduct from './src/scenes/featured/PopularProduct';
 import Discover from './src/scenes/tab/Discover';
 import Profile from './src/scenes/tab/Profile';
 import Account from './src/scenes/tab/Account';
@@ -47,7 +53,6 @@ import LoadingSpinner from './src/components/LoadingSpinner';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { getArtists } from './src/controllers/artist/actions';
 import { getProducts } from './src/controllers/product/actions';
 
 console.disableYellowBox = true;
@@ -97,10 +102,11 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
     navigationOptions: { tabBarLabel: 'Products' }
   }
 }, {
+  tabBarComponent: props => <TabBar {...props} />,
   tabBarOptions: {
     style: { backgroundColor: 'transparent' },
-    activeTintColor: '#ef3475',
-    inactiveTintColor: '#97898e',
+    activeTintColor: colors.mulberry,
+    inactiveTintColor: colors.smokyBlack,
     labelStyle: {
       fontFamily: 'Lato',
       fontSize: 24,
@@ -108,7 +114,7 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
       margin: 0
     },
     upperCaseLabel: false,
-    indicatorStyle: { backgroundColor: '#ef3475' }
+    indicatorStyle: { backgroundColor: colors.mulberry }
   }
 });
 
@@ -147,7 +153,8 @@ const FeaturedStackNav = createStackNavigator({
   ArtistProfile: { screen: ArtistProfile },
   Relations: { screen: Relations },
   Reviews: { screen: Reviews },
-  ProductDetails: { screen: ProductDetails }
+  SaleProduct: { screen: SaleProduct },
+  PopularProduct: { screen: PopularProduct }
 }, {
   initialRouteName: 'FeaturedTabNav',
   transitionConfig,
@@ -158,53 +165,62 @@ const FeaturedStackNav = createStackNavigator({
     let tabBarVisible = true;
     if (navigation.state.routes) {
       const currentRoute = navigation.state.routes[navigation.state.routes.length - 1].routeName;
-      if (currentRoute === 'ProductDetails')
+      if (currentRoute === 'SaleProduct' || currentRoute === 'PopularProduct')
         tabBarVisible = false;
     }
     return { tabBarVisible };
   }
 });
 
+function getTabeBarLabel(focused, tintColor, title) {
+  if (focused) {
+    return <Text style={{ textAlign: 'center', color: tintColor, fontSize: 10 }}>{title}</Text>;
+  } else {
+    return null;
+  }
+}
+
 const AppTabNav = createBottomTabNavigator({
   Featured: {
     screen: FeaturedStackNav,
     navigationOptions: {
-      tabBarLabel: 'Featured',
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="material" name="star" size={25} color={tintColor} />
+        <Icon type="ionicon" name="ios-star" size={25} color={tintColor} />
       )
     }
   },
   Discover: {
     screen: DiscoverStackNav,
     navigationOptions: {
-      tabBarLabel: 'Discover',
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Discover'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="material" name="search" size={25} color={tintColor} />
+        <Icon type="ionicon" name="ios-search" size={25} color={tintColor} />
       )
     }
   },
   Profile: {
     screen: ProfileStackNav,
     navigationOptions: {
-      tabBarLabel: 'Profile',
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="material" name="store" size={25} color={tintColor} />
+        <Icon type="ionicon" name="ios-calendar" size={25} color={tintColor} />
       )
     }
   },
   Account: {
     screen: AccountStackNav,
     navigationOptions: {
-      tabBarLabel: 'Account',
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Account'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="material" name="person" size={25} color={tintColor} />
+        <Icon type="ionicon" name="md-person" size={25} color={tintColor} />
       )
     }
   }
 }, {
   tabBarOptions: {
-    activeTintColor: '#ef3475'
+    activeTintColor: colors.mulberry,
+    inactiveTintColor: colors.taupe,
   }
 });
 
@@ -251,15 +267,33 @@ const mapStateToProps = (state) => ({
 const AppWithNavigationState = connect(mapStateToProps)(ReduxContainer);
 
 const store = createStore(appReducer, applyMiddleware(thunk, middleware));
-store.dispatch(getArtists());
 store.dispatch(getProducts());
+
+const theme = {
+  Input: {
+    inputContainerStyle: {
+      backgroundColor: colors.isabelline,
+      borderBottomColor: undefined,
+      borderBottomWidth: undefined,
+      borderRadius: 12
+    },
+    leftIconContainerStyle: {
+      marginRight: 8
+    },
+    inputStyle: {
+      color: colors.taupe
+    }
+  }
+};
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppWithNavigationState />
-        <LoadingSpinner />
+        <ThemeProvider theme={theme}>
+          <AppWithNavigationState />
+          <LoadingSpinner />
+        </ThemeProvider>
       </Provider>
     );
   }

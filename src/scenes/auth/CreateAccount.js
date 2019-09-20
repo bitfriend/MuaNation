@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
-import styles from './styles';
+import colors from '../../components/theme/colors';
 import { joinWithFacebook, joinWithInstagram } from '../../controllers/auth/actions';
 
 class CreateAccount extends Component {
@@ -28,15 +28,15 @@ class CreateAccount extends Component {
   renderItem({ checked, title, description, onPress }) {
     return (
       <TouchableOpacity
-        style={[customStyles.selectItem, checked ? { borderColor: '#ef3475' } : { borderColor: '#97898e' }]}
+        style={[styles.selectItem, checked ? { borderColor: colors.mulberry } : { borderColor: colors.gainsboro }]}
         onPress={onPress}
       >
         <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
-          <Text style={[styles.middleText, customStyles.middleText, checked ? { color: '#ef3475' } : {}]}>{title}</Text>
+          <Text style={[styles.middleText, checked ? { color: colors.mulberry } : { color: colors.smokyBlack }]}>{title}</Text>
           {checked ? (
-            <Icon type="material" name="radio-button-checked" size={20} color="#ef3475" />
+            <Icon type="material" name="radio-button-checked" size={20} color={colors.mulberry} />
           ) : (
-            <Icon type="material" name="radio-button-unchecked" size={20} color="black" />
+            <Icon type="material" name="radio-button-unchecked" size={20} color={colors.smokyBlack} />
           )}
         </View>
         <Text style={styles.smallText}>{description}</Text>
@@ -51,38 +51,20 @@ class CreateAccount extends Component {
         transparent={true}
         visible={this.state.modalVisible}
       >
-        <View style={{
-          flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          justifyContent: 'center'
-        }}>
-          <View style={{
-            backgroundColor: 'white',
-            marginHorizontal: 10,
-            padding: 5
-          }}>
-            <Text style={{
-              fontSize: 16,
-              padding: 10
-            }}>Please enter the email for Instagram</Text>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center' }}>
+          <View style={{ backgroundColor: 'white', marginHorizontal: 10, padding: 5 }}>
+            <Text style={{ fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
             <Input
               containerStyle={{ padding: 5 }}
-              leftIcon={{
-                name: 'envelope',
-                type: 'font-awesome',
-                size: 20,
-                color: '#97898e'
-              }}
+              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: colors.taupe }}
               placeholder="Email"
-              placeholderTextColor="#97898e"
+              placeholderTextColor={colors.taupeGray}
               onChangeText={(email) => this.setState({ email })}
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
-                containerStyle={{
-                  flex: 1,
-                  padding: 5
-                }}
+                containerStyle={{ flex: 1, padding: 5 }}
+                buttonStyle={{ backgroundColor: colors.mulberry, borderRadius: 12 }}
                 title="OK"
                 onPress={() => {
                   this.setState({ modalVisible: false });
@@ -90,11 +72,13 @@ class CreateAccount extends Component {
                 }}
               />
               <Button
-                containerStyle={{
-                  flex: 1,
-                  padding: 5
+                containerStyle={{ flex: 1, padding: 5 }}
+                buttonStyle={{
+                  backgroundColor: colors.mulberry + '19', // alpha 10%
+                  borderRadius: 12
                 }}
                 title="Cancel"
+                titleStyle={{ color: colors.mulberry }}
                 onPress={() => this.setState({ modalVisible: false })}
               />
             </View>
@@ -106,7 +90,7 @@ class CreateAccount extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, paddingBottom: 30 }}>
         <SceneHeader />
         <View style={{ flex: 1, marginHorizontal: 50 }}>
           <Text style={styles.titleText}>Create an account</Text>
@@ -127,30 +111,18 @@ class CreateAccount extends Component {
           </View>
           <View style={{ alignItems: 'center' }}>
             <Button
-              buttonStyle={styles.loginButton}
-              icon={{
-                name: 'facebook',
-                type: 'font-awesome',
-                size: 20,
-                color: 'white',
-                containerStyle: { marginRight: 10 }
-              }}
+              buttonStyle={styles.button}
+              icon={{ name: 'facebook', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
               title="Join with Facebook"
-              titleStyle={styles.socialText}
+              titleStyle={styles.buttonTitle}
               onPress={this.onClickFacebook}
               TouchableComponent={TouchableOpacity}
             />
             <Button
-              buttonStyle={styles.loginButton}
-              icon={{
-                name: 'instagram',
-                type: 'font-awesome',
-                size: 20,
-                color: 'white',
-                containerStyle: { marginRight: 10 }
-              }}
+              buttonStyle={styles.button}
+              icon={{ name: 'instagram', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
               title="Join with Instagram"
-              titleStyle={styles.socialText}
+              titleStyle={styles.buttonTitle}
               onPress={this.onClickInstagram}
               TouchableComponent={TouchableOpacity}
             />
@@ -180,10 +152,25 @@ class CreateAccount extends Component {
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  titleText: {
+    color: colors.smokyBlack,
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto'
+  },
   middleText: {
-    marginHorizontal: 0,
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
     flex: 1
+  },
+  smallText: {
+    color: colors.taupeGray,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    marginTop: 20,
+    marginBottom: 10
   },
   selectItem: {
     width: '100%',
@@ -193,7 +180,41 @@ const customStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     backgroundColor: 'white',
-    elevation: 20
+    elevation: 20,
+    ...Platform.select({
+      ios: {
+        shadowRadius: 16,
+        shadowColor: colors.sealBrown,
+        shadowOpacity: 1,
+        shadowOffset: { width: 2, height: 12 }
+      },
+      android: {
+        elevation: 12
+      }
+    })
+  },
+  button: {
+    width: 254,
+    height: 48,
+    marginTop: 16,
+    borderRadius: 12,
+    backgroundColor: colors.mulberry,
+    ...Platform.select({
+      ios: {
+        shadowRadius: 16,
+        shadowColor: colors.roseBonbon,
+        shadowOpacity: 1,
+        shadowOffset: { width: 1, height: 6 }
+      },
+      android: {
+        elevation: 6
+      }
+    })
+  },
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto'
   }
 });
 

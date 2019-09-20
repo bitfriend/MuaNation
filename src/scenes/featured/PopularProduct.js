@@ -6,11 +6,10 @@ import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import FloatingBackButton from '../../components/FloatingBackButton';
-import styles from './styles';
-import { getProductDetails } from '../../controllers/product/actions';
+import colors from '../../components/theme/colors';
+import { getPopularProduct } from '../../controllers/product/actions';
 
-class ProductDetails extends Component {
+class PopularProduct extends Component {
   state = {
     drawed: false
   };
@@ -19,7 +18,7 @@ class ProductDetails extends Component {
 
   componentDidMount() {
     const id = this.props.navigation.getParam('id');
-    this.props.getProductDetails(id);
+    this.props.getPopularProduct(id);
   }
 
   onDrawed = () => {
@@ -49,16 +48,16 @@ class ProductDetails extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? '#fabc3c' : '#dcd7d9'} containerStyle={{ marginHorizontal }} />
+          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? colors.pastelOrange : colors.lightGray} containerStyle={{ marginHorizontal }} />
         ))}
       </View>
     );
   }
 
   renderCard() {
-    if (!this.props.productDetails.artist)
+    if (!this.props.artist)
       return null;
-    const { avatar, fullName, score, overview } = this.props.productDetails.artist;
+    const { avatar, fullName, score, overview } = this.props.artist;
     return (
       <View style={cardStyles.container}>
         <Image source={{ uri: avatar }} style={cardStyles.avatar} />
@@ -74,19 +73,18 @@ class ProductDetails extends Component {
   }
 
   render() {
-    const { images, name, price, overview, artist } = this.props.productDetails;
+    const { images, name, price, overview, artist } = this.props;
     const { height: windowHeight } = Dimensions.get('window');
 
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-        <FloatingBackButton />
-        <View style={customStyles.fullfill}>
+        <View style={styles.fullfill}>
           {images && (
-            <Swiper paginationStyle={customStyles.pagination}>
+            <Swiper paginationStyle={styles.pagination}>
               {images.map((image, index) => (
                 <View key={index}>
-                  <Image resizeMode="cover" style={customStyles.fullfill} source={{ uri: image }} />
+                  <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
                 </View>
               ))}
             </Swiper>
@@ -102,9 +100,9 @@ class ProductDetails extends Component {
             })
           }]
         }}>
-          <View style={customStyles.panel}>
-            <TouchableOpacity style={customStyles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={customStyles.drawer} />
+          <View style={styles.panel}>
+            <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
+              <View style={styles.drawer} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={productStyles.name}>{name}</Text>
@@ -115,37 +113,38 @@ class ProductDetails extends Component {
             </View>
             <ScrollView>
               <Text style={productStyles.overview}>{overview}</Text>
-              {this.renderCard()}
-              <View style={actionStyles.container}>
-                <Button
-                  buttonStyle={actionStyles.close}
-                  icon={{
-                    name: 'close',
-                    type: 'material',
-                    size: 20,
-                    color: '#97898e'
-                  }}
-                  TouchableComponent={TouchableOpacity}
-                />
-                <Button
-                  containerStyle={{ flex: 1 }}
-                  buttonStyle={actionStyles.book}
-                  icon={{
-                    name: 'date-range',
-                    type: 'material',
-                    size: 20,
-                    color: 'white'
-                  }}
-                  title="Book"
-                  titleStyle={{
-                    fontFamily: 'Roboto',
-                    fontSize: 18,
-                    fontWeight: 'bold'
-                  }}
-                  TouchableComponent={TouchableOpacity}
-                />
-              </View>
             </ScrollView>
+            {this.renderCard()}
+            <View style={actionStyles.container}>
+              <Button
+                buttonStyle={actionStyles.close}
+                icon={{
+                  name: 'close',
+                  type: 'material',
+                  size: 20,
+                  color: colors.taupe
+                }}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => this.props.navigation.pop()}
+              />
+              <Button
+                containerStyle={{ flex: 1 }}
+                buttonStyle={actionStyles.book}
+                icon={{
+                  name: 'date-range',
+                  type: 'material',
+                  size: 20,
+                  color: 'white'
+                }}
+                title="Book"
+                titleStyle={{
+                  fontFamily: 'Roboto',
+                  fontSize: 18,
+                  fontWeight: 'bold'
+                }}
+                TouchableComponent={TouchableOpacity}
+              />
+            </View>
           </View>
         </Animated.View>
       </View>
@@ -153,7 +152,7 @@ class ProductDetails extends Component {
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   fullfill: {
     width: '100%',
     height: '100%'
@@ -176,7 +175,7 @@ const customStyles = StyleSheet.create({
     alignItems: 'center'
   },
   drawer: {
-    backgroundColor: '#dcd7d9',
+    backgroundColor: colors.lightGray,
     width: 64,
     height: 5,
     borderRadius: 2.5
@@ -186,23 +185,25 @@ const customStyles = StyleSheet.create({
 const productStyles = StyleSheet.create({
   name: {
     flex: 1,
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold'
   },
   dollar: {
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontFamily: 'Roboto',
-    fontSize: Math.floor(24 * 0.6)
+    fontSize: Math.floor(24 * 0.6),
+    fontWeight: 'bold'
   },
   price: {
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontFamily: 'Lato',
-    fontSize: 24
+    fontSize: 24,
+    fontWeight: 'bold'
   },
   overview: {
-    color: '#513a42',
+    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 18,
     marginTop: 16,
@@ -214,7 +215,7 @@ const cardStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.isabelline,
     borderRadius: 12
   },
   avatar: {
@@ -224,7 +225,7 @@ const cardStyles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: '#17050b',
+    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 14,
     fontWeight: 'bold',
@@ -232,7 +233,7 @@ const cardStyles = StyleSheet.create({
   },
   overview: {
     width: '100%',
-    color: '#513a42',
+    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 14,
     marginBottom: 8
@@ -248,29 +249,29 @@ const actionStyles = StyleSheet.create({
   close: {
     width: 64,
     height: 64,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    backgroundColor: colors.isabelline,
     marginRight: 8
   },
   book: {
     flex: 1,
     height: 64,
     borderRadius: 12,
-    backgroundColor: '#ef3475'
+    backgroundColor: colors.mulberry
   }
 });
 
 const mapStateToProps = ({
-  product: { productDetails }
+  product: { popularProduct }
 }) => ({
-  productDetails
+  ...popularProduct
 });
 
 const mapDispatchToProps = (dispacth) => ({
-  getProductDetails: (id) => dispacth(getProductDetails(id))
+  getPopularProduct: (id) => dispacth(getPopularProduct(id))
 });
 
 export default compose(
   withNavigation,
   connect(mapStateToProps, mapDispatchToProps)
-)(ProductDetails);
+)(PopularProduct);

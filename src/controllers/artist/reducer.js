@@ -1,6 +1,7 @@
 import * as types from './types';
 
 const initialState = {
+  featuredArtists: [],
   artists: [],
   suggestedArtists: [],
   artistProfile: {},
@@ -9,6 +10,16 @@ const initialState = {
 
 export default artistReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.GET_FEATURED_ARTISTS_SUCCESS:
+      return {
+        ...state,
+        featuredArtists: action.payload
+      };
+    case types.GET_FEATURED_ARTISTS_FAILURE:
+      return {
+        ...state,
+        featuredArtists: []
+      };
     case types.GET_ARTISTS_SUCCESS:
       return {
         ...state,

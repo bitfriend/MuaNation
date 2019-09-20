@@ -2,7 +2,8 @@ import * as types from './types';
 
 const initialState = {
   products: [],
-  productDetails: {}
+  saleProduct: {},
+  popularProduct: {}
 };
 
 export default productReducer = (state = initialState, action) => {
@@ -17,15 +18,25 @@ export default productReducer = (state = initialState, action) => {
         ...state,
         products: []
       };
-    case types.GET_PRODUCT_DETAILS_SUCCESS:
+    case types.GET_SALE_PRODUCT_SUCCESS:
       return {
         ...state,
-        productDetails: action.payload
+        saleProduct: action.payload
       };
-    case types.GET_PRODUCT_DETAILS_FAILURE:
+    case types.GET_SALE_PRODUCT_FAILURE:
       return {
         ...state,
-        productDetails: {}
+        saleProduct: {}
+      };
+    case types.GET_POPULAR_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        popularProduct: action.payload
+      };
+    case types.GET_POPULAR_PRODUCT_FAILURE:
+      return {
+        ...state,
+        popularProduct: {}
       };
     default:
       return state;
