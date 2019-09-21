@@ -63,7 +63,7 @@ export const getPopularProduct = (id) => {
           avatar: faker.image.avatar(),
           fullName: faker.name.findName(),
           score: faker.random.number({ min: 0, max: 5 }),
-          comment: faker.lorem.sentence()
+          comment: faker.lorem.sentence(10)
         });
       }
       const popularProduct = {

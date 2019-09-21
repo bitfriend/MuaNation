@@ -10,6 +10,7 @@ import colors from '../../components/theme/colors';
 import { getPopularProduct } from '../../controllers/product/actions';
 
 const drawerHeight = 402;
+const { width: windowWidth } = Dimensions.get('window');
 
 class PopularProduct extends Component {
   state = {
@@ -46,6 +47,7 @@ class PopularProduct extends Component {
   }
 
   render() {
+    console.log('artists', this.props.artists);
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.fullfill}>
@@ -74,27 +76,28 @@ class PopularProduct extends Component {
               <View style={styles.drawer} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 24 }}>
-              <Text style={productStyles.name}>{this.props.name}</Text>
+              <Text style={styles.name}>{this.props.name}</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={productStyles.dollar}>$</Text>
-                <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
+                <Text style={styles.dollar}>$</Text>
+                <Text style={styles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
-            <ScrollView>
-              <Text style={productStyles.overview}>{this.props.overview}</Text>
+            <ScrollView style={{ marginTop: 16, marginBottom: 24, marginHorizontal: 24 }}>
+              <Text style={styles.overview}>{this.props.overview}</Text>
             </ScrollView>
-            <View style={{ height: 96 }}>
-              <FlatList
-                data={this.props.artists}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index, separators }) => (
-                  <View style={styles.listItem}>
-                    <SaleProduct {...item} />
-                  </View>
-                )}
-                horizontal
-              />
-            </View>
+            {this.props.reviews && (
+              <View style={{ height: 96 }}>
+                <FlatList
+                  data={this.props.reviews}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index, separators }) => <Review {...item} />}
+                  ListHeaderComponent={() => <View style={{ width: 24 }} />}
+                  ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
+                  ListFooterComponent={() => <View style={{ width: 24 }} />}
+                  horizontal
+                />
+              </View>
+            )}
             <View style={actionStyles.container}>
               <Button
                 buttonStyle={actionStyles.close}
@@ -132,7 +135,7 @@ class PopularProduct extends Component {
   }
 }
 
-class SaleProduct extends PureComponent {
+class Review extends PureComponent {
   renderScore(score, size, marginHorizontal) {
     const criteria = [0, 1, 2, 3, 4];
     return (
@@ -151,9 +154,9 @@ class SaleProduct extends PureComponent {
         <View style={{ flex: 1, paddingLeft: 16 }}>
           <View style={{ width: '100%', flexDirection: 'row' }}>
             <Text style={cardStyles.name}>{this.props.fullName}</Text>
-            {this.renderScore(score, 16, 2)}
+            {this.renderScore(this.props.score, 16, 2)}
           </View>
-          <Text style={cardStyles.comment}>{this.props.comment}</Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={cardStyles.comment}>{this.props.comment}</Text>
         </View>
       </View>
     );
@@ -186,10 +189,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 5,
     borderRadius: 2.5
-  }
-});
-
-const productStyles = StyleSheet.create({
+  },
   name: {
     flex: 1,
     color: colors.smokyBlack,
@@ -213,10 +213,7 @@ const productStyles = StyleSheet.create({
   overview: {
     color: colors.taupe,
     fontFamily: 'Roboto',
-    fontSize: 18,
-    paddingTop: 16,
-    paddingBottom: 24,
-    paddingHorizontal: 24
+    fontSize: 18
   }
 });
 
@@ -241,11 +238,11 @@ const cardStyles = StyleSheet.create({
     textTransform: 'capitalize'
   },
   comment: {
-    width: '100%',
+    width: windowWidth * 0.6,
     color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 14,
-    marginBottom: 8
+    marginTop: 4
   }
 });
 
