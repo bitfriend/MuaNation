@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Animated, Dimensions, Easing, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Dimensions, Easing, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slider from '@react-native-community/slider';
 import StarRating from 'react-native-star-rating';
@@ -228,7 +228,6 @@ class Discover extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <View style={customStyles.container}>
           <MapView
             style={customStyles.map}

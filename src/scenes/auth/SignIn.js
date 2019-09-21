@@ -25,7 +25,7 @@ class SignIn extends Component {
   }
 
   onClickFacebook = () => {
-    this.props.signInWithFacebook((error) => {
+    this.props.signInWithFacebook(this.props.navigation, (error) => {
       Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
     });
   }
@@ -89,7 +89,7 @@ class SignIn extends Component {
                 title="OK"
                 onPress={() => {
                   this.setState({ emailModal: false });
-                  this.props.signInWithInstagram(this.state.instagramToken, this.state.instagramEmail, (reason) => Alert.alert(reason));
+                  this.props.signInWithInstagram(this.state.instagramToken, this.state.instagramEmail, this.props.navigation, (reason) => Alert.alert(reason));
                 }}
               />
               <Button

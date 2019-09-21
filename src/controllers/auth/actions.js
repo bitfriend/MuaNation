@@ -8,7 +8,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 // AsyncStorage.removeItem('mua_token');
 
-export const joinWithFacebook = (role, onError) => {
+export const joinWithFacebook = (role, navigation, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
@@ -58,7 +58,7 @@ export const joinWithFacebook = (role, onError) => {
                   dispatch({ type: types.JOIN_WITH_FACEBOOK_SUCCESS });
                   AsyncStorage.setItem('mua_token', response.data.token).then(() => {
                     dispatch(clearLoading());
-                    dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+                    navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
                   }).catch(error => {
                     dispatch(clearLoading());
                     if (onError) {
@@ -111,7 +111,7 @@ export const joinWithFacebook = (role, onError) => {
   }
 }
 
-export const signInWithFacebook = (onError) => {
+export const signInWithFacebook = (navigation, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
@@ -165,7 +165,7 @@ export const signInWithFacebook = (onError) => {
                       }
                     });
                     dispatch(clearLoading());
-                    dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+                    navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
                   } else {
                     dispatch({ type: types.SIGN_IN_WITH_FACEBOOK_FAILURE });
                     dispatch(clearLoading());
@@ -219,7 +219,7 @@ export const signInWithFacebook = (onError) => {
   }
 }
 
-export const joinWithInstagram = (role, token, email, onError) => {
+export const joinWithInstagram = (role, token, email, navigation, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     fetch(`https://api.instagram.com/v1/users/self/?access_token=${token}`, {
@@ -245,7 +245,7 @@ export const joinWithInstagram = (role, token, email, onError) => {
           dispatch({ type: types.JOIN_WITH_INSTAGRAM_SUCCESS });
           AsyncStorage.setItem('mua_token', response.data.token).then(() => {
             dispatch(clearLoading());
-            dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+            navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
           }).catch(error => {
             dispatch(clearLoading());
             if (onError) {
@@ -277,7 +277,7 @@ export const joinWithInstagram = (role, token, email, onError) => {
   }
 }
 
-export const signInWithInstagram = (token, email, onError) => {
+export const signInWithInstagram = (token, email, navigation, onError) => {
   return (dispatch) => {
     dispatch(setLoading());
     fetch(`https://api.instagram.com/v1/users/self/?access_token=${token}`, {
@@ -309,7 +309,7 @@ export const signInWithInstagram = (token, email, onError) => {
               }
             });
             dispatch(clearLoading());
-            dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+            navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
           } else {
             console.log('mua login failed', resp);
             dispatch({ type: types.SIGN_IN_FAILURE });

@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Animated, Easing, Platform, Text } from 'react-native';
+import { Animated, Easing, StatusBar, Text } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 
 import {
@@ -17,12 +17,6 @@ import {
   createStackNavigator,
   createSwitchNavigator
 } from 'react-navigation';
-
-import {
-  createReduxContainer,
-  createReactNavigationReduxMiddleware,
-  createNavigationReducer
-} from 'react-navigation-redux-helpers';
 
 import { Icon } from 'react-native-elements';
 
@@ -36,7 +30,7 @@ import ImportMedia from './src/scenes/auth/ImportMedia';
 import AccessLocation from './src/scenes/auth/AccessLocation';
 import SuggestedArtists from './src/scenes/auth/SuggestedArtists';
 
-import TabBar from './src/components/TabBar';
+import FixedTabBar from './src/components/FixedTabBar';
 import Artists from './src/scenes/featured/Artists';
 import Products from './src/scenes/featured/Products';
 
@@ -102,7 +96,7 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
     navigationOptions: { tabBarLabel: 'Products' }
   }
 }, {
-  tabBarComponent: props => <TabBar {...props} />,
+  tabBarComponent: props => <FixedTabBar {...props} />,
   tabBarOptions: {
     style: { backgroundColor: 'transparent' },
     activeTintColor: colors.mulberry,
@@ -218,6 +212,10 @@ const AppTabNav = createBottomTabNavigator({
     }
   }
 }, {
+  initialRouteName: 'Featured',
+  backBehavior: 'initialRoute',
+  swipeEnabled: false,
+  lazy: false,
   tabBarOptions: {
     activeTintColor: colors.mulberry,
     inactiveTintColor: colors.taupe,
@@ -232,9 +230,6 @@ const SwitchNav = createSwitchNavigator({
   initialRouteName: 'Splash'
 });
 
-// Create the navigation reducer
-const navReducer = createNavigationReducer(SwitchNav);
-
 import { combineReducers } from 'redux';
 
 import commonReducer from './src/controllers/common/reducer';
@@ -246,7 +241,6 @@ import reviewReducer from './src/controllers/review/reducer';
 import discoverReducer from './src/controllers/discover/reducer';
 
 const appReducer = combineReducers({
-  nav: navReducer,
   common: commonReducer,
   auth: authReducer,
   artist: artistReducer,
@@ -256,17 +250,9 @@ const appReducer = combineReducers({
   discover: discoverReducer
 });
 
-const middleware = createReactNavigationReduxMiddleware(
-  state => state.nav,
-);
+const AppContainer = createAppContainer(SwitchNav);
 
-const ReduxContainer = createReduxContainer(SwitchNav);
-const mapStateToProps = (state) => ({
-  state: state.nav,
-});
-const AppWithNavigationState = connect(mapStateToProps)(ReduxContainer);
-
-const store = createStore(appReducer, applyMiddleware(thunk, middleware));
+const store = createStore(appReducer, applyMiddleware(thunk));
 store.dispatch(getProducts());
 
 const theme = {
@@ -286,12 +272,35 @@ const theme = {
   }
 };
 
+const getActiveRouteName = (state) => {
+  const index = !!state.routes && state.index != null && state.index;
+  if (Number.isInteger(index)) {
+      return getActiveRouteName(state.routes[index]);
+  }
+  return state.routeName;
+};
+
+StatusBar.setBackgroundColor('transparent');
+StatusBar.setBarStyle('dark-content');
+
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <AppWithNavigationState />
+          <AppContainer onNavigationStateChange={(prevState, curState) => {
+            switch (getActiveRouteName(curState)) {
+              case 'Splash':
+              case 'Discover':
+              case 'SaleProduct':
+              case 'PopularProduct':
+                StatusBar.setTranslucent(true);
+                break;
+              default:
+                StatusBar.setTranslucent(false);
+                break;
+            }
+          }} />
           <LoadingSpinner />
         </ThemeProvider>
       </Provider>

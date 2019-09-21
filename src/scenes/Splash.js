@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, View } from 'react-native';
+import { View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -35,7 +35,6 @@ export default class Splash extends Component {
           justifyContent: 'center'
         }}
       >
-        <StatusBar translucent backgroundColor="transparent" />
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <View style={{ width: 72, height: 72, backgroundColor: 'white' }} />
         </View>

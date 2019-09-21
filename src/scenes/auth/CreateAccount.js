@@ -18,7 +18,7 @@ class CreateAccount extends Component {
   };
 
   onClickFacebook = () => {
-    this.props.joinWithFacebook(this.state.role, (msg) => Alert.alert(msg));
+    this.props.joinWithFacebook(this.state.role, this.props.navigation, (msg) => Alert.alert(msg));
   }
 
   onClickInstagram = () => {
@@ -68,7 +68,7 @@ class CreateAccount extends Component {
                 title="OK"
                 onPress={() => {
                   this.setState({ modalVisible: false });
-                  this.props.joinWithInstagram(this.state.role, this.state.instagramToken, this.state.email, (reason) => Alert.alert(reason));
+                  this.props.joinWithInstagram(this.state.role, this.state.instagramToken, this.state.email, this.props.navigation, (reason) => Alert.alert(reason));
                 }}
               />
               <Button

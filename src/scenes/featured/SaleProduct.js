@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, Image, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Easing, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';
@@ -48,7 +48,6 @@ class SaleProduct extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <View style={styles.fullfill}>
           {this.props.images && (
             <Swiper paginationStyle={styles.pagination}>
@@ -82,33 +81,31 @@ class SaleProduct extends Component {
                 <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
-            <ScrollView>
-              <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
-              <View style={actionStyles.container}>
-                <Button
-                  buttonStyle={actionStyles.close}
-                  icon={{
-                    name: 'close',
-                    type: 'material',
-                    size: 20,
-                    color: colors.taupe
-                  }}
-                  TouchableComponent={TouchableOpacity}
-                  onPress={() => this.props.navigation.pop()}
-                />
-                <Button
-                  containerStyle={{ flex: 1 }}
-                  buttonStyle={actionStyles.buy}
-                  title="Buy"
-                  titleStyle={{
-                    fontFamily: 'Roboto',
-                    fontSize: 18,
-                    fontWeight: 'bold'
-                  }}
-                  TouchableComponent={TouchableOpacity}
-                />
-              </View>
-            </ScrollView>
+            <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
+            <View style={actionStyles.container}>
+              <Button
+                buttonStyle={actionStyles.close}
+                icon={{
+                  name: 'close',
+                  type: 'material',
+                  size: 20,
+                  color: colors.taupe
+                }}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => this.props.navigation.pop()}
+              />
+              <Button
+                containerStyle={{ flex: 1 }}
+                buttonStyle={actionStyles.buy}
+                title="Buy"
+                titleStyle={{
+                  fontFamily: 'Roboto',
+                  fontSize: 18,
+                  fontWeight: 'bold'
+                }}
+                TouchableComponent={TouchableOpacity}
+              />
+            </View>
           </View>
         </Animated.View>
       </View>
@@ -199,7 +196,6 @@ const actionStyles = StyleSheet.create({
     marginRight: 8
   },
   buy: {
-    flex: 1,
     height: 64,
     borderRadius: 12,
     backgroundColor: colors.mulberry,

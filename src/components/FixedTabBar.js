@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import colors from './theme/colors';
 
-export default class TabBar extends Component {
+export default class FixedTabBar extends Component {
   onPress(routeName) {
     this.props.navigation.navigate(routeName);
   }
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   }
 });
 
-TabBar.propTypes = {
+FixedTabBar.propTypes = {
   style: PropTypes.object,
   activeTintColor: PropTypes.string,
   inactiveTintColor: PropTypes.string,
@@ -69,7 +69,7 @@ TabBar.propTypes = {
   indicatorStyle: PropTypes.object
 }
 
-TabBar.defaultProps = {
+FixedTabBar.defaultProps = {
   activeTintColor: colors.mulberry,
   inactiveTintColor: colors.taupe,
   upperCaseLabel: false

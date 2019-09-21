@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import { connect } from 'react-redux';

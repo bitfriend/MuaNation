@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { Component, PureComponent } from 'react';
+import { Animated, Dimensions, Easing, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';
@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 
 import colors from '../../components/theme/colors';
 import { getPopularProduct } from '../../controllers/product/actions';
+
+const drawerHeight = 402;
 
 class PopularProduct extends Component {
   state = {
@@ -43,46 +45,13 @@ class PopularProduct extends Component {
     }
   }
 
-  renderScore(score, size, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? colors.pastelOrange : colors.lightGray} containerStyle={{ marginHorizontal }} />
-        ))}
-      </View>
-    );
-  }
-
-  renderCard() {
-    if (!this.props.artist)
-      return null;
-    const { avatar, fullName, score, overview } = this.props.artist;
-    return (
-      <View style={cardStyles.container}>
-        <Image source={{ uri: avatar }} style={cardStyles.avatar} />
-        <View style={{ flex: 1, paddingLeft: 16 }}>
-          <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={cardStyles.name}>{fullName}</Text>
-            {this.renderScore(score, 16, 2)}
-          </View>
-          <Text style={cardStyles.overview}>{overview}</Text>
-        </View>
-      </View>
-    );
-  }
-
   render() {
-    const { images, name, price, overview, artist } = this.props;
-    const { height: windowHeight } = Dimensions.get('window');
-
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <View style={styles.fullfill}>
-          {images && (
+          {this.props.images && (
             <Swiper paginationStyle={styles.pagination}>
-              {images.map((image, index) => (
+              {this.props.images.map((image, index) => (
                 <View key={index}>
                   <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
                 </View>
@@ -92,11 +61,11 @@ class PopularProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: windowHeight * 0.5,
+          height: drawerHeight,
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-40, -windowHeight * 0.5]
+              outputRange: [-40, -drawerHeight]
             })
           }]
         }}>
@@ -104,17 +73,28 @@ class PopularProduct extends Component {
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
               <View style={styles.drawer} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={productStyles.name}>{name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 24 }}>
+              <Text style={productStyles.name}>{this.props.name}</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={productStyles.dollar}>$</Text>
-                <Text style={productStyles.price}>{price}</Text>
+                <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
             <ScrollView>
-              <Text style={productStyles.overview}>{overview}</Text>
+              <Text style={productStyles.overview}>{this.props.overview}</Text>
             </ScrollView>
-            {this.renderCard()}
+            <View style={{ height: 96 }}>
+              <FlatList
+                data={this.props.artists}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index, separators }) => (
+                  <View style={styles.listItem}>
+                    <SaleProduct {...item} />
+                  </View>
+                )}
+                horizontal
+              />
+            </View>
             <View style={actionStyles.container}>
               <Button
                 buttonStyle={actionStyles.close}
@@ -152,6 +132,34 @@ class PopularProduct extends Component {
   }
 }
 
+class SaleProduct extends PureComponent {
+  renderScore(score, size, marginHorizontal) {
+    const criteria = [0, 1, 2, 3, 4];
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        {criteria.map((criterion, index) => (
+          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? colors.pastelOrange : colors.lightGray} containerStyle={{ marginHorizontal }} />
+        ))}
+      </View>
+    );
+  }
+
+  render() {
+    return (
+      <View style={cardStyles.container}>
+        <Image source={{ uri: this.props.avatar }} style={cardStyles.avatar} />
+        <View style={{ flex: 1, paddingLeft: 16 }}>
+          <View style={{ width: '100%', flexDirection: 'row' }}>
+            <Text style={cardStyles.name}>{this.props.fullName}</Text>
+            {this.renderScore(score, 16, 2)}
+          </View>
+          <Text style={cardStyles.comment}>{this.props.comment}</Text>
+        </View>
+      </View>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
   fullfill: {
     width: '100%',
@@ -165,7 +173,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingHorizontal: 16,
     paddingBottom: 16,
     backgroundColor: 'white'
   },
@@ -197,6 +204,7 @@ const productStyles = StyleSheet.create({
     fontWeight: 'bold'
   },
   price: {
+    marginLeft: 4,
     color: colors.smokyBlack,
     fontFamily: 'Lato',
     fontSize: 24,
@@ -206,8 +214,9 @@ const productStyles = StyleSheet.create({
     color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 18,
-    marginTop: 16,
-    marginBottom: 24
+    paddingTop: 16,
+    paddingBottom: 24,
+    paddingHorizontal: 24
   }
 });
 
@@ -231,7 +240,7 @@ const cardStyles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
-  overview: {
+  comment: {
     width: '100%',
     color: colors.taupe,
     fontFamily: 'Roboto',
@@ -244,7 +253,8 @@ const actionStyles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: 14
+    paddingTop: 14,
+    paddingHorizontal: 24
   },
   close: {
     width: 64,
@@ -254,10 +264,20 @@ const actionStyles = StyleSheet.create({
     marginRight: 8
   },
   book: {
-    flex: 1,
     height: 64,
     borderRadius: 12,
-    backgroundColor: colors.mulberry
+    backgroundColor: colors.mulberry,
+    ...Platform.select({
+      ios: {
+        shadowRadius: 16,
+        shadowColor: colors.sealBrown,
+        shadowOpacity: 1,
+        shadowOffset: { width: 1, height: 6 }
+      },
+      android: {
+        elevation: 6
+      }
+    })
   }
 });
 

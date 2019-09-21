@@ -39,13 +39,7 @@ export const getSaleProduct = (id) => {
         name: faker.lorem.word(),
         extra: faker.random.number({ min: 1, max: 50 }) + '% off',
         price: faker.random.number({ min: 1, max: 1000 }),
-        overview: faker.lorem.paragraph(3),
-        artist: {
-          avatar: faker.image.avatar(),
-          fullName: faker.name.findName(),
-          score: faker.random.number({ min: 0, max: 5 }),
-          overview: faker.lorem.sentence()
-        }
+        overview: faker.lorem.paragraph(3)
       };
       dispatch({ type: types.GET_SALE_PRODUCT_SUCCESS, payload: saleProduct });
       dispatch(clearLoading());
@@ -60,9 +54,17 @@ export const getPopularProduct = (id) => {
   return (dispatch) => {
     dispatch(setLoading());
     try {
-      let images = [];
-      for (let i = 0; i < 3; i++) {
+      let i, images = [], reviews = [];
+      for ( i = 0; i < 3; i++) {
         images.push(faker.image.image());
+      }
+      for (i = 0; i < 10; i++) {
+        reviews.push({
+          avatar: faker.image.avatar(),
+          fullName: faker.name.findName(),
+          score: faker.random.number({ min: 0, max: 5 }),
+          comment: faker.lorem.sentence()
+        });
       }
       const popularProduct = {
         images,
@@ -70,12 +72,7 @@ export const getPopularProduct = (id) => {
         extra: faker.random.number({ min: 1, max: 50 }) + '% off',
         price: faker.random.number({ min: 1, max: 1000 }),
         overview: faker.lorem.paragraph(3),
-        artist: {
-          avatar: faker.image.avatar(),
-          fullName: faker.name.findName(),
-          score: faker.random.number({ min: 0, max: 5 }),
-          overview: faker.lorem.sentence()
-        }
+        reviews
       };
       dispatch({ type: types.GET_POPULAR_PRODUCT_SUCCESS, payload: popularProduct });
       dispatch(clearLoading());
