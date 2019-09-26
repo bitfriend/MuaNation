@@ -13,6 +13,9 @@ import colors from '../../components/theme/colors';
 
 const Color = require('color');
 
+const slideWidth = 252;
+const slideHeight = 253;
+
 class SuggestedArtists extends Component {
   state = {
     checkedArtists: []
@@ -67,7 +70,7 @@ class SuggestedArtists extends Component {
     const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
-      <View style={{ width: 252, height: 253 }}>
+      <View style={{ width: slideWidth, height: slideHeight }}>
         <Animated.View style={{
           ...styles.outer,
           backgroundColor: this.props.customTheme.card,
@@ -147,6 +150,7 @@ class SuggestedArtists extends Component {
             renderItem={({ item, index, animatedValue }) => this.renderCard(item, index, animatedValue)}
             sliderWidth={windowWidth}
             itemWidth={windowWidth * 0.7}
+            slideStyle={{ width: slideWidth + 16 * 2, height: slideHeight + 16 * 2 }}
             slideInterpolatedStyle={this.getAnimatedStyle}
             contentContainerCustomStyle={{ alignItems: 'center' }}
           />
