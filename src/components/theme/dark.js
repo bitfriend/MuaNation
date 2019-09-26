@@ -1,20 +1,17 @@
-const black = '#14070c';
-const white = '#ffffff';
+import { primary, secondary, success, warning, danger, white, black } from './common';
 
 export const palette = {
-  primary: '#4c39e8',
-  secondary: '#ce4d82',
-  success: '#04a777',
-  warning: '#fabc3c',
-  danger: '#ed7d3a',
+  primary,
+  secondary,
+  success,
+  warning,
+  danger,
   black,
   white,
-  grey0: white,
-  grey1: '#edecec',
-  grey2: '#d0cdce',
-  grey3: '#8f888b',
-  grey4: '#43393d',
-  grey5: black
+  grey0: '#edecec',
+  grey1: '#d0cdce',
+  grey2: '#8f888b',
+  grey3: '#43393d'
 };
 
 export const gradients = [{

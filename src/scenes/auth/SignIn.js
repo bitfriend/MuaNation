@@ -7,6 +7,7 @@ import CookieManager from 'react-native-cookies';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
+import EmailModal from '../../components/EmailModal';
 import { signInWithFacebook, signInWithInstagram } from '../../controllers/auth/actions';
 import * as types from '../../controllers/auth/types';
 
@@ -14,7 +15,7 @@ const Color = require('color');
 
 class SignIn extends Component {
   state = {
-    emailModal: false,
+    modalVisible: false,
     instagramEmail: '',
     instagramToken: ''
   };
@@ -44,7 +45,7 @@ class SignIn extends Component {
       <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{
-            color: this.props.customTheme.palette.grey0,
+            color: this.props.customTheme.title,
             fontSize: 24,
             fontWeight: 'bold',
             fontFamily: 'Lato'
@@ -57,7 +58,7 @@ class SignIn extends Component {
               fontFamily: 'Lato'
             }}>Mua's</Text>
             <Text style={{
-              color: this.props.customTheme.palette.grey2,
+              color: this.props.customTheme.label,
               fontSize: 14,
               fontFamily: 'Roboto'
             }}>place for professionals</Text>
@@ -85,59 +86,12 @@ class SignIn extends Component {
     );
   }
 
-  renderModal() {
-    return (
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={this.state.emailModal}
-      >
-        <View style={{ flex: 1, backgroundColor: this.props.customTheme.overlays[0], justifyContent: 'center' }}>
-          <View style={{ backgroundColor: this.props.customTheme.palette.grey5, borderRadius: 12, marginHorizontal: 10, padding: 5 }}>
-            <Text style={{ color: this.props.customTheme.palette.grey2, fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
-            <Input
-              containerStyle={{ padding: 5 }}
-              inputContainerStyle={{ backgroundColor: this.props.customTheme.palette.grey4 }}
-              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: this.props.customTheme.palette.grey1 }}
-              placeholder="Email"
-              placeholderTextColor={this.props.customTheme.palette.grey2}
-              inputStyle={{ color: this.props.customTheme.palette.grey1 }}
-              onChangeText={(instagramEmail) => this.setState({ instagramEmail })}
-            />
-            <View style={{ flexDirection: 'row' }}>
-              <Button
-                containerStyle={{ flex: 1, padding: 5 }}
-                buttonStyle={{
-                  backgroundColor: this.props.customTheme.palette.secondary,
-                  borderRadius: 12
-                }}
-                title="OK"
-                titleStyle={{ color: this.props.customTheme.palette.grey5 }}
-                onPress={() => {
-                  this.setState({ emailModal: false });
-                  this.props.signInWithInstagram(this.state.instagramToken, this.state.instagramEmail, this.props.navigation, (reason) => Alert.alert(reason));
-                }}
-              />
-              <Button
-                containerStyle={{ flex: 1, padding: 5 }}
-                buttonStyle={{
-                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string(),
-                  borderRadius: 12
-                }}
-                title="Cancel"
-                titleStyle={{ color: this.props.customTheme.palette.secondary }}
-                onPress={() => this.setState({ emailModal: false })}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30, backgroundColor: this.props.customTheme.palette.grey5 }}>
+      <View style={{
+        ...styles.container,
+        backgroundColor: this.props.customTheme.container
+      }}>
         {this.renderGallery()}
         <Button
           buttonStyle={{
@@ -149,13 +103,13 @@ class SignIn extends Component {
             name: 'facebook',
             type: 'font-awesome',
             size: 20,
-            color: this.props.customTheme.palette.grey5,
+            color: this.props.customTheme.buttonTitle,
             containerStyle: { marginRight: 10 }
           }}
           title="Login with Facebook"
           titleStyle={{
             ...styles.buttonTitle,
-            color: this.props.customTheme.palette.grey5
+            color: this.props.customTheme.buttonTitle
           }}
           onPress={this.onClickFacebook}
           TouchableComponent={TouchableOpacity}
@@ -170,13 +124,13 @@ class SignIn extends Component {
             name: 'instagram',
             type: 'font-awesome',
             size: 20,
-            color: this.props.customTheme.palette.grey5,
+            color: this.props.customTheme.buttonTitle,
             containerStyle: { marginRight: 10 }
           }}
           title="Login with Instagram"
           titleStyle={{
             ...styles.buttonTitle,
-            color: this.props.customTheme.palette.grey5
+            color: this.props.customTheme.buttonTitle
           }}
           onPress={this.onClickInstagram}
           TouchableComponent={TouchableOpacity}
@@ -190,7 +144,7 @@ class SignIn extends Component {
           onLoginSuccess={(token) => {
             console.log('Instagram login succeeded', token);
             this.setState({
-              emailModal: true,
+              modalVisible: true,
               instagramToken: token
             });
           }}
@@ -201,11 +155,10 @@ class SignIn extends Component {
           }}
         />
         <Text style={{
-          color: this.props.customTheme.palette.grey2,
+          color: this.props.customTheme.label,
           fontSize: 14,
           fontFamily: 'Roboto',
-          marginTop: 20,
-          marginBottom: 10
+          marginTop: 24
         }}>New to the platform?</Text>
         <Button
           buttonStyle={{
@@ -220,13 +173,25 @@ class SignIn extends Component {
           onPress={this.onClickSignup}
           TouchableComponent={TouchableOpacity}
         />
-        {this.renderModal()}
+        <EmailModal
+          visible={this.state.modalVisible}
+          onAccept={(email) => {
+            this.setState({ modalVisible: false });
+            this.props.signInWithInstagram(this.state.instagramToken, email, this.props.navigation, (reason) => Alert.alert(reason));
+          }}
+          onReject={() => this.setState({ modalVisible: false })}
+        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingBottom: 30
+  },
   banner: {
     width: '100%',
     height: '100%'

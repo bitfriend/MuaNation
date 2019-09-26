@@ -11,6 +11,8 @@ import SceneHeader from '../../components/SceneHeader';
 import Carousel from '../../components/carousel';
 import colors from '../../components/theme/colors';
 
+const Color = require('color');
+
 class SuggestedArtists extends Component {
   state = {
     checkedArtists: []
@@ -47,7 +49,14 @@ class SuggestedArtists extends Component {
     return (
       <Fragment>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={16} color={score > criterion ? '#fabc3c' : '#dcd7d9'} containerStyle={{ marginHorizontal }} />
+          <Icon
+            key={index}
+            type="font-awesome"
+            name="star"
+            size={16}
+            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            containerStyle={{ marginHorizontal }}
+          />
         ))}
       </Fragment>
     );
@@ -59,31 +68,48 @@ class SuggestedArtists extends Component {
 
     return (
       <View style={{ width: 252, height: 253 }}>
-        <Animated.View style={[styles.outer, {
+        <Animated.View style={{
+          ...styles.outer,
+          backgroundColor: this.props.customTheme.card,
+          borderColor: this.props.customTheme.palette.secondary,
           opacity: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1]
           })
-        }]} />
+        }} />
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
-          <View style={styles.inner}>
+          <View style={{
+            ...styles.inner,
+            backgroundColor: this.props.customTheme.card,
+            ...this.props.customTheme.shadows[3]
+          }}>
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <View style={{ flex: 1, marginBottom: 8 }}>
                 <Image source={{ uri: avatar }} style={styles.avatar} />
               </View>
               {checked && (
-                <Icon type="font-awesome" name="check-circle" size={24} color={colors.mulberry} />
+                <Icon type="font-awesome" name="check-circle" size={24} color={this.props.customTheme.palette.secondary} />
               )}
             </View>
-            <Text style={styles.name}>{fullName}</Text>
+            <Text style={{
+              ...styles.name,
+              color: this.props.customTheme.title
+            }}>{fullName}</Text>
             <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 12 }}>
               {tags.map((tag, subIndex) => (
-                <Text key={subIndex} style={styles.tag}>{tag}</Text>
+                <Text key={subIndex} style={{
+                  ...styles.tag,
+                  color: this.props.customTheme.tagTitle,
+                  backgroundColor: this.props.customTheme.tag
+                }}>{tag}</Text>
               ))}
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
               {this.renderScore(score, 2)}
-              <Text style={{ color: '#97898e', fontSize: 10, marginLeft: 4 }}>{reviews} reviews</Text>
+              <Text style={{
+                ...styles.reviews,
+                color: this.props.customTheme.label
+              }}>{reviews} reviews</Text>
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
               {products.map((product, subIndex) => (
@@ -100,11 +126,20 @@ class SuggestedArtists extends Component {
     const { width: windowWidth } = Dimensions.get('window');
 
     return (
-      <View style={{ flex: 1, paddingBottom: 30 }}>
+      <View style={{
+        ...styles.container,
+        backgroundColor: this.props.customTheme.container
+      }}>
         <SceneHeader />
         <View style={{ marginHorizontal: 50 }}>
-          <Text style={styles.titleText}>Suggested artists</Text>
-          <Text style={styles.smallText}>We’ve hand picked several amazing artists around you to follow</Text>
+          <Text style={{
+            ...styles.titleText,
+            color: this.props.customTheme.title
+          }}>Suggested artists</Text>
+          <Text style={{
+            ...styles.smallText,
+            color: this.props.customTheme.label
+          }}>We’ve hand picked several amazing artists around you to follow</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Carousel
@@ -116,16 +151,29 @@ class SuggestedArtists extends Component {
             contentContainerCustomStyle={{ alignItems: 'center' }}
           />
           <Button
-            buttonStyle={[styles.button, styles.primaryButton]}
+            buttonStyle={{
+              ...styles.button,
+              backgroundColor: this.props.customTheme.palette.secondary,
+              ...this.props.customTheme.buttonShadow
+            }}
             title={`Follow (${this.state.checkedArtists.length})`}
-            titleStyle={styles.buttonTitle}
+            titleStyle={{
+              ...styles.buttonTitle,
+              color: this.props.customTheme.buttonTitle
+            }}
             onPress={this.onClickFollow}
             TouchableComponent={TouchableOpacity}
           />
           <Button
-            buttonStyle={[styles.button, styles.secondaryButton]}
+            buttonStyle={{
+              ...styles.button,
+              backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
+            }}
             title="Skip for now"
-            titleStyle={[styles.buttonTitle, { color: colors.mulberry }]}
+            titleStyle={{
+              ...styles.buttonTitle,
+              color: this.props.customTheme.palette.secondary
+            }}
             onPress={this.onClickSkip}
             TouchableComponent={TouchableOpacity}
           />
@@ -136,14 +184,16 @@ class SuggestedArtists extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 30
+  },
   titleText: {
-    color: colors.smokyBlack,
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   },
   smallText: {
-    color: colors.taupeGray,
     fontSize: 14,
     fontFamily: 'Roboto',
     marginTop: 20,
@@ -152,13 +202,10 @@ const styles = StyleSheet.create({
   outer: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
-    borderColor: colors.mulberry,
     borderWidth: 2,
     borderRadius: 14
   },
   inner: {
-    backgroundColor: 'white',
     padding: 16,
     borderRadius: 12,
     position: 'absolute',
@@ -173,43 +220,28 @@ const styles = StyleSheet.create({
     borderRadius: 24
   },
   name: {
-    color: colors.taupe,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    color: colors.taupeGray,
-    backgroundColor: colors.isabelline,
-    fontSize: 14,
     paddingHorizontal: 4,
     paddingVertical: 2,
     marginHorizontal: 2,
+    borderRadius: 4,
+    fontSize: 14,
     textTransform: 'capitalize'
+  },
+  reviews: {
+    marginLeft: 4,
+    fontSize: 10
   },
   button: {
     width: 254,
     height: 48,
     marginTop: 16,
     borderRadius: 12
-  },
-  primaryButton: {
-    backgroundColor: colors.mulberry,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.mulberry,
-        shadowOpacity: 1,
-        shadowOffset: { width: 1, height: 6 }
-      },
-      android: {
-        elevation: 6
-      }
-    })
-  },
-  secondaryButton: {
-    backgroundColor: colors.mulberry + '19' // alpha 10%
   },
   buttonTitle: {
     fontSize: 16,
@@ -219,8 +251,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({
+  common: { theme },
   artist: { suggestedArtists }
 }) => ({
+  customTheme: theme,
   suggestedArtists
 });
 
