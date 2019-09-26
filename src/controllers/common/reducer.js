@@ -26,6 +26,18 @@ const initialState = {
   }
 };
 
+// const initialState = {
+//   loading: 0,
+//   themeName: 'dark',
+//   theme: {
+//     palette: darkPalette,
+//     gradients: darkGradients,
+//     overlays: darkOverlays,
+//     buttonShadow: darkButtonShadow,
+//     shadows: darkShadows
+//   }
+// };
+
 export default commonReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SET_LOADING:

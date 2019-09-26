@@ -137,7 +137,7 @@ class SignIn extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
+      <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30, backgroundColor: this.props.customTheme.palette.grey5 }}>
         {this.renderGallery()}
         <Button
           buttonStyle={{
