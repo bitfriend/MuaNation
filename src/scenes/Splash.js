@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux';
 
-export default class Splash extends Component {
+class Splash extends Component {
   componentDidMount() {
     this._bootstrapAsync();
   }
@@ -28,7 +29,7 @@ export default class Splash extends Component {
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
-        colors={['#ce4d82', '#4c39e8']}
+        colors={[this.props.customTheme.gradients[0].start, this.props.customTheme.gradients[0].end]}
         style={{
           flex: 1,
           alignItems: 'center',
@@ -42,3 +43,11 @@ export default class Splash extends Component {
     );
   }
 }
+
+const mapStateToProps = ({
+  common: { theme }
+}) => ({
+  customTheme: theme
+});
+
+export default connect(mapStateToProps)(Splash);

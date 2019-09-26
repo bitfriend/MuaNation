@@ -7,9 +7,10 @@ import CookieManager from 'react-native-cookies';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
-import colors from '../../components/theme/colors';
 import { signInWithFacebook, signInWithInstagram } from '../../controllers/auth/actions';
 import * as types from '../../controllers/auth/types';
+
+const Color = require('color');
 
 class SignIn extends Component {
   state = {
@@ -42,14 +43,33 @@ class SignIn extends Component {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.welcome}>Welcome to</Text>
+          <Text style={{
+            color: this.props.customTheme.palette.grey0,
+            fontSize: 24,
+            fontWeight: 'bold',
+            fontFamily: 'Lato'
+          }}>Welcome to</Text>
           <View style={{ margin: 10 }}>
-            <Text style={styles.mua}>Mua's</Text>
-            <Text style={styles.place}>place for professionals</Text>
+            <Text style={{
+              color: this.props.customTheme.palette.secondary,
+              fontSize: 38,
+              fontWeight: 'bold',
+              fontFamily: 'Lato'
+            }}>Mua's</Text>
+            <Text style={{
+              color: this.props.customTheme.palette.grey2,
+              fontSize: 14,
+              fontFamily: 'Roboto'
+            }}>place for professionals</Text>
           </View>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          <Swiper>
+          <Swiper
+            dotColor={Color(this.props.customTheme.palette.grey0).alpha(0.3).string()}
+            dotStyle={styles.pageDot}
+            activeDotColor={this.props.customTheme.palette.grey0}
+            activeDotStyle={styles.pageDot}
+          >
             <View>
               <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash1.png')} />
             </View>
@@ -72,21 +92,27 @@ class SignIn extends Component {
         transparent={true}
         visible={this.state.emailModal}
       >
-        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center' }}>
-          <View style={{ backgroundColor: 'white', borderRadius: 12, marginHorizontal: 10, padding: 5 }}>
-            <Text style={{ fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
+        <View style={{ flex: 1, backgroundColor: this.props.customTheme.overlays[0], justifyContent: 'center' }}>
+          <View style={{ backgroundColor: this.props.customTheme.palette.grey5, borderRadius: 12, marginHorizontal: 10, padding: 5 }}>
+            <Text style={{ color: this.props.customTheme.palette.grey2, fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
             <Input
               containerStyle={{ padding: 5 }}
-              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: colors.taupe }}
+              inputContainerStyle={{ backgroundColor: this.props.customTheme.palette.grey4 }}
+              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: this.props.customTheme.palette.grey1 }}
               placeholder="Email"
-              placeholderTextColor={colors.taupeGray}
+              placeholderTextColor={this.props.customTheme.palette.grey2}
+              inputStyle={{ color: this.props.customTheme.palette.grey1 }}
               onChangeText={(instagramEmail) => this.setState({ instagramEmail })}
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
                 containerStyle={{ flex: 1, padding: 5 }}
-                buttonStyle={{ backgroundColor: colors.mulberry, borderRadius: 12 }}
+                buttonStyle={{
+                  backgroundColor: this.props.customTheme.palette.secondary,
+                  borderRadius: 12
+                }}
                 title="OK"
+                titleStyle={{ color: this.props.customTheme.palette.grey5 }}
                 onPress={() => {
                   this.setState({ emailModal: false });
                   this.props.signInWithInstagram(this.state.instagramToken, this.state.instagramEmail, this.props.navigation, (reason) => Alert.alert(reason));
@@ -95,11 +121,11 @@ class SignIn extends Component {
               <Button
                 containerStyle={{ flex: 1, padding: 5 }}
                 buttonStyle={{
-                  backgroundColor: colors.mulberry + '19', // alpha 10%
+                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string(),
                   borderRadius: 12
                 }}
                 title="Cancel"
-                titleStyle={{ color: colors.mulberry }}
+                titleStyle={{ color: this.props.customTheme.palette.secondary }}
                 onPress={() => this.setState({ emailModal: false })}
               />
             </View>
@@ -114,22 +140,49 @@ class SignIn extends Component {
       <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
         {this.renderGallery()}
         <Button
-          buttonStyle={[styles.button, styles.primaryButton]}
-          icon={{ name: 'facebook', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
+          buttonStyle={{
+            ...styles.button,
+            backgroundColor: this.props.customTheme.palette.secondary,
+            ...this.props.customTheme.buttonShadow
+          }}
+          icon={{
+            name: 'facebook',
+            type: 'font-awesome',
+            size: 20,
+            color: this.props.customTheme.palette.grey5,
+            containerStyle: { marginRight: 10 }
+          }}
           title="Login with Facebook"
-          titleStyle={styles.buttonTitle}
+          titleStyle={{
+            ...styles.buttonTitle,
+            color: this.props.customTheme.palette.grey5
+          }}
           onPress={this.onClickFacebook}
           TouchableComponent={TouchableOpacity}
         />
         <Button
-          buttonStyle={[styles.button, styles.primaryButton]}
-          icon={{ name: 'instagram', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
+          buttonStyle={{
+            ...styles.button,
+            backgroundColor: this.props.customTheme.palette.secondary,
+            ...this.props.customTheme.buttonShadow
+          }}
+          icon={{
+            name: 'instagram',
+            type: 'font-awesome',
+            size: 20,
+            color: this.props.customTheme.palette.grey5,
+            containerStyle: { marginRight: 10 }
+          }}
           title="Login with Instagram"
-          titleStyle={styles.buttonTitle}
+          titleStyle={{
+            ...styles.buttonTitle,
+            color: this.props.customTheme.palette.grey5
+          }}
           onPress={this.onClickInstagram}
           TouchableComponent={TouchableOpacity}
         />
         <InstagramLogin
+          containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}
           ref={c => this.instagramLogin = c}
           clientId="2862949e166644b3a94fc2c483d744f2"
           redirectUrl="https://muanation.com/"
@@ -147,11 +200,23 @@ class SignIn extends Component {
             Alert.alert(reason);
           }}
         />
-        <Text style={styles.question}>New to the platform?</Text>
+        <Text style={{
+          color: this.props.customTheme.palette.grey2,
+          fontSize: 14,
+          fontFamily: 'Roboto',
+          marginTop: 20,
+          marginBottom: 10
+        }}>New to the platform?</Text>
         <Button
-          buttonStyle={[styles.button, styles.secondaryButton]}
+          buttonStyle={{
+            ...styles.button,
+            backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
+          }}
           title="Create an account"
-          titleStyle={[styles.buttonTitle, { color: colors.mulberry }]}
+          titleStyle={{
+            ...styles.buttonTitle,
+            color: this.props.customTheme.palette.secondary
+          }}
           onPress={this.onClickSignup}
           TouchableComponent={TouchableOpacity}
         />
@@ -162,26 +227,14 @@ class SignIn extends Component {
 }
 
 const styles = StyleSheet.create({
-  welcome: {
-    color: colors.smokyBlack,
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'Lato'
-  },
-  mua: {
-    color: colors.mulberry,
-    fontSize: 38,
-    fontWeight: 'bold',
-    fontFamily: 'Lato'
-  },
-  place: {
-    color: colors.taupeGray,
-    fontSize: 14,
-    fontFamily: 'Roboto'
-  },
   banner: {
     width: '100%',
     height: '100%'
+  },
+  pageDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5
   },
   button: {
     width: 254,
@@ -189,41 +242,18 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderRadius: 12
   },
-  primaryButton: {
-    backgroundColor: colors.mulberry,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.mulberry,
-        shadowOpacity: 1,
-        shadowOffset: { width: 1, height: 6 }
-      },
-      android: {
-        elevation: 6
-      }
-    })
-  },
-  secondaryButton: {
-    backgroundColor: colors.mulberry + '19' // alpha 10%
-  },
   buttonTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'Roboto'
-  },
-  question: {
-    color: colors.taupeGray,
-    fontSize: 14,
-    fontFamily: 'Roboto',
-    marginTop: 20,
-    marginBottom: 10
   }
 });
 
-const mapStateToProps = (state) => {
-  const { user } = state
-  return { user }
-};
+const mapStateToProps = ({
+  common: { theme }
+}) => ({
+  customTheme: theme
+});
 
 const mapDispatchToProps = (dispacth) => ({
   signInWithFacebook: (onError) => dispacth(signInWithFacebook(onError)),

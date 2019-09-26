@@ -11,3 +11,9 @@ export const clearLoading = () => {
     return dispatch({ type: types.CLEAR_LOADING });
   }
 }
+
+export const changeTheme = (name) => {
+  return (dispatch) => {
+    return dispatch({ type: types.CHANGE_THEME, payload: name });
+  }
+}

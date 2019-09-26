@@ -258,16 +258,12 @@ store.dispatch(getProducts());
 const theme = {
   Input: {
     inputContainerStyle: {
-      backgroundColor: colors.isabelline,
       borderBottomColor: undefined,
       borderBottomWidth: undefined,
       borderRadius: 12
     },
     leftIconContainerStyle: {
       marginRight: 8
-    },
-    inputStyle: {
-      color: colors.taupe
     }
   }
 };
