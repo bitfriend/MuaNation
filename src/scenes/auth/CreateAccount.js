@@ -6,8 +6,9 @@ import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
-import colors from '../../components/theme/colors';
 import { joinWithFacebook, joinWithInstagram } from '../../controllers/auth/actions';
+
+const Color = require('color');
 
 class CreateAccount extends Component {
   state = {
@@ -28,44 +29,68 @@ class CreateAccount extends Component {
   renderItem({ checked, title, description, onPress }) {
     return (
       <TouchableOpacity
-        style={[styles.selectItem, checked ? { borderColor: colors.mulberry } : { borderColor: colors.gainsboro }]}
+        style={{
+          width: '100%',
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+          marginVertical: 10,
+          backgroundColor: this.props.customTheme.palette.grey5,
+          borderWidth: 1,
+          borderRadius: 12,
+          borderColor: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey3,
+          ...this.props.customTheme.shadows[2]
+        }}
         onPress={onPress}
       >
         <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
-          <Text style={[styles.middleText, checked ? { color: colors.mulberry } : { color: colors.smokyBlack }]}>{title}</Text>
+          <Text style={{
+            flex: 1,
+            color: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey0,
+            fontSize: 18,
+            fontWeight: 'bold',
+            fontFamily: 'Roboto'
+          }}>{title}</Text>
           {checked ? (
-            <Icon type="material" name="radio-button-checked" size={20} color={colors.mulberry} />
+            <Icon type="material" name="radio-button-checked" size={20} color={this.props.customTheme.palette.secondary} />
           ) : (
-            <Icon type="material" name="radio-button-unchecked" size={20} color={colors.smokyBlack} />
+            <Icon type="material" name="radio-button-unchecked" size={20} color={this.props.customTheme.palette.secondary} />
           )}
         </View>
-        <Text style={styles.smallText}>{description}</Text>
+        <Text style={{
+          color: this.props.customTheme.palette.grey2,
+          fontSize: 14,
+          fontFamily: 'Roboto',
+          marginTop: 20,
+          marginBottom: 10
+        }}>{description}</Text>
       </TouchableOpacity>
     );
   }
 
   renderModal() {
     return (
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={this.state.modalVisible}
-      >
-        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center' }}>
-          <View style={{ backgroundColor: 'white', marginHorizontal: 10, padding: 5 }}>
-            <Text style={{ fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
+      <Modal animationType="fade" transparent={true} visible={this.state.modalVisible}>
+        <View style={{ flex: 1, backgroundColor: this.props.customTheme.overlays[0], justifyContent: 'center' }}>
+          <View style={{ backgroundColor: this.props.customTheme.palette.grey5, borderRadius: 12, marginHorizontal: 10, padding: 5 }}>
+            <Text style={{ color: this.props.customTheme.palette.grey2, fontSize: 16, padding: 10 }}>Please enter the email for Instagram</Text>
             <Input
               containerStyle={{ padding: 5 }}
-              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: colors.taupe }}
+              inputContainerStyle={{ backgroundColor: this.props.customTheme.palette.grey4 }}
+              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: this.props.customTheme.palette.grey1 }}
               placeholder="Email"
-              placeholderTextColor={colors.taupeGray}
+              placeholderTextColor={this.props.customTheme.palette.grey2}
+              inputStyle={{ color: this.props.customTheme.palette.grey1 }}
               onChangeText={(email) => this.setState({ email })}
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
                 containerStyle={{ flex: 1, padding: 5 }}
-                buttonStyle={{ backgroundColor: colors.mulberry, borderRadius: 12 }}
+                buttonStyle={{
+                  backgroundColor: this.props.customTheme.palette.secondary,
+                  borderRadius: 12
+                }}
                 title="OK"
+                titleStyle={{ color: this.props.customTheme.palette.grey5 }}
                 onPress={() => {
                   this.setState({ modalVisible: false });
                   this.props.joinWithInstagram(this.state.role, this.state.instagramToken, this.state.email, this.props.navigation, (reason) => Alert.alert(reason));
@@ -74,11 +99,11 @@ class CreateAccount extends Component {
               <Button
                 containerStyle={{ flex: 1, padding: 5 }}
                 buttonStyle={{
-                  backgroundColor: colors.mulberry + '19', // alpha 10%
+                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string(),
                   borderRadius: 12
                 }}
                 title="Cancel"
-                titleStyle={{ color: colors.mulberry }}
+                titleStyle={{ color: this.props.customTheme.palette.secondary }}
                 onPress={() => this.setState({ modalVisible: false })}
               />
             </View>
@@ -90,11 +115,22 @@ class CreateAccount extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingBottom: 30 }}>
+      <View style={{ flex: 1, paddingBottom: 30, backgroundColor: this.props.customTheme.palette.grey5 }}>
         <SceneHeader />
         <View style={{ flex: 1, marginHorizontal: 50 }}>
-          <Text style={styles.titleText}>Create an account</Text>
-          <Text style={styles.smallText}>Please select how do you want to use the app</Text>
+          <Text style={{
+            color: this.props.customTheme.palette.grey0,
+            fontSize: 24,
+            fontWeight: 'bold',
+            fontFamily: 'Roboto'
+          }}>Create an account</Text>
+          <Text style={{
+            color: this.props.customTheme.palette.grey2,
+            fontSize: 14,
+            fontFamily: 'Roboto',
+            marginTop: 20,
+            marginBottom: 10
+          }}>Please select how do you want to use the app</Text>
           <View style={{ flex: 1 }}>
             {this.renderItem({
               checked: this.state.role === 'artist',
@@ -111,22 +147,49 @@ class CreateAccount extends Component {
           </View>
           <View style={{ alignItems: 'center' }}>
             <Button
-              buttonStyle={styles.button}
-              icon={{ name: 'facebook', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
+              buttonStyle={{
+                ...styles.button,
+                backgroundColor: this.props.customTheme.palette.secondary,
+                ...this.props.customTheme.buttonShadow
+              }}
+              icon={{
+                name: 'facebook',
+                type: 'font-awesome',
+                size: 20,
+                color: this.props.customTheme.palette.grey5,
+                containerStyle: { marginRight: 10 }
+              }}
               title="Join with Facebook"
-              titleStyle={styles.buttonTitle}
+              titleStyle={{
+                ...styles.buttonTitle,
+                color: this.props.customTheme.palette.grey5
+              }}
               onPress={this.onClickFacebook}
               TouchableComponent={TouchableOpacity}
             />
             <Button
-              buttonStyle={styles.button}
-              icon={{ name: 'instagram', type: 'font-awesome', size: 20, color: 'white', containerStyle: { marginRight: 10 } }}
+              buttonStyle={{
+                ...styles.button,
+                backgroundColor: this.props.customTheme.palette.secondary,
+                ...this.props.customTheme.buttonShadow
+              }}
+              icon={{
+                name: 'instagram',
+                type: 'font-awesome',
+                size: 20,
+                color: this.props.customTheme.palette.grey5,
+                containerStyle: { marginRight: 10 }
+              }}
               title="Join with Instagram"
-              titleStyle={styles.buttonTitle}
+              titleStyle={{
+                ...styles.buttonTitle,
+                color: this.props.customTheme.palette.grey5
+              }}
               onPress={this.onClickInstagram}
               TouchableComponent={TouchableOpacity}
             />
             <InstagramLogin
+              containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}
               ref={c => this.instagramLogin = c}
               clientId="2862949e166644b3a94fc2c483d744f2"
               redirectUrl="https://muanation.com/"
@@ -153,63 +216,11 @@ class CreateAccount extends Component {
 }
 
 const styles = StyleSheet.create({
-  titleText: {
-    color: colors.smokyBlack,
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
-  },
-  middleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
-    flex: 1
-  },
-  smallText: {
-    color: colors.taupeGray,
-    fontSize: 14,
-    fontFamily: 'Roboto',
-    marginTop: 20,
-    marginBottom: 10
-  },
-  selectItem: {
-    width: '100%',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderRadius: 12,
-    backgroundColor: 'white',
-    elevation: 20,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.sealBrown,
-        shadowOpacity: 1,
-        shadowOffset: { width: 2, height: 12 }
-      },
-      android: {
-        elevation: 12
-      }
-    })
-  },
   button: {
     width: 254,
     height: 48,
     marginTop: 16,
-    borderRadius: 12,
-    backgroundColor: colors.mulberry,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.roseBonbon,
-        shadowOpacity: 1,
-        shadowOffset: { width: 1, height: 6 }
-      },
-      android: {
-        elevation: 6
-      }
-    })
+    borderRadius: 12
   },
   buttonTitle: {
     fontSize: 16,
@@ -218,10 +229,16 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = ({
+  common: { theme }
+}) => ({
+  customTheme: theme
+});
+
 const mapDispatchToProps = (dispacth) => ({
   joinWithFacebook: (role, onError) => dispacth(joinWithFacebook(role, onError)),
   joinWithInstagram: (role, token, email, onError) => dispacth(joinWithInstagram(role, token, email, onError)),
   joinWithInstagramFailure: () => dispacth({ type: types.JOIN_WITH_INSTAGRAM_FAILURE })
 });
 
-export default connect(null, mapDispatchToProps)(CreateAccount);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount);
