@@ -51,13 +51,13 @@ class SignIn extends Component {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Swiper>
             <View>
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/logo1.png')} />
+              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash1.png')} />
             </View>
             <View>
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/logo2.png')} />
+              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash2.png')} />
             </View>
             <View>
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/logo3.png')} />
+              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash3.png')} />
             </View>
           </Swiper>
         </View>

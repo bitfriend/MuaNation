@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -28,7 +28,7 @@ export default class Splash extends Component {
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
-        colors={['#ed7d3a', '#ce4d82']}
+        colors={['#ce4d82', '#4c39e8']}
         style={{
           flex: 1,
           alignItems: 'center',
@@ -36,7 +36,7 @@ export default class Splash extends Component {
         }}
       >
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <View style={{ width: 72, height: 72, backgroundColor: 'white' }} />
+          <Image source={require('../../asset/images/logo.png')} style={{ width: 180, height: 172 }} />
         </View>
       </LinearGradient>
     );
