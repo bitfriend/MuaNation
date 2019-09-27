@@ -40,6 +40,7 @@ class Products extends Component {
                 </TouchableOpacity>
               )}
               horizontal
+              style={{ paddingHorizontal: 8 }}
             />
           </View>
           <Text style={{
@@ -59,6 +60,7 @@ class Products extends Component {
               </TouchableOpacity>
             )}
             numColumns={2}
+            style={{ paddingHorizontal: 8 }}
           />
         </View>
       </ImageCacheProvider>
@@ -136,11 +138,10 @@ class PopularProduct extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 16
+    paddingTop: 16
   },
   heading: {
-    marginHorizontal: 8,
+    marginHorizontal: 16,
     fontFamily: 'Roboto',
     fontSize: 14,
     fontWeight: 'bold'

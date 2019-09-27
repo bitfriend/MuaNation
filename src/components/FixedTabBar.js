@@ -22,12 +22,13 @@ export default class FixedTabBar extends Component {
     };
     const focusedLabelStyle = {
       ...normalLabelStyle,
-      textDecorationLine: 'underline'
+      borderBottomColor: this.props.activeTintColor,
+      borderBottomWidth: 2
     };
     return (
       <View style={tabStyle}>
         <View style={{ marginHorizontal: 16, flexDirection: 'row' }}>
-          <Text style={focused ? focusedLabelStyle: normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
+          <Text style={focused ? focusedLabelStyle : normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
           <Text style={normalLabelStyle}>{label.substring(1)}</Text>
         </View>
       </View>
