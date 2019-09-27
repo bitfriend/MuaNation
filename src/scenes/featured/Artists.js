@@ -1,11 +1,10 @@
-import React, { Component, Fragment, PureComponent } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
-import colors from '../../components/theme/colors';
 import { getFeaturedArtists, getArtists } from '../../controllers/artist/actions';
 
 class Artists extends Component {
@@ -115,8 +114,8 @@ class Artists extends Component {
               keyExtractor={(item, index) => index.toString()}
               renderItem={this.renderCard}
               horizontal
-              ListHeaderComponent={<View style={{ width: 8 }} />}
-              ListFooterComponent={<View style={{ width: 8 }} />}
+              ListHeaderComponent={() => <View style={{ width: 8 }} />}
+              ListFooterComponent={() => <View style={{ width: 8 }} />}
             />
           </ImageCacheProvider>
         </View>
@@ -138,10 +137,6 @@ class Artists extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.isabelline
-  },
   avatar: {
     width: 48,
     height: 48,

@@ -114,8 +114,8 @@ class Products extends Component {
               keyExtractor={(item, index) => index.toString()}
               renderItem={this.renderSaleProduct}
               horizontal
-              ListHeaderComponent={<View style={{ width: 8 }} />}
-              ListFooterComponent={<View style={{ width: 8 }} />}
+              ListHeaderComponent={() => <View style={{ width: 8 }} />}
+              ListFooterComponent={() => <View style={{ width: 8 }} />}
             />
           </View>
           <Text style={{

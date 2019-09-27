@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Animated, Dimensions, Easing, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -6,8 +6,9 @@ import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import colors from '../../components/theme/colors';
 import { getPopularProduct } from '../../controllers/product/actions';
+
+const Color = require('color');
 
 const drawerHeight = 402;
 const { width: windowWidth } = Dimensions.get('window');
@@ -46,13 +47,61 @@ class PopularProduct extends Component {
     }
   }
 
+  renderScore(score, size, marginHorizontal) {
+    const criteria = [0, 1, 2, 3, 4];
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        {criteria.map((criterion, index) => (
+          <Icon
+            key={index}
+            type="font-awesome"
+            name="star"
+            size={size}
+            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            containerStyle={{ marginHorizontal }}
+          />
+        ))}
+      </View>
+    );
+  }
+
+  renderCard = ({ item, index, separators }) => {
+    return (
+      <View style={{
+        ...cardStyles.container,
+        backgroundColor: this.props.customTheme.palette.grey3
+      }}>
+        <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
+        <View style={{ flex: 1, paddingLeft: 16 }}>
+          <View style={{ width: '100%', flexDirection: 'row' }}>
+            <Text style={{
+              ...cardStyles.name,
+              color: this.props.customTheme.title
+            }}>{item.fullName}</Text>
+            {this.renderScore(item.score, 16, 2)}
+          </View>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={{
+            ...cardStyles.comment,
+            color: this.props.customTheme.label
+          }}>{item.comment}</Text>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     console.log('artists', this.props.artists);
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.fullfill}>
           {this.props.images && (
-            <Swiper paginationStyle={styles.pagination}>
+            <Swiper
+              dotColor={Color(this.props.customTheme.container).alpha(0.3).string()}
+              dotStyle={styles.pageDot}
+              activeDotColor={this.props.customTheme.container}
+              activeDotStyle={styles.pageDot}
+              paginationStyle={styles.pagination}
+            >
               {this.props.images.map((image, index) => (
                 <View key={index}>
                   <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
@@ -71,26 +120,44 @@ class PopularProduct extends Component {
             })
           }]
         }}>
-          <View style={styles.panel}>
+          <View style={{
+            ...styles.panel,
+            backgroundColor: this.props.customTheme.container
+          }}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={styles.drawer} />
+              <View style={{
+                ...styles.drawer,
+                backgroundColor: this.props.customTheme.palette.grey2
+              }} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 24 }}>
-              <Text style={styles.name}>{this.props.name}</Text>
+              <Text style={{
+                ...styles.name,
+                color: this.props.customTheme.title
+              }}>{this.props.name}</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.dollar}>$</Text>
-                <Text style={styles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
+                <Text style={{
+                  ...styles.dollar,
+                  color: this.props.customTheme.title
+                }}>$</Text>
+                <Text style={{
+                  ...styles.price,
+                  color: this.props.customTheme.title
+                }}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
             <ScrollView style={{ marginTop: 16, marginBottom: 24, marginHorizontal: 24 }}>
-              <Text style={styles.overview}>{this.props.overview}</Text>
+              <Text style={{
+                ...styles.overview,
+                color: this.props.customTheme.label
+              }}>{this.props.overview}</Text>
             </ScrollView>
             {this.props.reviews && (
               <View style={{ height: 96 }}>
                 <FlatList
                   data={this.props.reviews}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item, index, separators }) => <Review {...item} />}
+                  renderItem={this.renderCard}
                   ListHeaderComponent={() => <View style={{ width: 24 }} />}
                   ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
                   ListFooterComponent={() => <View style={{ width: 24 }} />}
@@ -100,27 +167,35 @@ class PopularProduct extends Component {
             )}
             <View style={actionStyles.container}>
               <Button
-                buttonStyle={actionStyles.close}
+                buttonStyle={{
+                  ...actionStyles.close,
+                  backgroundColor: this.props.customTheme.palette.grey3
+                }}
                 icon={{
                   name: 'close',
                   type: 'material',
                   size: 20,
-                  color: colors.taupe
+                  color: this.props.customTheme.palette.grey0
                 }}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
               />
               <Button
                 containerStyle={{ flex: 1 }}
-                buttonStyle={actionStyles.book}
+                buttonStyle={{
+                  ...actionStyles.book,
+                  backgroundColor: this.props.customTheme.palette.secondary,
+                  ...this.props.customTheme.buttonShadow
+                }}
                 icon={{
                   name: 'date-range',
                   type: 'material',
                   size: 20,
-                  color: 'white'
+                  color: this.props.customTheme.buttonTitle
                 }}
                 title="Book"
                 titleStyle={{
+                  color: this.props.customTheme.buttonTitle,
                   fontFamily: 'Roboto',
                   fontSize: 18,
                   fontWeight: 'bold'
@@ -130,34 +205,6 @@ class PopularProduct extends Component {
             </View>
           </View>
         </Animated.View>
-      </View>
-    );
-  }
-}
-
-class Review extends PureComponent {
-  renderScore(score, size, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? colors.pastelOrange : colors.lightGray} containerStyle={{ marginHorizontal }} />
-        ))}
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <View style={cardStyles.container}>
-        <Image source={{ uri: this.props.avatar }} style={cardStyles.avatar} />
-        <View style={{ flex: 1, paddingLeft: 16 }}>
-          <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={cardStyles.name}>{this.props.fullName}</Text>
-            {this.renderScore(this.props.score, 16, 2)}
-          </View>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={cardStyles.comment}>{this.props.comment}</Text>
-        </View>
       </View>
     );
   }
@@ -176,8 +223,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingBottom: 16,
-    backgroundColor: 'white'
+    paddingBottom: 16
   },
   drawerWrapper: {
     width: '100%',
@@ -185,33 +231,28 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   drawer: {
-    backgroundColor: colors.lightGray,
     width: 64,
     height: 5,
     borderRadius: 2.5
   },
   name: {
     flex: 1,
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold'
   },
   dollar: {
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: Math.floor(24 * 0.6),
     fontWeight: 'bold'
   },
   price: {
     marginLeft: 4,
-    color: colors.smokyBlack,
     fontFamily: 'Lato',
     fontSize: 24,
     fontWeight: 'bold'
   },
   overview: {
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 18
   }
@@ -221,7 +262,6 @@ const cardStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: colors.isabelline,
     borderRadius: 12
   },
   avatar: {
@@ -231,7 +271,6 @@ const cardStyles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 14,
     fontWeight: 'bold',
@@ -239,7 +278,6 @@ const cardStyles = StyleSheet.create({
   },
   comment: {
     width: windowWidth * 0.6,
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 14,
     marginTop: 4
@@ -257,30 +295,19 @@ const actionStyles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: colors.isabelline,
     marginRight: 8
   },
   book: {
     height: 64,
-    borderRadius: 12,
-    backgroundColor: colors.mulberry,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.sealBrown,
-        shadowOpacity: 1,
-        shadowOffset: { width: 1, height: 6 }
-      },
-      android: {
-        elevation: 6
-      }
-    })
+    borderRadius: 12
   }
 });
 
 const mapStateToProps = ({
+  common: { theme },
   product: { popularProduct }
 }) => ({
+  customTheme: theme,
   ...popularProduct
 });
 

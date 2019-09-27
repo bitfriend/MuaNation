@@ -6,8 +6,9 @@ import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import colors from '../../components/theme/colors';
 import { getSaleProduct } from '../../controllers/product/actions';
+
+const Color = require('color');
 
 const drawerHeight = 248;
 
@@ -50,7 +51,13 @@ class SaleProduct extends Component {
       <View style={{ flex: 1 }}>
         <View style={styles.fullfill}>
           {this.props.images && (
-            <Swiper paginationStyle={styles.pagination}>
+            <Swiper
+              dotColor={Color(this.props.customTheme.container).alpha(0.3).string()}
+              dotStyle={styles.pageDot}
+              activeDotColor={this.props.customTheme.container}
+              activeDotStyle={styles.pageDot}
+              paginationStyle={styles.pagination}
+            >
               {this.props.images.map((image, index) => (
                 <View key={index}>
                   <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
@@ -69,36 +76,66 @@ class SaleProduct extends Component {
             })
           }]
         }}>
-          <View style={styles.panel}>
+          <View style={{
+            ...styles.panel,
+            backgroundColor: this.props.customTheme.container
+          }}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={styles.drawer} />
+              <View style={{
+                ...styles.drawer,
+                backgroundColor: this.props.customTheme.palette.grey2
+              }} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={productStyles.name}>{this.props.name}</Text>
-              <Text style={productStyles.extra}>{this.props.extra}</Text>
+              <Text style={{
+                ...productStyles.name,
+                color: this.props.customTheme.title
+              }}>{this.props.name}</Text>
+              <Text style={{
+                ...productStyles.extra,
+                color: this.props.customTheme.extra,
+                backgroundColor: this.props.customTheme.palette.warning
+              }}>{this.props.extra}</Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Text style={productStyles.dollar}>$</Text>
-                <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
+                <Text style={{
+                  ...productStyles.dollar,
+                  color: this.props.customTheme.title
+                }}>$</Text>
+                <Text style={{
+                  ...productStyles.price,
+                  color: this.props.customTheme.title
+                }}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
-            <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
+            <Text numberOfLines={2} style={{
+              ...productStyles.overview,
+              color: this.props.customTheme.label
+            }}>{this.props.overview}</Text>
             <View style={actionStyles.container}>
               <Button
-                buttonStyle={actionStyles.close}
+                buttonStyle={{
+                  ...actionStyles.close,
+                  backgroundColor: this.props.customTheme.palette.grey3
+                }}
                 icon={{
                   name: 'close',
                   type: 'material',
                   size: 20,
-                  color: colors.taupe
+                  color: this.props.customTheme.palette.grey0
                 }}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
               />
               <Button
                 containerStyle={{ flex: 1 }}
-                buttonStyle={actionStyles.buy}
+                buttonStyle={{
+                  ...actionStyles.buy,
+                  backgroundColor: this.props.customTheme.palette.secondary,
+                  ...this.props.customTheme.buttonShadow
+                }}
                 title="Buy"
                 titleStyle={{
+                  color: this.props.customTheme.buttonTitle,
                   fontFamily: 'Roboto',
                   fontSize: 18,
                   fontWeight: 'bold'
@@ -118,6 +155,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
+  pageDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5
+  },
   pagination: {
     bottom: 50
   },
@@ -127,8 +169,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingHorizontal: 24,
-    paddingBottom: 16,
-    backgroundColor: 'white'
+    paddingBottom: 16
   },
   drawerWrapper: {
     width: '100%',
@@ -136,8 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   drawer: {
-    backgroundColor: colors.lightGray,
-    width: 64,
+    width: 32,
     height: 5,
     borderRadius: 2.5
   }
@@ -145,36 +185,30 @@ const styles = StyleSheet.create({
 
 const productStyles = StyleSheet.create({
   name: {
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold'
   },
   extra: {
-    marginLeft: 8,
-    backgroundColor: colors.pastelOrange,
+    marginLeft: 12,
     borderRadius: 4,
     paddingHorizontal: 4,
     paddingVertical: 2,
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   dollar: {
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: Math.floor(24 * 0.6),
     fontWeight: 'bold'
   },
   price: {
     marginLeft: 4,
-    color: colors.smokyBlack,
     fontFamily: 'Lato',
     fontSize: 24,
     fontWeight: 'bold'
   },
   overview: {
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 18,
     marginTop: 16,
@@ -192,30 +226,19 @@ const actionStyles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: colors.isabelline,
     marginRight: 8
   },
   buy: {
     height: 64,
-    borderRadius: 12,
-    backgroundColor: colors.mulberry,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 16,
-        shadowColor: colors.sealBrown,
-        shadowOpacity: 1,
-        shadowOffset: { width: 1, height: 6 }
-      },
-      android: {
-        elevation: 6
-      }
-    })
+    borderRadius: 12
   }
 });
 
 const mapStateToProps = ({
+  common: { theme },
   product: { saleProduct }
 }) => ({
+  customTheme: theme,
   ...saleProduct
 });
 
