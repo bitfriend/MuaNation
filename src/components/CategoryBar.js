@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 
-export default class CategoryBar extends Component {
+export default class CategoryBar extends PureComponent {
   state = {
     activeIndex: 0
   };
@@ -19,6 +19,8 @@ export default class CategoryBar extends Component {
           {this.props.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
               <Text style={[customStyles.tabItem, index === this.state.activeIndex ? {
+                borderBottomColor: this.props.underlineColor,
+                borderBottomWidth: 2,
                 color: this.props.activeTabColor,
                 fontWeight: 'bold'
               } : {
@@ -37,6 +39,7 @@ const customStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 18,
     marginHorizontal: 16,
+    paddingVertical: 16,
     textTransform: 'capitalize'
   }
 });
