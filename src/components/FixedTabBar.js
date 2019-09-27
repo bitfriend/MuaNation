@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 
-import colors from './theme/colors';
-
 export default class FixedTabBar extends Component {
   onPress(routeName) {
     this.props.navigation.navigate(routeName);
@@ -37,10 +35,10 @@ export default class FixedTabBar extends Component {
   }
 
   render() {
-    const { navigationState, getLabelText } = this.props;
+    const { navigationState, getLabelText, style } = this.props;
     const { routes } = navigationState;
     return (
-      <View style={{ flexDirection: 'row', paddingVertical: 8 }}>
+      <View style={{ ...style, flexDirection: 'row', paddingVertical: 8 }}>
         {routes.map((route, index) => (
           <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
             {this.renderItem(index === navigationState.index, getLabelText({ route }))}
@@ -61,8 +59,8 @@ const styles = StyleSheet.create({
 
 FixedTabBar.propTypes = {
   style: PropTypes.object,
-  activeTintColor: PropTypes.string,
-  inactiveTintColor: PropTypes.string,
+  activeTintColor: PropTypes.string.isRequired,
+  inactiveTintColor: PropTypes.string.isRequired,
   tabStyle: PropTypes.object,
   labelStyle: PropTypes.object,
   upperCaseLabel: PropTypes.bool,
@@ -70,7 +68,5 @@ FixedTabBar.propTypes = {
 }
 
 FixedTabBar.defaultProps = {
-  activeTintColor: colors.mulberry,
-  inactiveTintColor: colors.taupe,
   upperCaseLabel: false
 }

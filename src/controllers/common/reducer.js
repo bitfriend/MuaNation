@@ -30,7 +30,10 @@ function getLightTheme() {
     placeholder: lightPalette.grey1,
     card: lightPalette.white,
     tag: lightPalette.grey2,
-    tagTitle: lightPalette.grey1
+    tagTitle: lightPalette.grey1,
+    tabTitle: lightPalette.grey0,
+    heading: lightPalette.grey1,
+    extra: lightPalette.grey0
   };
 }
 
@@ -50,25 +53,28 @@ function getDarkTheme() {
     placeholder: darkPalette.grey1,
     card: darkPalette.grey3,
     tag: darkPalette.grey2,
-    tagTitle: darkPalette.grey1
+    tagTitle: darkPalette.grey1,
+    tabTitle: darkPalette.grey1,
+    heading: darkPalette.grey2,
+    extra: darkPalette.black
   };
 }
-
-const initialState = {
-  loading: 0,
-  theme: {
-    name: 'light',
-    ...getLightTheme()
-  }
-};
 
 // const initialState = {
 //   loading: 0,
 //   theme: {
-//     name: 'dark',
-//     ...getDarkTheme()
+//     name: 'light',
+//     ...getLightTheme()
 //   }
 // };
+
+const initialState = {
+  loading: 0,
+  theme: {
+    name: 'dark',
+    ...getDarkTheme()
+  }
+};
 
 export default commonReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -85,7 +91,6 @@ export default commonReducer = (state = initialState, action) => {
     case types.CHANGE_THEME:
       return {
         ...state,
-        themeName: action.payload,
         theme: action.payload === 'dark' ? {
           name: action.payload,
           palette: darkPalette,

@@ -20,7 +20,29 @@ import {
 
 import { Icon } from 'react-native-elements';
 
-import colors from './src/components/theme/colors';
+import { combineReducers } from 'redux';
+
+import commonReducer from './src/controllers/common/reducer';
+import authReducer from './src/controllers/auth/reducer';
+import artistReducer from './src/controllers/artist/reducer';
+import productReducer from './src/controllers/product/reducer';
+import relationReducer from './src/controllers/relation/reducer';
+import reviewReducer from './src/controllers/review/reducer';
+import discoverReducer from './src/controllers/discover/reducer';
+
+const appReducer = combineReducers({
+  common: commonReducer,
+  auth: authReducer,
+  artist: artistReducer,
+  product: productReducer,
+  relation: relationReducer,
+  review: reviewReducer,
+  discover: discoverReducer
+});
+
+const store = createStore(appReducer, applyMiddleware(thunk));
+store.dispatch(getProducts());
+const { common } = store.getState();
 
 import Splash from './src/scenes/Splash';
 
@@ -98,9 +120,9 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
 }, {
   tabBarComponent: props => <FixedTabBar {...props} />,
   tabBarOptions: {
-    style: { backgroundColor: 'transparent' },
-    activeTintColor: colors.mulberry,
-    inactiveTintColor: colors.smokyBlack,
+    style: { backgroundColor: common.theme.container },
+    activeTintColor: common.theme.palette.secondary,
+    inactiveTintColor: common.theme.palette.grey0,
     labelStyle: {
       fontFamily: 'Lato',
       fontSize: 24,
@@ -108,7 +130,7 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
       margin: 0
     },
     upperCaseLabel: false,
-    indicatorStyle: { backgroundColor: colors.mulberry }
+    indicatorStyle: { backgroundColor: common.theme.palette.secondary }
   }
 });
 
@@ -217,8 +239,9 @@ const AppTabNav = createBottomTabNavigator({
   swipeEnabled: false,
   lazy: false,
   tabBarOptions: {
-    activeTintColor: colors.mulberry,
-    inactiveTintColor: colors.taupe,
+    activeTintColor: common.theme.palette.secondary,
+    inactiveTintColor: common.theme.tabTitle,
+    style: { backgroundColor: common.theme.container }
   }
 });
 
@@ -230,30 +253,7 @@ const SwitchNav = createSwitchNavigator({
   initialRouteName: 'Splash'
 });
 
-import { combineReducers } from 'redux';
-
-import commonReducer from './src/controllers/common/reducer';
-import authReducer from './src/controllers/auth/reducer';
-import artistReducer from './src/controllers/artist/reducer';
-import productReducer from './src/controllers/product/reducer';
-import relationReducer from './src/controllers/relation/reducer';
-import reviewReducer from './src/controllers/review/reducer';
-import discoverReducer from './src/controllers/discover/reducer';
-
-const appReducer = combineReducers({
-  common: commonReducer,
-  auth: authReducer,
-  artist: artistReducer,
-  product: productReducer,
-  relation: relationReducer,
-  review: reviewReducer,
-  discover: discoverReducer
-});
-
 const AppContainer = createAppContainer(SwitchNav);
-
-const store = createStore(appReducer, applyMiddleware(thunk));
-store.dispatch(getProducts());
 
 const theme = {
   Input: {

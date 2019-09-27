@@ -8,7 +8,7 @@ export const getProducts = () => {
     dispatch(setLoading());
     try {
       let products = [];
-      for (let j, i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) {
         products.push({
           image: faker.image.image(),
           name: faker.lorem.word(),
@@ -55,7 +55,7 @@ export const getPopularProduct = (id) => {
     dispatch(setLoading());
     try {
       let i, images = [], reviews = [];
-      for ( i = 0; i < 3; i++) {
+      for (i = 0; i < 3; i++) {
         images.push(faker.image.image());
       }
       for (i = 0; i < 10; i++) {

@@ -18,8 +18,14 @@ class Products extends Component {
 
     return (
       <ImageCacheProvider urlsToPreload={images}>
-        <View style={styles.container}>
-          <Text style={styles.heading}>SALE</Text>
+        <View style={{
+          ...styles.container,
+          backgroundColor: this.props.customTheme.container
+        }}>
+          <Text style={{
+            ...styles.heading,
+            color: this.props.customTheme.heading
+          }}>SALE</Text>
           <View style={{ height: 348 }}>
             <FlatList
               data={this.props.products}
@@ -29,14 +35,17 @@ class Products extends Component {
                   this.props.navigation.navigate('SaleProduct', { id: 0 });
                 }}>
                   <View style={styles.listItem}>
-                    <SaleProduct {...item} />
+                    <SaleProduct {...item} customTheme={this.props.customTheme} />
                   </View>
                 </TouchableOpacity>
               )}
               horizontal
             />
           </View>
-          <Text style={styles.heading}>POPULAR</Text>
+          <Text style={{
+            ...styles.heading,
+            color: this.props.customTheme.heading
+          }}>POPULAR</Text>
           <FlatList
             data={this.props.products}
             keyExtractor={(item, index) => index.toString()}
@@ -45,7 +54,7 @@ class Products extends Component {
                 this.props.navigation.navigate('PopularProduct', { id: 0 });
               }}>
                 <View style={styles.listItem}>
-                  <PopularProduct {...item} />
+                  <PopularProduct {...item} customTheme={this.props.customTheme} />
                 </View>
               </TouchableOpacity>
             )}
@@ -62,16 +71,36 @@ const saleProductWidth = 254;
 class SaleProduct extends PureComponent {
   render() {
     return (
-      <View style={saleStyles.container}>
+      <View style={{
+        borderRadius: 12,
+        backgroundColor: this.props.customTheme.card,
+        ...this.props.customTheme.shadows[3]
+      }}>
         <CachedImage source={{ uri: this.props.image }} style={{ width: saleProductWidth, height: 180, borderTopLeftRadius: 12, borderTopRightRadius: 12 }} />
         <View style={{ padding: 16 }}>
-          <Text style={saleStyles.name}>{this.props.name}</Text>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={saleStyles.overview}>{this.props.overview}</Text>
+          <Text style={{
+            ...saleStyles.name,
+            color: this.props.customTheme.title
+          }}>{this.props.name}</Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={{
+            ...saleStyles.overview,
+            color: this.props.customTheme.label
+          }}>{this.props.overview}</Text>
           <View style={saleStyles.title}>
-            <Text style={saleStyles.extra}>{this.props.extra}</Text>
+            <Text style={{
+              ...saleStyles.extra,
+              color: this.props.customTheme.extra,
+              backgroundColor: this.props.customTheme.palette.warning
+            }}>{this.props.extra}</Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <Text style={saleStyles.symbol}>$</Text>
-              <Text style={saleStyles.price}>{this.props.price.toFixed(2)}</Text>
+              <Text style={{
+                ...saleStyles.symbol,
+                color: this.props.customTheme.title
+              }}>$</Text>
+              <Text style={{
+                ...saleStyles.price,
+                color: this.props.customTheme.title
+              }}>{this.props.price.toFixed(2)}</Text>
             </View>
           </View>
         </View>
@@ -90,8 +119,14 @@ class PopularProduct extends PureComponent {
       <View>
         <CachedImage source={{ uri: this.props.image }} style={{ width: imageWidth, height: imageHeight, borderRadius: 8 }} />
         <View style={popularStyles.title}>
-          <Text style={popularStyles.name}>{this.props.name}</Text>
-          <Text style={popularStyles.price}>${this.props.price.toFixed(2)}</Text>
+          <Text style={{
+            ...popularStyles.name,
+            color: this.props.customTheme.title
+          }}>{this.props.name}</Text>
+          <Text style={{
+            ...popularStyles.price,
+            color: this.props.customTheme.palette.secondary
+          }}>${this.props.price.toFixed(2)}</Text>
         </View>
       </View>
     );
@@ -101,8 +136,8 @@ class PopularProduct extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 8,
-    marginVertical: 16
+    paddingHorizontal: 8,
+    paddingVertical: 16
   },
   heading: {
     marginHorizontal: 8,
@@ -116,24 +151,7 @@ const styles = StyleSheet.create({
 });
 
 const saleStyles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderColor: colors.sealBrown,
-    ...Platform.select({
-      ios: {
-        shadowRadius: 24,
-        shadowColor: colors.sealBrown,
-        shadowOpacity: 1,
-        shadowOffset: { width: 3, height: 16 }
-      },
-      android: {
-        elevation: 16
-      }
-    })
-  },
   name: {
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold',
@@ -141,7 +159,6 @@ const saleStyles = StyleSheet.create({
   },
   overview: {
     width: saleProductWidth - 16 * 2,
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontSize: 14
   },
@@ -151,22 +168,18 @@ const saleStyles = StyleSheet.create({
     marginTop: 16
   },
   extra: {
-    backgroundColor: colors.pastelOrange,
     borderRadius: 4,
     paddingHorizontal: 4,
     paddingVertical: 2,
-    color: colors.taupe,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   symbol: {
     marginRight: 4,
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   price: {
-    color: colors.smokyBlack,
     fontFamily: 'Lato',
     fontSize: 24,
     fontWeight: 'bold'
@@ -180,22 +193,22 @@ const popularStyles = StyleSheet.create({
     marginVertical: 8
   },
   name: {
-    color: colors.smokyBlack,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize',
     flex: 1
   },
   price: {
-    color: colors.mulberry,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
+  common: { theme },
   product: { products }
 }) => ({
+  customTheme: theme,
   products
 });
 

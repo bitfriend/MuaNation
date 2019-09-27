@@ -8,7 +8,7 @@ export const getReviews = (userId) => {
     dispatch(setLoading());
     try {
       let reviews = [];
-      for (let j, i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         let products = [];
         for (let j = 0; j < 5; j++) {
           products.push(faker.image.image());

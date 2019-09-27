@@ -8,49 +8,71 @@ import { setLoading, clearLoading } from '../common/actions';
 export const getFeaturedArtists = (onError) => {
   return (dispatch) => {
     dispatch(setLoading());
-    AsyncStorage.getItem('mua_token').then(muaToken => {
-      console.log('muaToken', muaToken);
-      fetch('https://muanation.com/api/users/featured_artists.json', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${muaToken}`
+    // AsyncStorage.getItem('mua_token').then(muaToken => {
+    //   console.log('muaToken', muaToken);
+    //   fetch('https://muanation.com/api/users/featured_artists.json', {
+    //     method: 'GET',
+    //     headers: {
+    //       'Authorization': `Bearer ${muaToken}`
+    //     }
+    //   }).then(response => response.json()).then(response => {
+    //     if (response.message.success) {
+    //       let artists = [];
+    //       response.featured_artists.map(artist => {
+    //         artists.push({
+    //           avatar: artist.image,
+    //           checked: faker.random.boolean(),
+    //           fullName: artist.username,
+    //           tags: artist.tags,
+    //           score: faker.random.number({ min: 0, max: 5 }),
+    //           reviews: artist.reviews.length
+    //         });
+    //       });
+    //       dispatch({ type: types.GET_FEATURED_ARTISTS_SUCCESS, payload: artists });
+    //       dispatch(clearLoading());
+    //     } else {
+    //       dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+    //       dispatch(clearLoading());
+    //       if (onError) {
+    //         onError(response.message.msg);
+    //       }
+    //     }
+    //   }).catch(error => {
+    //     dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+    //     dispatch(clearLoading());
+    //     if (onError) {
+    //       onError(error.message);
+    //     }
+    //   });
+    // }).catch(error => {
+    //   dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+    //   dispatch(clearLoading());
+    //   if (onError) {
+    //     onError(error);
+    //   }
+    // });
+    try {
+      let artists = [];
+      for (let i = 0; i < 10; i++) {
+        let tags = [];
+        for (let j = 0; j < 5; j++) {
+          tags.push(faker.lorem.word());
         }
-      }).then(response => response.json()).then(response => {
-        if (response.message.success) {
-          let artists = [];
-          response.featured_artists.map(artist => {
-            artists.push({
-              avatar: artist.image,
-              checked: faker.random.boolean(),
-              fullName: artist.username,
-              tags: artist.tags,
-              score: faker.random.number({ min: 0, max: 5 }),
-              reviews: artist.reviews.length
-            });
-          });
-          dispatch({ type: types.GET_FEATURED_ARTISTS_SUCCESS, payload: artists });
-          dispatch(clearLoading());
-        } else {
-          dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
-          dispatch(clearLoading());
-          if (onError) {
-            onError(response.message.msg);
-          }
-        }
-      }).catch(error => {
-        dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
-        dispatch(clearLoading());
-        if (onError) {
-          onError(error.message);
-        }
-      });
-    }).catch(error => {
+        artists.push({
+          avatar: faker.image.avatar(),
+          checked: faker.random.boolean(),
+          fullName: faker.name.findName(),
+          tags,
+          score: faker.random.number({ min: 0, max: 5 }),
+          reviews: faker.random.number({ min: 0, max: 1000 })
+        });
+      }
+      dispatch({ type: types.GET_FEATURED_ARTISTS_SUCCESS, payload: artists });
+      dispatch(clearLoading());
+    } catch (error) {
       dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
       dispatch(clearLoading());
-      if (onError) {
-        onError(error);
-      }
-    });
+    }
   }
 }
 

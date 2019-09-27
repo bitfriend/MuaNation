@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
 import Carousel from '../../components/carousel';
-import colors from '../../components/theme/colors';
 
 const Color = require('color');
 
