@@ -19,7 +19,7 @@ export const getLocation = (onError) => {
           onError(error);
         }
       },
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 3000 }
     );
   }
 }
