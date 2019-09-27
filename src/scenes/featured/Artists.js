@@ -1,11 +1,10 @@
 import React, { Component, Fragment, PureComponent } from 'react';
-import { Animated, Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
-import Carousel from '../../components/carousel';
 import colors from '../../components/theme/colors';
 import { getFeaturedArtists, getArtists } from '../../controllers/artist/actions';
 
@@ -23,6 +22,81 @@ class Artists extends Component {
     this.props.navigation.navigate('ArtistProfile');
   }
 
+  renderScore(score, marginHorizontal) {
+    const criteria = [0, 1, 2, 3, 4];
+    return (
+      <Fragment>
+        {criteria.map((criterion, index) => (
+          <Icon
+            key={index}
+            type="font-awesome"
+            name="star"
+            size={16}
+            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            containerStyle={{ marginHorizontal }}
+          />
+        ))}
+      </Fragment>
+    );
+  }
+
+  renderCard = ({ item, index, separators }) => {
+    return (
+      <View style={{ paddingHorizontal: 8, marginVertical: 24 }}>
+        <View style={{
+          ...styles.card,
+          backgroundColor: this.props.customTheme.card,
+          ...this.props.customTheme.shadows[3]
+        }}>
+          <View style={{ flexDirection: 'row', width: '100%' }}>
+            <View style={{ flex: 1, marginBottom: 8 }}>
+              {!item.avatar ? (
+                <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
+              ) : (
+                <CachedImage source={{ uri: item.avatar }} style={styles.avatar} />
+              )}
+            </View>
+          </View>
+          <Text style={{
+            ...styles.cardName,
+            color: this.props.customTheme.title
+          }}>{item.fullName}</Text>
+          <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
+            {item.tags.map((tag, subIndex) => (
+              <Text key={subIndex} style={{
+                ...styles.tag,
+                color: this.props.customTheme.tagTitle,
+                backgroundColor: this.props.customTheme.tag
+              }}>{tag}</Text>
+            ))}
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            {this.renderScore(item.score, 2)}
+            <Text style={{
+              ...styles.reviews,
+              color: this.props.customTheme.label
+            }}>{item.reviews} reviews</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  renderItem = ({ item, index, separators }) => {
+    return (
+      <View style={{
+        ...styles.listItem,
+        backgroundColor: this.props.customTheme.container
+      }}>
+        <CachedImage source={{ uri: item.avatar }} style={styles.avatar} />
+        <Text style={{
+          ...styles.listName,
+          color: this.props.customTheme.title
+        }}>{item.fullName}</Text>
+      </View>
+    );
+  }
+
   render() {
     const { width: windowWidth } = Dimensions.get('window');
 
@@ -33,102 +107,31 @@ class Artists extends Component {
     this.props.artists.map((artist) => images.push(artist.avatar));
 
     return (
-      <View style={styles.container}>
-        <View style={{ paddingVertical: 24, justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
+        <View style={{ height: 240 }}>
           <ImageCacheProvider urlsToPreload={featuredImages}>
-            <Carousel
+            <FlatList
               data={this.props.featuredArtists}
-              renderItem={({ item, index, animatedValue }) => (
-                <TouchableOpacity activeOpacity={1} onPress={this.onPressCard}>
-                  <Artist {...item} animatedValue={animatedValue} />
-                </TouchableOpacity>
-              )}
-              sliderWidth={windowWidth}
-              itemWidth={windowWidth * 0.7}
-              slideInterpolatedStyle={this.getAnimatedStyle}
-              contentContainerCustomStyle={{ alignItems: 'center' }}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={this.renderCard}
+              horizontal
+              ListHeaderComponent={<View style={{ width: 8 }} />}
+              ListFooterComponent={<View style={{ width: 8 }} />}
             />
           </ImageCacheProvider>
         </View>
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <View style={{ flex: 1 }}>
           <ImageCacheProvider urlsToPreload={images}>
             <FlatList
               data={this.props.artists}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index, separators }) => (
-                <TouchableOpacity>
-                  <Product {...item} />
-                </TouchableOpacity>
-              )}
+              renderItem={this.renderItem}
               ItemSeparatorComponent={() => (
-                <View style={{ height: 1, backgroundColor: colors.isabelline }} />
+                <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />
               )}
             />
           </ImageCacheProvider>
         </View>
-      </View>
-    );
-  }
-}
-
-class Artist extends PureComponent {
-  renderScore(score, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
-    return (
-      <Fragment>
-        {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={16} color={score > criterion ? '#fabc3c' : '#dcd7d9'} containerStyle={{ marginHorizontal }} />
-        ))}
-      </Fragment>
-    );
-  }
-
-  render() {
-    const { avatar, fullName, checked, tags, score, reviews, animatedValue } = this.props;
-
-    return (
-      <View style={{ width: 252, height: 189 }}>
-        <Animated.View style={[styles.cardOuter, {
-          opacity: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
-          })
-        }]} />
-        <View style={styles.cardInner}>
-          <View style={{ flexDirection: 'row', width: '100%' }}>
-            <View style={{ flex: 1, marginBottom: 8 }}>
-              {!avatar ? (
-                <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
-              ) : (
-                <CachedImage source={{ uri: avatar }} style={styles.avatar} />
-              )}
-            </View>
-            {checked && (
-              <Icon type="font-awesome" name="check-circle" size={24} color="#ef3475" />
-            )}
-          </View>
-          <Text style={styles.cardName}>{fullName}</Text>
-          <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
-            {tags.map((tag, subIndex) => (
-              <Text key={subIndex} style={styles.tag}>{tag}</Text>
-            ))}
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            {this.renderScore(score, 2)}
-            <Text style={styles.review}>{reviews} reviews</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-}
-
-class Product extends PureComponent {
-  render() {
-    return (
-      <View style={styles.listItem}>
-        <CachedImage source={{ uri: this.props.avatar }} style={styles.avatar} />
-        <Text style={styles.listName}>{this.props.fullName}</Text>
       </View>
     );
   }
@@ -144,38 +147,24 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24
   },
-  cardOuter: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'white',
-    borderColor: colors.isabelline,
-    borderWidth: 2,
-    borderRadius: 14
-  },
-  cardInner: {
-    backgroundColor: 'white',
-    padding: 16,
+  card: {
+    width: 254,
+    height: 192,
     borderRadius: 12,
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    bottom: 2,
-    left: 2
+    padding: 24
   },
   cardName: {
-    color: colors.smokyBlack,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    color: colors.taupeGray,
-    backgroundColor: colors.isabelline,
-    fontSize: 14,
     paddingHorizontal: 4,
     paddingVertical: 2,
     marginHorizontal: 2,
+    borderRadius: 4,
+    fontSize: 14,
     textTransform: 'capitalize'
   },
   listItem: {
@@ -184,23 +173,24 @@ const styles = StyleSheet.create({
     padding: 16
   },
   listName: {
-    color: colors.smokyBlack,
+    marginLeft: 16,
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 16,
     textTransform: 'capitalize'
   },
-  review: {
-    color: colors.taupeGray,
+  reviews: {
+    marginLeft: 4,
     fontSize: 10,
-    marginLeft: 4
+    fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
+  common: { theme },
   artist: { featuredArtists, artists }
 }) => ({
+  customTheme: theme,
   featuredArtists, artists
 });
 
