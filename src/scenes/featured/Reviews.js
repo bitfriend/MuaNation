@@ -18,7 +18,7 @@ class Reviews extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label} containerStyle={{ marginHorizontal }} />
+          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar} containerStyle={{ marginHorizontal }} />
         ))}
       </View>
     );

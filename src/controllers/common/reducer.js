@@ -39,7 +39,9 @@ function getLightTheme() {
     uncheckedButton: darkPalette.grey0,
     uncheckedButtonTitle: darkPalette.grey3,
     toggledButton: darkPalette.primary,
-    toggledButtonTitle: darkPalette.grey0
+    toggledButtonTitle: darkPalette.grey0,
+    fullStar: darkPalette.warning,
+    emptyStar: darkPalette.grey3
   };
 }
 
@@ -68,7 +70,9 @@ function getDarkTheme() {
     uncheckedButton: darkPalette.grey3,
     uncheckedButtonTitle: darkPalette.grey0,
     toggledButton: darkPalette.primary,
-    toggledButtonTitle: darkPalette.grey0
+    toggledButtonTitle: darkPalette.grey0,
+    fullStar: darkPalette.warning,
+    emptyStar: darkPalette.grey2
   };
 }
 

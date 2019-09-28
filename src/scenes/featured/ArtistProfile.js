@@ -60,7 +60,7 @@ class ArtistProfile extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={16} color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label} containerStyle={{ marginHorizontal }} />
+          <Icon key={index} type="font-awesome" name="star" size={16} color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar} containerStyle={{ marginHorizontal }} />
         ))}
       </View>
     );
@@ -91,18 +91,17 @@ class ArtistProfile extends Component {
       <View style={{
         flexDirection: 'row',
         width: '100%',
-        padding: 16,
-        marginHorizontal: -2
+        padding: 16
       }}>
         <Button
           title="Book"
-          containerStyle={{ flex: 1, marginHorizontal: 2 }}
+          containerStyle={{ flex: 1 }}
           buttonStyle={{ backgroundColor: this.props.customTheme.palette.secondary, ...this.props.customTheme.buttonShadow }}
           titleStyle={{ color: this.props.customTheme.buttonTitle, fontSize: 14 }}
         />
         <Button
           title="Follow"
-          containerStyle={{ flex: 1, marginHorizontal: 2 }}
+          containerStyle={{ flex: 1, marginLeft: 4 }}
           buttonStyle={{ backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string() }}
           titleStyle={{ color: this.props.customTheme.palette.secondary, fontSize: 14 }}
         />
@@ -113,7 +112,7 @@ class ArtistProfile extends Component {
             size: 22,
             color: this.props.customTheme.palette.secondary
           }}
-          containerStyle={{ marginHorizontal: 2 }}
+          containerStyle={{ marginLeft: 4 }}
           buttonStyle={{ backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string() }}
         />
       </View>

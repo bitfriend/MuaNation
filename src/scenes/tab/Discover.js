@@ -185,9 +185,9 @@ class Discover extends Component {
             selectedStar={this.onMinScoreChanged}
             containerStyle={{ width: 192 }}
             starSize={32}
-            fullStarColor={this.props.customTheme.palette.warning}
+            fullStarColor={this.props.customTheme.fullStar}
             emptyStar="star"
-            emptyStarColor={this.props.customTheme.label}
+            emptyStarColor={this.props.customTheme.emptyStar}
           />
         </View>
       );

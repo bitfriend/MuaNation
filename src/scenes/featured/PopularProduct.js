@@ -57,7 +57,7 @@ class PopularProduct extends Component {
             type="font-awesome"
             name="star"
             size={size}
-            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
             containerStyle={{ marginHorizontal }}
           />
         ))}

@@ -32,7 +32,7 @@ class Artists extends Component {
             type="font-awesome"
             name="star"
             size={16}
-            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
             containerStyle={{ marginHorizontal }}
           />
         ))}
@@ -66,10 +66,11 @@ class Artists extends Component {
               ...styles.cardName,
               color: this.props.customTheme.title
             }}>{item.fullName}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 8, marginBottom: 16 }}>
               {item.tags.map((tag, subIndex) => (
                 <Text key={subIndex} style={{
                   ...styles.tag,
+                  marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
                   color: this.props.customTheme.tagTitle,
                   backgroundColor: this.props.customTheme.tag
                 }}>{tag}</Text>
@@ -158,7 +159,6 @@ const styles = StyleSheet.create({
   tag: {
     paddingHorizontal: 4,
     paddingVertical: 2,
-    marginHorizontal: 2,
     borderRadius: 4,
     fontSize: 14,
     textTransform: 'capitalize'

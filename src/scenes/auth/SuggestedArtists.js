@@ -1,6 +1,6 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import { isEqual } from 'lodash/fp';
@@ -8,12 +8,11 @@ import { connect } from 'react-redux';
 
 import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
-import Carousel from '../../components/carousel';
 
 const Color = require('color');
 
-const slideWidth = 252;
-const slideHeight = 253;
+const slideWidth = 254;
+const slideHeight = 272;
 const criteria = [0, 1, 2, 3, 4];
 
 class SuggestedArtists extends Component {
@@ -56,7 +55,7 @@ class SuggestedArtists extends Component {
             type="font-awesome"
             name="star"
             size={16}
-            color={score > criterion ? this.props.customTheme.palette.warning : this.props.customTheme.label}
+            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
             containerStyle={{ marginHorizontal }}
           />
         ))}
@@ -64,30 +63,20 @@ class SuggestedArtists extends Component {
     );
   }
 
-  renderCard(item, index, animatedValue) {
-    const { avatar, fullName, tags, score, reviews, products } = item;
+  renderItem = ({ item, index, separators }) => {
     const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
-      <View style={{ width: slideWidth, height: slideHeight }}>
-        <Animated.View style={{
-          ...styles.outer,
-          backgroundColor: this.props.customTheme.card,
-          borderColor: this.props.customTheme.palette.secondary,
-          opacity: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
-          })
-        }} />
+      <View style={{ paddingHorizontal: 8, marginVertical: 48 }}>
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
           <View style={{
-            ...styles.inner,
+            ...styles.card,
             backgroundColor: this.props.customTheme.card,
             ...this.props.customTheme.shadows[3]
           }}>
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <View style={{ flex: 1, marginBottom: 8 }}>
-                <Image source={{ uri: avatar }} style={styles.avatar} />
+                <Image source={{ uri: item.avatar }} style={styles.avatar} />
               </View>
               {checked && (
                 <Icon type="font-awesome" name="check-circle" size={24} color={this.props.customTheme.palette.secondary} />
@@ -96,25 +85,26 @@ class SuggestedArtists extends Component {
             <Text style={{
               ...styles.name,
               color: this.props.customTheme.title
-            }}>{fullName}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginHorizontal: -2, marginTop: 8, marginBottom: 12 }}>
-              {tags.map((tag, subIndex) => (
+            }}>{item.fullName}</Text>
+            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 10, marginBottom: 16 }}>
+              {item.tags.map((tag, subIndex) => (
                 <Text key={subIndex} style={{
                   ...styles.tag,
+                  marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
                   color: this.props.customTheme.tagTitle,
                   backgroundColor: this.props.customTheme.tag
                 }}>{tag}</Text>
               ))}
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-              {this.renderScore(score, 2)}
+              {this.renderScore(item.score, 2)}
               <Text style={{
                 ...styles.reviews,
                 color: this.props.customTheme.label
-              }}>{reviews} reviews</Text>
+              }}>{item.reviews} reviews</Text>
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-              {products.map((product, subIndex) => (
+              {item.products.map((product, subIndex) => (
                 <Image key={subIndex} style={{ width: 64, height: 64, borderRadius: 4 }} source={{ uri: product }} />
               ))}
             </View>
@@ -133,7 +123,7 @@ class SuggestedArtists extends Component {
         backgroundColor: this.props.customTheme.container
       }}>
         <SceneHeader />
-        <View style={{ marginHorizontal: 50 }}>
+        <View style={{ marginHorizontal: 60 }}>
           <Text style={{
             ...styles.titleText,
             color: this.props.customTheme.title
@@ -143,16 +133,17 @@ class SuggestedArtists extends Component {
             color: this.props.customTheme.label
           }}>We’ve hand picked several amazing artists around you to follow</Text>
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Carousel
+        <View style={{ flex: 1 }}>
+          <FlatList
             data={this.props.suggestedArtists}
-            renderItem={({ item, index, animatedValue }) => this.renderCard(item, index, animatedValue)}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth * 0.7}
-            slideStyle={{ width: slideWidth + 16 * 2, height: slideHeight + 16 * 2 }}
-            slideInterpolatedStyle={this.getAnimatedStyle}
-            contentContainerCustomStyle={{ alignItems: 'center' }}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={this.renderItem}
+            horizontal
+            ListHeaderComponent={() => <View style={{ width: 8 }} />}
+            ListFooterComponent={() => <View style={{ width: 8 }} />}
           />
+        </View>
+        <View style={{ alignItems: 'center' }}>
           <Button
             buttonStyle={{
               ...styles.button,
@@ -202,20 +193,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10
   },
-  outer: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 2,
-    borderRadius: 14
-  },
-  inner: {
-    padding: 16,
-    borderRadius: 12,
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    bottom: 2,
-    left: 2
+  card: {
+    width: 254,
+    height: 272,
+    padding: 24,
+    borderRadius: 12
   },
   avatar: {
     width: 48,
