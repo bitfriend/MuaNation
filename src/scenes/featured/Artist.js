@@ -6,20 +6,20 @@ import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import CategoryBar from '../../components/CategoryBar';
-import { getArtistProfile, getArtistProducts } from '../../controllers/artist/actions';
+import { getArtist, getArtistProducts } from '../../controllers/artist/actions';
 
 const Color = require('color');
 
 const criteria = [0, 1, 2, 3, 4];
 
-class ArtistProfile extends Component {
+class Artist extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
     this.imageWidth = (width - 16 * 3) / 2;
     this.imageHeight = Math.floor(this.imageWidth * 0.8);
 
     const id = this.props.navigation.getParam('id');
-    this.props.getArtistProfile(id);
+    this.props.getArtist(id);
     this.props.getArtistProducts(id, '');
   }
 
@@ -30,7 +30,7 @@ class ArtistProfile extends Component {
 
   onRelations(category) {
     const id = this.props.navigation.getParam('id');
-    const { fullName } = this.props.artistProfile;
+    const { fullName } = this.props.currentArtist;
     this.props.navigation.navigate('Relations', { id, fullName, category });
   }
 
@@ -47,8 +47,8 @@ class ArtistProfile extends Component {
     const id = this.props.navigation.getParam('id');
     this.props.navigation.navigate('Reviews', {
       id,
-      score: this.props.artistProfile.score,
-      reviews: this.props.artistProfile.reviews
+      score: this.props.currentArtist.score,
+      reviews: this.props.currentArtist.reviews
     });
   }
 
@@ -67,7 +67,7 @@ class ArtistProfile extends Component {
   }
 
   renderCard() {
-    const { avatar, followers, following, score, reviews } = this.props.artistProfile;
+    const { avatar, followers, following, score, reviews } = this.props.currentArtist;
 
     return (
       <View style={styles.card}>
@@ -148,7 +148,7 @@ class ArtistProfile extends Component {
   }
 
   render() {
-    const { fullName, overview, tags, products } = this.props.artistProfile;
+    const { fullName, overview, tags, products } = this.props.currentArtist;
     let cateogories = [{ label: 'All', value: '' }];
     if (tags)
       tags.map((tag, index) => cateogories.push({ label: tag, value: tag }));
@@ -234,15 +234,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({
   common: { theme },
-  artist: { artistProfile, artistProducts }
+  artist: { currentArtist, artistProducts }
 }) => ({
   customTheme: theme,
-  artistProfile, artistProducts
+  currentArtist, artistProducts
 });
 
 const mapDispatchToProps = (dispacth) => ({
-  getArtistProfile: (id) => dispacth(getArtistProfile(id)),
+  getArtist: (id) => dispacth(getArtist(id)),
   getArtistProducts: (id, category) => dispacth(getArtistProducts(id, category))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArtistProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(Artist);

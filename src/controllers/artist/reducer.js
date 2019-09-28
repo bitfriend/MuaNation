@@ -4,7 +4,7 @@ const initialState = {
   featuredArtists: [],
   artists: [],
   suggestedArtists: [],
-  artistProfile: {},
+  currentArtist: {},
   artistProducts: []
 };
 
@@ -40,15 +40,15 @@ export default artistReducer = (state = initialState, action) => {
         ...state,
         suggestedArtists: []
       };
-    case types.GET_ARTIST_PROFILE_SUCCESS:
+    case types.GET_ARTIST_SUCCESS:
       return {
         ...state,
-        artistProfile: action.payload
+        currentArtist: action.payload
       };
-    case types.GET_ARTIST_PROFILE_FAILURE:
+    case types.GET_ARTIST_FAILURE:
       return {
         ...state,
-        artistProfile: {}
+        currentArtist: {}
       };
     case types.GET_ARTIST_PRODUCTS_SUCCESS:
       return {

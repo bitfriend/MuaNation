@@ -20,7 +20,7 @@ class Artists extends Component {
   }
 
   onPressCard = () => {
-    this.props.navigation.navigate('ArtistProfile');
+    this.props.navigation.navigate('Artist');
   }
 
   renderScore(score, marginHorizontal) {

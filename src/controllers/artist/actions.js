@@ -141,7 +141,7 @@ export const getSuggestedArtists = () => {
   }
 }
 
-export const getArtistProfile = (id) => {
+export const getArtist = (id) => {
   return (dispatch) => {
     dispatch(setLoading());
     try {
@@ -153,7 +153,7 @@ export const getArtistProfile = (id) => {
       for (j = 0; j < 3; j++) {
         products.push(faker.random.image());
       }
-      const artistProfile = {
+      const currentArtist = {
         avatar: faker.image.avatar(),
         fullName: faker.name.findName(),
         followers: faker.random.number({ min: 0, max: 1000 }),
@@ -164,10 +164,10 @@ export const getArtistProfile = (id) => {
         tags,
         products
       };
-      dispatch({ type: types.GET_ARTIST_PROFILE_SUCCESS, payload: artistProfile });
+      dispatch({ type: types.GET_ARTIST_SUCCESS, payload: currentArtist });
       dispatch(clearLoading());
     } catch (error) {
-      dispatch({ type: types.GET_ARTIST_PROFILE_FAILURE });
+      dispatch({ type: types.GET_ARTIST_FAILURE });
       dispatch(clearLoading());
     }
   }

@@ -58,7 +58,7 @@ import FixedTabBar from './src/components/FixedTabBar';
 import Artists from './src/scenes/featured/Artists';
 import Products from './src/scenes/featured/Products';
 
-import ArtistProfile from './src/scenes/featured/ArtistProfile';
+import Artist from './src/scenes/featured/Artist';
 import Relations from './src/scenes/featured/Relations';
 import Reviews from './src/scenes/featured/Reviews';
 import SaleProduct from './src/scenes/featured/SaleProduct';
@@ -169,7 +169,7 @@ const ProfileStackNav = createStackNavigator({
 
 const FeaturedStackNav = createStackNavigator({
   FeaturedTabNav: { screen: FeaturedTabNav },
-  ArtistProfile: { screen: ArtistProfile },
+  Artist: { screen: Artist },
   Relations: { screen: Relations },
   Reviews: { screen: Reviews },
   SaleProduct: { screen: SaleProduct },
