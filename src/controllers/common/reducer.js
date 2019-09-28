@@ -60,21 +60,21 @@ function getDarkTheme() {
   };
 }
 
-// const initialState = {
-//   loading: 0,
-//   theme: {
-//     name: 'light',
-//     ...getLightTheme()
-//   }
-// };
-
 const initialState = {
   loading: 0,
   theme: {
-    name: 'dark',
-    ...getDarkTheme()
+    name: 'light',
+    ...getLightTheme()
   }
 };
+
+// const initialState = {
+//   loading: 0,
+//   theme: {
+//     name: 'dark',
+//     ...getDarkTheme()
+//   }
+// };
 
 export default commonReducer = (state = initialState, action) => {
   switch (action.type) {

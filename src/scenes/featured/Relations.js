@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import { getFollowers, getFollowing } from '../../controllers/relation/actions';
-import styles from './styles';
+
+const Color = require('color');
 
 class Relations extends Component {
   constructor(props) {
@@ -44,14 +45,61 @@ class Relations extends Component {
     this.setState({ activeTab });
   }
 
+  renderItem = ({ item, index, separators }) => {
+    return (
+      <View style={styles.item}>
+        <Image source={{ uri: item.avatar }} style={styles.avatar} />
+        <Text style={{
+          ...styles.name,
+          color: this.props.customTheme.title
+        }}>{item.fullName}</Text>
+        {item.followed ? (
+          <Button
+            buttonStyle={{
+              ...styles.button,
+              backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
+            }}
+            title="Unfollow"
+            titleStyle={{
+              ...styles.buttonTitle,
+              color: this.props.customTheme.palette.secondary
+            }}
+            TouchableComponent={TouchableOpacity}
+          />
+        ) : (
+          <Button
+            buttonStyle={{
+              ...styles.button,
+              backgroundColor: this.props.customTheme.palette.secondary,
+              ...this.props.customTheme.buttonShadow
+            }}
+            title="Follow"
+            titleStyle={{
+              ...styles.buttonTitle,
+              color: this.props.customTheme.buttonTitle
+            }}
+            TouchableComponent={TouchableOpacity}
+          />
+        )}
+      </View>
+    );
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader title={this.props.navigation.getParam('fullName')} />
         <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 16 }}>
           {this.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
-              <Text style={[customStyles.tab, tab === this.state.activeTab ? customStyles.activeTab : customStyles.inactiveTab]}>{tab}</Text>
+              <Text style={[styles.tab, tab === this.state.activeTab ? {
+                color: this.props.customTheme.title,
+                fontWeight: 'bold',
+                borderBottomColor: this.props.customTheme.title,
+                borderBottomWidth: 2
+              } : {
+                color: this.props.customTheme.label
+              }]}>{tab}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -59,21 +107,8 @@ class Relations extends Component {
           <FlatList
             data={this.props.relations}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index, separators }) => {
-              const { avatar, followed } = item;
-              return (
-                <View style={customStyles.item}>
-                  <Image source={{ uri: avatar }} style={customStyles.avatar} />
-                  <Text style={customStyles.name}>{getFullName(item)}</Text>
-                  <Button
-                    buttonStyle={[customStyles.button, followed ? customStyles.inactiveButton : customStyles.activeButton]}
-                    title={followed ? 'Unfollow' : 'Follow'}
-                    titleStyle={[customStyles.title, followed ? customStyles.inactiveTitle : customStyles.activeTitle]}
-                    TouchableComponent={TouchableOpacity}
-                  />
-                </View>
-              );
-            }}
+            renderItem={this.renderItem}
+            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />}
           />
         </View>
       </View>
@@ -81,7 +116,7 @@ class Relations extends Component {
   }
 }
 
-const customStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   tab: {
     width: '100%',
     textAlign: 'center',
@@ -89,15 +124,6 @@ const customStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 18,
     textTransform: 'capitalize'
-  },
-  activeTab: {
-    color: '#17050b',
-    fontWeight: 'bold',
-    borderBottomColor: '#17050b',
-    borderBottomWidth: 2
-  },
-  inactiveTab: {
-    color: '#97898e'
   },
   avatar: {
     width: 48,
@@ -107,13 +133,10 @@ const customStyles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    borderBottomColor: '#dcd7d9',
-    borderBottomWidth: 1
+    paddingVertical: 16
   },
   name: {
     flex: 1,
-    color: '#17050b',
     fontFamily: 'Roboto',
     fontSize: 18,
     marginHorizontal: 16,
@@ -121,30 +144,21 @@ const customStyles = StyleSheet.create({
   },
   button: {
     width: 88,
-    height: 48
+    height: 48,
+    borderRadius: 12
   },
-  activeButton: {
-    backgroundColor: '#ef3475'
-  },
-  inactiveButton: {
-    backgroundColor: 'rgba(239, 68, 146, 0.1)'
-  },
-  title: {
+  buttonTitle: {
     fontFamily: 'Roboto',
     fontSize: 14,
     fontWeight: 'bold'
-  },
-  activeTitle: {
-    color: 'white'
-  },
-  inactiveTitle: {
-    color: '#ef3475'
   }
 });
 
 const mapStateToProps = ({
+  common: { theme },
   relation: { relations }
 }) => ({
+  customTheme: theme,
   relations
 });
 
