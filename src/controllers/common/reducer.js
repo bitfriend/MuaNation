@@ -34,10 +34,10 @@ function getLightTheme() {
     tabTitle: lightPalette.grey0,
     heading: lightPalette.grey1,
     extra: lightPalette.grey0,
-    checkedButton: darkPalette.grey0,
-    checkedButtonTitle: darkPalette.grey3,
-    uncheckedButton: darkPalette.grey3,
-    uncheckedButtonTitle: darkPalette.grey0,
+    checkedButton: darkPalette.grey3,
+    checkedButtonTitle: darkPalette.grey0,
+    uncheckedButton: darkPalette.grey0,
+    uncheckedButtonTitle: darkPalette.grey3,
     toggledButton: darkPalette.primary,
     toggledButtonTitle: darkPalette.grey0
   };
