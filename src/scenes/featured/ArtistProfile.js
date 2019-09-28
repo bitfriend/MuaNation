@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -124,11 +124,15 @@ class ArtistProfile extends Component {
     return (
       <TouchableOpacity onPress={() => this.onPressItem(item)}>
         <View style={styles.listItem}>
-          <CachedImage source={{ uri: item.image }} style={{
-            width: this.imageWidth,
-            height: this.imageHeight,
-            borderRadius: 4
-          }} />
+          <FastImage
+            style={{
+              width: this.imageWidth,
+              height: this.imageHeight,
+              borderRadius: 4
+            }}
+            source={{ uri: item.image }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
           <View style={styles.title}>
             <Text style={{
               ...styles.name,
@@ -170,14 +174,12 @@ class ArtistProfile extends Component {
           onSelect={(value) => this.onChangeCategory(value)}
         />
         <View style={styles.container}>
-          <ImageCacheProvider urlsToPreload={images}>
-            <FlatList
-              data={this.props.artistProducts}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this.renderItem}
-              numColumns={2}
-            />
-          </ImageCacheProvider>
+          <FlatList
+            data={this.props.artistProducts}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={this.renderItem}
+            numColumns={2}
+          />
         </View>
       </View>
     );

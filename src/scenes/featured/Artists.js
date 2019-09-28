@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
@@ -54,7 +54,11 @@ class Artists extends Component {
                 {!item.avatar ? (
                   <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
                 ) : (
-                  <CachedImage source={{ uri: item.avatar }} style={styles.avatar} />
+                  <FastImage
+                    style={styles.avatar}
+                    source={{ uri: item.avatar }}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
                 )}
               </View>
             </View>
@@ -90,7 +94,11 @@ class Artists extends Component {
         ...styles.listItem,
         backgroundColor: this.props.customTheme.container
       }}>
-        <CachedImage source={{ uri: item.avatar }} style={styles.avatar} />
+        <FastImage
+          style={styles.avatar}
+          source={{ uri: item.avatar }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
         <Text style={{
           ...styles.listName,
           color: this.props.customTheme.title
@@ -102,37 +110,27 @@ class Artists extends Component {
   render() {
     const { width: windowWidth } = Dimensions.get('window');
 
-    let featuredImages = [];
-    this.props.featuredArtists.map((artist) => featuredImages.push(artist.avatar));
-
-    let images = [];
-    this.props.artists.map((artist) => images.push(artist.avatar));
-
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <View style={{ height: 240 }}>
-          <ImageCacheProvider urlsToPreload={featuredImages}>
-            <FlatList
-              data={this.props.featuredArtists}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this.renderCard}
-              horizontal
-              ListHeaderComponent={() => <View style={{ width: 8 }} />}
-              ListFooterComponent={() => <View style={{ width: 8 }} />}
-            />
-          </ImageCacheProvider>
+          <FlatList
+            data={this.props.featuredArtists}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={this.renderCard}
+            horizontal
+            ListHeaderComponent={() => <View style={{ width: 8 }} />}
+            ListFooterComponent={() => <View style={{ width: 8 }} />}
+          />
         </View>
         <View style={{ flex: 1 }}>
-          <ImageCacheProvider urlsToPreload={images}>
-            <FlatList
-              data={this.props.artists}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this.renderItem}
-              ItemSeparatorComponent={() => (
-                <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />
-              )}
-            />
-          </ImageCacheProvider>
+          <FlatList
+            data={this.props.artists}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={this.renderItem}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />
+            )}
+          />
         </View>
       </View>
     );

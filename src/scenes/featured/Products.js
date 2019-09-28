@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CachedImage, ImageCacheProvider } from 'react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -25,12 +25,16 @@ class Products extends Component {
             backgroundColor: this.props.customTheme.card,
             ...this.props.customTheme.shadows[3]
           }}>
-            <CachedImage source={{ uri: item.image }} style={{
-              width: saleImageWidth,
-              height: 180,
-              borderTopLeftRadius: 12,
-              borderTopRightRadius: 12
-            }} />
+            <FastImage
+              style={{
+                width: saleImageWidth,
+                height: 180,
+                borderTopLeftRadius: 12,
+                borderTopRightRadius: 12
+              }}
+              source={{ uri: item.image }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
             <View style={{ padding: 16 }}>
               <Text style={{
                 ...saleStyles.name,
@@ -70,11 +74,15 @@ class Products extends Component {
         this.props.navigation.navigate('PopularProduct', { id: 0 });
       }}>
         <View style={styles.listItem}>
-          <CachedImage source={{ uri: item.image }} style={{
-            width: this.popularImageWidth,
-            height: this.popularImageHeight,
-            borderRadius: 8
-          }} />
+          <FastImage
+            style={{
+              width: this.popularImageWidth,
+              height: this.popularImageHeight,
+              borderRadius: 8
+            }}
+            source={{ uri: item.image }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
           <View style={popularStyles.title}>
             <Text style={{
               ...popularStyles.name,
@@ -95,42 +103,37 @@ class Products extends Component {
     const imageWidth = (windowWidth - 16 * 3) / 2;
     const imageHeight = Math.floor(imageWidth * 0.8);
 
-    let images = [];
-    this.props.products.map((product) => images.push(product.image));
-
     return (
-      <ImageCacheProvider urlsToPreload={images}>
-        <View style={{
-          ...styles.container,
-          backgroundColor: this.props.customTheme.container
-        }}>
-          <Text style={{
-            ...styles.heading,
-            color: this.props.customTheme.heading
-          }}>SALE</Text>
-          <View style={{ height: 348 }}>
-            <FlatList
-              data={this.props.products}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this.renderSaleProduct}
-              horizontal
-              ListHeaderComponent={() => <View style={{ width: 8 }} />}
-              ListFooterComponent={() => <View style={{ width: 8 }} />}
-            />
-          </View>
-          <Text style={{
-            ...styles.heading,
-            color: this.props.customTheme.heading
-          }}>POPULAR</Text>
+      <View style={{
+        ...styles.container,
+        backgroundColor: this.props.customTheme.container
+      }}>
+        <Text style={{
+          ...styles.heading,
+          color: this.props.customTheme.heading
+        }}>SALE</Text>
+        <View style={{ height: 348 }}>
           <FlatList
             data={this.props.products}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderPopularProduct}
-            numColumns={2}
-            style={{ paddingHorizontal: 8 }}
+            renderItem={this.renderSaleProduct}
+            horizontal
+            ListHeaderComponent={() => <View style={{ width: 8 }} />}
+            ListFooterComponent={() => <View style={{ width: 8 }} />}
           />
         </View>
-      </ImageCacheProvider>
+        <Text style={{
+          ...styles.heading,
+          color: this.props.customTheme.heading
+        }}>POPULAR</Text>
+        <FlatList
+          data={this.props.products}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderPopularProduct}
+          numColumns={2}
+          style={{ paddingHorizontal: 8 }}
+        />
+      </View>
     );
   }
 }

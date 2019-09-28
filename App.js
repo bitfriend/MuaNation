@@ -62,8 +62,8 @@ import Reviews from './src/scenes/featured/Reviews';
 import SaleProduct from './src/scenes/featured/SaleProduct';
 import PopularProduct from './src/scenes/featured/PopularProduct';
 import Discover from './src/scenes/tab/Discover';
+import Bookings from './src/scenes/calendar/Bookings';
 import Profile from './src/scenes/tab/Profile';
-import Account from './src/scenes/tab/Account';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
 import { Provider, connect } from 'react-redux';
@@ -145,20 +145,20 @@ const DiscoverStackNav = createStackNavigator({
   }
 });
 
-const ProfileStackNav = createStackNavigator({
-  Profile: { screen: Profile },
+const CalendarStackNav = createStackNavigator({
+  Bookings: { screen: Bookings },
 }, {
-  initialRouteName: 'Profile',
+  initialRouteName: 'Bookings',
   transitionConfig,
   defaultNavigationOptions: {
     header: null
   }
 });
 
-const AccountStackNav = createStackNavigator({
-  Account: { screen: Account },
+const ProfileStackNav = createStackNavigator({
+  Profile: { screen: Profile },
 }, {
-  initialRouteName: 'Account',
+  initialRouteName: 'Profile',
   transitionConfig,
   defaultNavigationOptions: {
     header: null
@@ -216,19 +216,19 @@ const AppTabNav = createBottomTabNavigator({
       )
     }
   },
-  Profile: {
-    screen: ProfileStackNav,
+  Calendar: {
+    screen: CalendarStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Calendar'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="ios-calendar" size={25} color={tintColor} />
       )
     }
   },
-  Account: {
-    screen: AccountStackNav,
+  Profile: {
+    screen: ProfileStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Account'),
+      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="md-person" size={25} color={tintColor} />
       )
