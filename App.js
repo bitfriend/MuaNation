@@ -29,6 +29,7 @@ import productReducer from './src/controllers/product/reducer';
 import relationReducer from './src/controllers/relation/reducer';
 import reviewReducer from './src/controllers/review/reducer';
 import discoverReducer from './src/controllers/discover/reducer';
+import calendarReducer from './src/controllers/calendar/reducer';
 
 const appReducer = combineReducers({
   common: commonReducer,
@@ -37,7 +38,8 @@ const appReducer = combineReducers({
   product: productReducer,
   relation: relationReducer,
   review: reviewReducer,
-  discover: discoverReducer
+  discover: discoverReducer,
+  calendar: calendarReducer
 });
 
 const store = createStore(appReducer, applyMiddleware(thunk));

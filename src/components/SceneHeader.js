@@ -11,7 +11,7 @@ class SceneHeader extends Component {
     return (
       <Header
         containerStyle={styles.container}
-        leftComponent={{
+        leftComponent={this.props.leftIcon === false ? undefined : {
           icon: 'arrow-back',
           type: 'ionicons',
           color: this.props.customTheme.palette.grey0,
@@ -30,6 +30,7 @@ class SceneHeader extends Component {
             textTransform: 'capitalize'
           }
         } : undefined}
+        rightComponent={this.props.rightIcon ? this.props.rightIcon : undefined}
       />
     );
   }
