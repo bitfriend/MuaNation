@@ -14,6 +14,7 @@ const Color = require('color');
 
 const slideWidth = 252;
 const slideHeight = 253;
+const criteria = [0, 1, 2, 3, 4];
 
 class SuggestedArtists extends Component {
   state = {
@@ -47,7 +48,6 @@ class SuggestedArtists extends Component {
   }
 
   renderScore(score, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
     return (
       <Fragment>
         {criteria.map((criterion, index) => (

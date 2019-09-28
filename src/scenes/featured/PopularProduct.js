@@ -12,6 +12,7 @@ const Color = require('color');
 
 const drawerHeight = 402;
 const { width: windowWidth } = Dimensions.get('window');
+const criteria = [0, 1, 2, 3, 4];
 
 class PopularProduct extends Component {
   state = {
@@ -48,7 +49,6 @@ class PopularProduct extends Component {
   }
 
   renderScore(score, size, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (

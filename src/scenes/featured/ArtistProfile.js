@@ -10,6 +10,8 @@ import { getArtistProfile, getArtistProducts } from '../../controllers/artist/ac
 
 const Color = require('color');
 
+const criteria = [0, 1, 2, 3, 4];
+
 class ArtistProfile extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
@@ -55,7 +57,6 @@ class ArtistProfile extends Component {
   }
 
   renderScore(score, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (

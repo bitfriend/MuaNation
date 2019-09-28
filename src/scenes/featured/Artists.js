@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 
 import { getFeaturedArtists, getArtists } from '../../controllers/artist/actions';
 
+const criteria = [0, 1, 2, 3, 4];
+
 class Artists extends Component {
   componentDidMount() {
     this.props.getFeaturedArtists(error => {
@@ -22,7 +24,6 @@ class Artists extends Component {
   }
 
   renderScore(score, marginHorizontal) {
-    const criteria = [0, 1, 2, 3, 4];
     return (
       <Fragment>
         {criteria.map((criterion, index) => (
