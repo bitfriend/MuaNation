@@ -53,34 +53,18 @@ class Relations extends Component {
           ...styles.name,
           color: this.props.customTheme.title
         }}>{item.fullName}</Text>
-        {item.followed ? (
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
-            }}
-            title="Unfollow"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.palette.secondary
-            }}
-            TouchableComponent={TouchableOpacity}
-          />
-        ) : (
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: this.props.customTheme.palette.secondary,
-              ...this.props.customTheme.buttonShadow
-            }}
-            title="Follow"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.buttonTitle
-            }}
-            TouchableComponent={TouchableOpacity}
-          />
-        )}
+        <Button
+          buttonStyle={{
+            ...styles.button,
+            backgroundColor: item.followed ? Color(this.props.customTheme.palette.secondary).alpha(0.1).string() : this.props.customTheme.palette.secondary
+          }}
+          title={item.followed ? 'Unfollow' : 'Follow'}
+          titleStyle={{
+            ...styles.buttonTitle,
+            color: item.followed ? this.props.customTheme.palette.secondary : this.props.customTheme.buttonTitle
+          }}
+          TouchableComponent={TouchableOpacity}
+        />
       </View>
     );
   }

@@ -127,7 +127,8 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
       fontFamily: 'Lato',
       fontSize: 24,
       fontWeight: 'bold',
-      margin: 0
+      margin: 0,
+      paddingBottom: 2
     },
     upperCaseLabel: false,
     indicatorStyle: { backgroundColor: common.theme.palette.secondary }
@@ -202,7 +203,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="ios-star" size={25} color={tintColor} />
+        <Icon type="font-awesome" name="star" size={25} color={tintColor} />
       )
     }
   },

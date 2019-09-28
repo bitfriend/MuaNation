@@ -33,7 +33,13 @@ function getLightTheme() {
     tagTitle: lightPalette.grey1,
     tabTitle: lightPalette.grey0,
     heading: lightPalette.grey1,
-    extra: lightPalette.grey0
+    extra: lightPalette.grey0,
+    checkedButton: darkPalette.grey0,
+    checkedButtonTitle: darkPalette.grey3,
+    uncheckedButton: darkPalette.grey3,
+    uncheckedButtonTitle: darkPalette.grey0,
+    toggledButton: darkPalette.primary,
+    toggledButtonTitle: darkPalette.grey0
   };
 }
 
@@ -56,7 +62,13 @@ function getDarkTheme() {
     tagTitle: darkPalette.grey1,
     tabTitle: darkPalette.grey1,
     heading: darkPalette.grey2,
-    extra: darkPalette.black
+    extra: darkPalette.black,
+    checkedButton: darkPalette.grey0,
+    checkedButtonTitle: darkPalette.grey3,
+    uncheckedButton: darkPalette.grey3,
+    uncheckedButtonTitle: darkPalette.grey0,
+    toggledButton: darkPalette.primary,
+    toggledButtonTitle: darkPalette.grey0
   };
 }
 
