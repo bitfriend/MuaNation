@@ -1,7 +1,8 @@
 import * as types from './types';
 
 const initialState = {
-  bookings: []
+  bookings: [],
+  booking: {}
 };
 
 export default calendarReducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ export default calendarReducer = (state = initialState, action) => {
       return {
         ...state,
         bookings: []
+      };
+    case types.GET_BOOKING_SUCCESS:
+      return {
+        ...state,
+        booking: action.payload
+      };
+    case types.GET_BOOKING_FAILURE:
+      return {
+        ...state,
+        booking: {}
       };
     default:
       return state;

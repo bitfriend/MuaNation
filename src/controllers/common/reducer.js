@@ -34,14 +34,15 @@ function getLightTheme() {
     tabTitle: lightPalette.grey0,
     heading: lightPalette.grey1,
     extra: lightPalette.grey0,
-    checkedButton: darkPalette.grey3,
-    checkedButtonTitle: darkPalette.grey0,
-    uncheckedButton: darkPalette.grey0,
-    uncheckedButtonTitle: darkPalette.grey3,
-    toggledButton: darkPalette.primary,
-    toggledButtonTitle: darkPalette.grey0,
-    fullStar: darkPalette.warning,
-    emptyStar: darkPalette.grey3
+    drawer: lightPalette.grey2,
+    checkedButton: lightPalette.grey0,
+    checkedButtonTitle: lightPalette.grey3,
+    uncheckedButton: lightPalette.white,
+    uncheckedButtonTitle: lightPalette.grey0,
+    toggledButton: lightPalette.primary,
+    toggledButtonTitle: lightPalette.grey3,
+    fullStar: lightPalette.warning,
+    emptyStar: lightPalette.grey3
   };
 }
 
@@ -65,9 +66,10 @@ function getDarkTheme() {
     tabTitle: darkPalette.grey1,
     heading: darkPalette.grey2,
     extra: darkPalette.black,
+    drawer: darkPalette.grey2,
     checkedButton: darkPalette.grey0,
     checkedButtonTitle: darkPalette.grey3,
-    uncheckedButton: darkPalette.grey3,
+    uncheckedButton: darkPalette.black,
     uncheckedButtonTitle: darkPalette.grey0,
     toggledButton: darkPalette.primary,
     toggledButtonTitle: darkPalette.grey0,

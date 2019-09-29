@@ -81,10 +81,7 @@ class SaleProduct extends Component {
             backgroundColor: this.props.customTheme.container
           }}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={{
-                ...styles.drawer,
-                backgroundColor: this.props.customTheme.palette.grey2
-              }} />
+              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.drawer }} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{
@@ -98,7 +95,7 @@ class SaleProduct extends Component {
               }}>{this.props.extra}</Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <Text style={{
-                  ...productStyles.dollar,
+                  ...productStyles.symbol,
                   color: this.props.customTheme.title
                 }}>$</Text>
                 <Text style={{
@@ -197,7 +194,7 @@ const productStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
-  dollar: {
+  symbol: {
     fontFamily: 'Roboto',
     fontSize: Math.floor(24 * 0.6),
     fontWeight: 'bold'

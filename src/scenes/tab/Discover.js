@@ -305,7 +305,7 @@ class Discover extends Component {
         }}>
           <View style={{ ...styles.panel, backgroundColor: this.props.customTheme.container }}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.label }} />
+              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.drawer }} />
             </TouchableOpacity>
             <Input
               containerStyle={searchStyles.container}
@@ -358,7 +358,7 @@ class Discover extends Component {
                       buttonStyle={{
                         ...buttonStyle.button,
                         backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.uncheckedButton
+                        borderColor: this.props.customTheme.palette.grey3
                       }}
                       title={category}
                       titleStyle={{
@@ -536,7 +536,7 @@ const buttonStyle = StyleSheet.create({
   },
   button: {
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 8
   },
   title: {

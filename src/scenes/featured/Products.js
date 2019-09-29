@@ -44,7 +44,7 @@ class Products extends Component {
                 ...saleStyles.overview,
                 color: this.props.customTheme.label
               }}>{item.overview}</Text>
-              <View style={saleStyles.title}>
+              <View style={saleStyles.caption}>
                 <Text style={{
                   ...saleStyles.extra,
                   color: this.props.customTheme.extra,
@@ -83,7 +83,7 @@ class Products extends Component {
             source={{ uri: item.image }}
             resizeMode={FastImage.resizeMode.cover}
           />
-          <View style={popularStyles.title}>
+          <View style={popularStyles.caption}>
             <Text style={{
               ...popularStyles.name,
               color: this.props.customTheme.title
@@ -166,7 +166,7 @@ const saleStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14
   },
-  title: {
+  caption: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 16
@@ -191,7 +191,7 @@ const saleStyles = StyleSheet.create({
 });
 
 const popularStyles = StyleSheet.create({
-  title: {
+  caption: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 8

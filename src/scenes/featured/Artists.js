@@ -43,46 +43,44 @@ class Artists extends Component {
   renderCard = ({ item, index, separators }) => {
     return (
       <View style={{ paddingHorizontal: 8, marginVertical: 24 }}>
-        <TouchableOpacity onPress={this.onPressCard}>
-          <View style={{
-            ...styles.card,
-            backgroundColor: this.props.customTheme.card,
-            ...this.props.customTheme.shadows[3]
-          }}>
-            <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View style={{ flex: 1, marginBottom: 8 }}>
-                {!item.avatar ? (
-                  <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
-                ) : (
-                  <FastImage
-                    style={styles.avatar}
-                    source={{ uri: item.avatar }}
-                    resizeMode={FastImage.resizeMode.cover}
-                  />
-                )}
-              </View>
+        <TouchableOpacity onPress={this.onPressCard} style={{
+          ...styles.card,
+          backgroundColor: this.props.customTheme.card,
+          ...this.props.customTheme.shadows[3]
+        }}>
+          <View style={{ flexDirection: 'row', width: '100%' }}>
+            <View style={{ flex: 1, marginBottom: 8 }}>
+              {!item.avatar ? (
+                <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
+              ) : (
+                <FastImage
+                  style={styles.avatar}
+                  source={{ uri: item.avatar }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+              )}
             </View>
+          </View>
+          <Text style={{
+            ...styles.cardName,
+            color: this.props.customTheme.title
+          }}>{item.fullName}</Text>
+          <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 8, marginBottom: 16 }}>
+            {item.tags.map((tag, subIndex) => (
+              <Text key={subIndex} style={{
+                ...styles.tag,
+                marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
+                color: this.props.customTheme.tagTitle,
+                backgroundColor: this.props.customTheme.tag
+              }}>{tag}</Text>
+            ))}
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            {this.renderScore(item.score, 2)}
             <Text style={{
-              ...styles.cardName,
-              color: this.props.customTheme.title
-            }}>{item.fullName}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 8, marginBottom: 16 }}>
-              {item.tags.map((tag, subIndex) => (
-                <Text key={subIndex} style={{
-                  ...styles.tag,
-                  marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
-                  color: this.props.customTheme.tagTitle,
-                  backgroundColor: this.props.customTheme.tag
-                }}>{tag}</Text>
-              ))}
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-              {this.renderScore(item.score, 2)}
-              <Text style={{
-                ...styles.reviews,
-                color: this.props.customTheme.label
-              }}>{item.reviews} reviews</Text>
-            </View>
+              ...styles.reviews,
+              color: this.props.customTheme.label
+            }}>{item.reviews} reviews</Text>
           </View>
         </TouchableOpacity>
       </View>

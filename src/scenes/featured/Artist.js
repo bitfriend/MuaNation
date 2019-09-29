@@ -132,7 +132,7 @@ class Artist extends Component {
             source={{ uri: item.image }}
             resizeMode={FastImage.resizeMode.cover}
           />
-          <View style={styles.title}>
+          <View style={styles.caption}>
             <Text style={{
               ...styles.name,
               color: this.props.customTheme.title
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   listItem: {
     margin: 8
   },
-  title: {
+  caption: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 8

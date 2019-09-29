@@ -65,6 +65,7 @@ import SaleProduct from './src/scenes/featured/SaleProduct';
 import PopularProduct from './src/scenes/featured/PopularProduct';
 import Discover from './src/scenes/tab/Discover';
 import Bookings from './src/scenes/calendar/Bookings';
+import Booking from './src/scenes/calendar/Booking';
 import Profile from './src/scenes/tab/Profile';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
@@ -138,7 +139,7 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
 });
 
 const DiscoverStackNav = createStackNavigator({
-  Discover: { screen: Discover },
+  Discover: { screen: Discover }
 }, {
   initialRouteName: 'Discover',
   transitionConfig,
@@ -149,6 +150,7 @@ const DiscoverStackNav = createStackNavigator({
 
 const CalendarStackNav = createStackNavigator({
   Bookings: { screen: Bookings },
+  Booking: { screen: Booking }
 }, {
   initialRouteName: 'Bookings',
   transitionConfig,
@@ -158,7 +160,7 @@ const CalendarStackNav = createStackNavigator({
 });
 
 const ProfileStackNav = createStackNavigator({
-  Profile: { screen: Profile },
+  Profile: { screen: Profile }
 }, {
   initialRouteName: 'Profile',
   transitionConfig,

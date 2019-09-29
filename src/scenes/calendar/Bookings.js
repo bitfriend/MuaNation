@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Badge, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -22,6 +22,10 @@ class Bookings extends Component {
     this.props.getBookings();
   }
 
+  onPress(item) {
+    this.props.navigation.navigate('Booking');
+  }
+
   renderArrow = (direction) => {
     switch (direction) {
       case 'left':
@@ -38,30 +42,46 @@ class Bookings extends Component {
   renderDay = ({ date, state }) => {
     let backgroundColor = 'transparent';
     let color = this.props.customTheme.palette.grey0;
+
     switch (state) {
       case 'disabled':
         color = this.props.customTheme.palette.grey1;
-        break;
-      case 'selected':
-        backgroundColor = this.props.customTheme.palette.secondary;
-        color = this.props.customTheme.palette.white;
         break;
       case 'today':
         backgroundColor = this.props.customTheme.palette.primary;
         color = this.props.customTheme.palette.white;
         break;
     }
+
+    const found = this.props.bookings.findIndex(({ createdAt }, index) => moment(createdAt).format('YYYY-MM-DD') === date.dateString);
+    if (found !== -1) {
+      backgroundColor = this.props.customTheme.palette.secondary;
+      color = this.props.customTheme.palette.white;
+    }
+
     return (
-      <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor, justifyContent: 'center' }}>
-        <Text style={{ color, fontFamily: 'Roboto', fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>{date.day}</Text>
-      </View>
+      <TouchableOpacity style={{
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        backgroundColor,
+        justifyContent: 'center'
+      }}>
+        <Text style={{
+          color,
+          fontFamily: 'Roboto',
+          fontSize: 18,
+          fontWeight: 'bold',
+          textAlign: 'center'
+        }}>{date.day}</Text>
+      </TouchableOpacity>
     );
   }
 
   renderItem = ({ item, index, separators }) => {
     return (
       <View style={{ paddingHorizontal: 16, marginVertical: 8 }}>
-        <View style={{
+        <TouchableOpacity onPress={() => this.onPress(item)} style={{
           borderRadius: 12,
           backgroundColor: this.props.customTheme.container,
           padding: 24,
@@ -88,18 +108,51 @@ class Bookings extends Component {
               ...styles.time,
               color: this.props.customTheme.palette.grey1,
               backgroundColor: this.props.customTheme.palette.grey2
-            }}>{moment(item.datetime).format('h:mm A')}</Text>
+            }}>{moment(item.createdAt).format('h:mm A')}</Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
               <Icon type="font-awesome" name="compass" size={16} color={this.props.customTheme.palette.primary} />
               <Text style={{ marginLeft: 8, color: this.props.customTheme.palette.primary }}>Get directions</Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   }
 
   render() {
+    let dates = {};
+    this.props.bookings.map((booking, index) => {
+      const date = moment(booking.createdAt).format('YYYY-MM-DD');
+      dates[date] = {
+        customStyles: {
+          container: {
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            backgroundColor: this.props.customTheme.palette.secondary
+          },
+          text: {
+            color: this.props.customTheme.title
+          }
+        }
+      };
+    });
+
+    const today = moment().format('YYYY-MM-DD');
+    dates[today] = {
+      customStyles: {
+        container: {
+          width: 40,
+          height: 40,
+          borderRadius: 12,
+          backgroundColor: this.props.customTheme.palette.primary
+        },
+        text: {
+          color: this.props.customTheme.title
+        }
+      }
+    };
+
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader leftIcon={false} title="My bookings" rightIcon={(
@@ -114,6 +167,12 @@ class Bookings extends Component {
         <Calendar
           monthFormat="MMMM"
           theme={{
+            backgroundColor: this.props.customTheme.container,
+            calendarBackground: this.props.customTheme.container,
+            textSectionTitleColor: this.props.customTheme.palette.grey1,
+            selectedDayBackgroundColor: this.props.customTheme.palette.secondary,
+            selectedDayTextColor: this.props.customTheme.palette.grey0,
+            textDisabledColor: this.props.customTheme.palette.grey1,
             textMonthFontSize: 18,
             textMonthFontFamily: 'Roboto',
             textMonthFontWeight: 'bold',
@@ -121,10 +180,14 @@ class Bookings extends Component {
             textDayHeaderFontSize: 18,
             textDayHeaderFontFamily: 'Roboto',
             textDayHeaderFontWeight: 'bold',
-            textSectionTitleColor: this.props.customTheme.palette.grey1
+            dayTextColor: this.props.customTheme.palette.grey0,
+            todayBackgroundColor: this.props.customTheme.palette.primary,
+            todayTextColor: this.props.customTheme.title
           }}
-          dayComponent={this.renderDay}
           renderArrow={this.renderArrow}
+          markingType="custom"
+          dayComponent={this.renderDay}
+          markedDates={dates}
         />
         <Text style={{
           paddingTop: 24,
