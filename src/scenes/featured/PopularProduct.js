@@ -7,6 +7,7 @@ import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { getPopularProduct } from '../../controllers/product/actions';
+import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
@@ -177,27 +178,20 @@ class PopularProduct extends Component {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
               />
-              <Button
+              <ThemeButton
                 containerStyle={{ flex: 1 }}
-                buttonStyle={{
-                  ...actionStyles.book,
-                  backgroundColor: this.props.customTheme.palette.secondary,
-                  ...this.props.customTheme.buttonShadow
-                }}
+                buttonStyle={actionStyles.book}
                 icon={{
                   name: 'date-range',
                   type: 'material',
-                  size: 20,
-                  color: this.props.customTheme.buttonTitle
+                  size: 20
                 }}
                 title="Book"
                 titleStyle={{
-                  color: this.props.customTheme.buttonTitle,
                   fontFamily: 'Roboto',
                   fontSize: 18,
                   fontWeight: 'bold'
                 }}
-                TouchableComponent={TouchableOpacity}
               />
             </View>
           </View>

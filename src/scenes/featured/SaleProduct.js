@@ -7,6 +7,7 @@ import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { getSaleProduct } from '../../controllers/product/actions';
+import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
@@ -123,21 +124,15 @@ class SaleProduct extends Component {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
               />
-              <Button
+              <ThemeButton
                 containerStyle={{ flex: 1 }}
-                buttonStyle={{
-                  ...actionStyles.buy,
-                  backgroundColor: this.props.customTheme.palette.secondary,
-                  ...this.props.customTheme.buttonShadow
-                }}
+                buttonStyle={actionStyles.buy}
                 title="Buy"
                 titleStyle={{
-                  color: this.props.customTheme.buttonTitle,
                   fontFamily: 'Roboto',
                   fontSize: 18,
                   fontWeight: 'bold'
                 }}
-                TouchableComponent={TouchableOpacity}
               />
             </View>
           </View>

@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 import CategoryBar from '../../components/CategoryBar';
 import { getArtist, getArtistProducts } from '../../controllers/artist/actions';
 
@@ -93,27 +94,29 @@ class Artist extends Component {
         width: '100%',
         padding: 16
       }}>
-        <Button
+        <ThemeButton
           title="Book"
           containerStyle={{ flex: 1 }}
-          buttonStyle={{ backgroundColor: this.props.customTheme.palette.secondary, ...this.props.customTheme.buttonShadow }}
-          titleStyle={{ color: this.props.customTheme.buttonTitle, fontSize: 14 }}
+          buttonStyle={{ height: 48, borderRadius: 12 }}
+          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
         />
-        <Button
+        <ThemeButton
           title="Follow"
           containerStyle={{ flex: 1, marginLeft: 4 }}
-          buttonStyle={{ backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string() }}
-          titleStyle={{ color: this.props.customTheme.palette.secondary, fontSize: 14 }}
+          buttonStyle={{ height: 48, borderRadius: 12 }}
+          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
+          isPrimary={false}
         />
-        <Button
+        <ThemeButton
           icon={{
             name: 'paper-plane',
             type: 'font-awesome',
-            size: 22,
-            color: this.props.customTheme.palette.secondary
+            size: 22
           }}
           containerStyle={{ marginLeft: 4 }}
-          buttonStyle={{ backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string() }}
+          buttonStyle={{ width: 48, height: 48, borderRadius: 12 }}
+          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
+          isPrimary={false}
         />
       </View>
     );

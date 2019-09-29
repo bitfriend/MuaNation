@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 import { getBooking } from '../../controllers/calendar/actions';
 
 class Booking extends Component {
@@ -80,16 +81,14 @@ class Booking extends Component {
               color: this.props.customTheme.title,
               fontWeight: 'bold'
             }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
-            <Button
+            <ThemeButton
               icon={{
                 name: 'paper-plane',
                 type: 'font-awesome',
-                size: 22,
-                color: this.props.customTheme.buttonTitle
+                size: 22
               }}
               containerStyle={{ marginLeft: 4 }}
-              buttonStyle={{ ...this.props.customTheme.buttonShadow, width: 48, height: 48, borderRadius: 12, backgroundColor: this.props.customTheme.palette.secondary }}
-              TouchableComponent={TouchableOpacity}
+              buttonStyle={{ width: 48, height: 48, borderRadius: 12 }}
             />
           </View>
           <Button

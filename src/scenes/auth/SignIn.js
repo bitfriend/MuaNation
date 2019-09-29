@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Alert, Image, Modal, Platform, StyleSheet, Text, View } from 'react-native';
+import { Input } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
+import ThemeButton from '../../components/theme/Button';
 import EmailModal from '../../components/EmailModal';
 import { signInWithFacebook, signInWithInstagram } from '../../controllers/auth/actions';
 import * as types from '../../controllers/auth/types';
@@ -93,47 +94,29 @@ class SignIn extends Component {
         backgroundColor: this.props.customTheme.container
       }}>
         {this.renderGallery()}
-        <Button
-          buttonStyle={{
-            ...styles.button,
-            backgroundColor: this.props.customTheme.palette.secondary,
-            ...this.props.customTheme.buttonShadow
-          }}
+        <ThemeButton
+          buttonStyle={styles.button}
           icon={{
             name: 'facebook',
             type: 'font-awesome',
             size: 20,
-            color: this.props.customTheme.buttonTitle,
             containerStyle: { marginRight: 10 }
           }}
           title="Login with Facebook"
-          titleStyle={{
-            ...styles.buttonTitle,
-            color: this.props.customTheme.buttonTitle
-          }}
+          titleStyle={styles.buttonTitle}
           onPress={this.onClickFacebook}
-          TouchableComponent={TouchableOpacity}
         />
-        <Button
-          buttonStyle={{
-            ...styles.button,
-            backgroundColor: this.props.customTheme.palette.secondary,
-            ...this.props.customTheme.buttonShadow
-          }}
+        <ThemeButton
+          buttonStyle={styles.button}
           icon={{
             name: 'instagram',
             type: 'font-awesome',
             size: 20,
-            color: this.props.customTheme.buttonTitle,
             containerStyle: { marginRight: 10 }
           }}
           title="Login with Instagram"
-          titleStyle={{
-            ...styles.buttonTitle,
-            color: this.props.customTheme.buttonTitle
-          }}
+          titleStyle={styles.buttonTitle}
           onPress={this.onClickInstagram}
-          TouchableComponent={TouchableOpacity}
         />
         <InstagramLogin
           containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}
@@ -160,18 +143,15 @@ class SignIn extends Component {
           fontFamily: 'Roboto',
           marginTop: 24
         }}>New to the platform?</Text>
-        <Button
-          buttonStyle={{
-            ...styles.button,
-            backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
-          }}
+        <ThemeButton
+          buttonStyle={styles.button}
           title="Create an account"
           titleStyle={{
             ...styles.buttonTitle,
             color: this.props.customTheme.palette.secondary
           }}
           onPress={this.onClickSignup}
-          TouchableComponent={TouchableOpacity}
+          isPrimary={false}
         />
         <EmailModal
           visible={this.state.modalVisible}

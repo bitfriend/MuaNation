@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 import { getFollowers, getFollowing } from '../../controllers/relation/actions';
 
 const Color = require('color');
@@ -53,17 +54,11 @@ class Relations extends Component {
           ...styles.name,
           color: this.props.customTheme.title
         }}>{item.fullName}</Text>
-        <Button
-          buttonStyle={{
-            ...styles.button,
-            backgroundColor: item.followed ? Color(this.props.customTheme.palette.secondary).alpha(0.1).string() : this.props.customTheme.palette.secondary
-          }}
+        <ThemeButton
+          isPrimary={!item.followed}
+          buttonStyle={styles.button}
           title={item.followed ? 'Unfollow' : 'Follow'}
-          titleStyle={{
-            ...styles.buttonTitle,
-            color: item.followed ? this.props.customTheme.palette.secondary : this.props.customTheme.buttonTitle
-          }}
-          TouchableComponent={TouchableOpacity}
+          titleStyle={styles.buttonTitle}
         />
       </View>
     );

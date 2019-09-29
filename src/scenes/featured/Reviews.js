@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 

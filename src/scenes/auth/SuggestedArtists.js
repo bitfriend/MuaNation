@@ -1,13 +1,14 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
@@ -144,32 +145,17 @@ class SuggestedArtists extends Component {
           />
         </View>
         <View style={{ alignItems: 'center' }}>
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: this.props.customTheme.palette.secondary,
-              ...this.props.customTheme.buttonShadow
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             title={`Follow (${this.state.checkedArtists.length})`}
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.buttonTitle
-            }}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickFollow}
-            TouchableComponent={TouchableOpacity}
           />
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             title="Skip for now"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.palette.secondary
-            }}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickSkip}
-            TouchableComponent={TouchableOpacity}
           />
         </View>
       </View>

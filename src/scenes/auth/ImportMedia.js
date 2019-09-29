@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
@@ -36,60 +36,36 @@ class ImportMedia extends Component {
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/ph-photos.png')} />
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: this.props.customTheme.palette.secondary,
-              ...this.props.customTheme.buttonShadow
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             icon={{
               name: 'instagram',
               type: 'font-awesome',
               size: 20,
-              color: this.props.customTheme.buttonTitle,
               containerStyle: { marginRight: 10 }
             }}
             title="Import from Instagram"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.buttonTitle
-            }}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickImportInstagram}
-            TouchableComponent={TouchableOpacity}
           />
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: this.props.customTheme.palette.secondary,
-              ...this.props.customTheme.buttonShadow
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             icon={{
               name: 'camera',
               type: 'font-awesome',
               size: 20,
-              color: this.props.customTheme.buttonTitle,
-              containerStyle: { marginRight: 10 }
-            }}
-            title="Import from Camera roll"
-            titleStyle={{
-              ...styles.buttonTitle,
               color: this.props.customTheme.buttonTitle
             }}
+            title="Import from Camera roll"
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickImportCameraRoll}
-            TouchableComponent={TouchableOpacity}
           />
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             title="Skip for now"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.palette.secondary
-            }}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickSkip}
-            TouchableComponent={TouchableOpacity}
+            isPrimary={false}
           />
         </View>
       </View>

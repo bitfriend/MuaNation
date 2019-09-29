@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Alert, Image, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Icon, Input } from 'react-native-elements';
+import { Icon, Input } from 'react-native-elements';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 import EmailModal from '../../components/EmailModal';
 import { joinWithFacebook, joinWithInstagram } from '../../controllers/auth/actions';
 
@@ -89,47 +90,29 @@ class CreateAccount extends Component {
             })}
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Button
-              buttonStyle={{
-                ...styles.button,
-                backgroundColor: this.props.customTheme.palette.secondary,
-                ...this.props.customTheme.buttonShadow
-              }}
+            <ThemeButton
+              buttonStyle={styles.button}
               icon={{
                 name: 'facebook',
                 type: 'font-awesome',
                 size: 20,
-                color: this.props.customTheme.buttonTitle,
                 containerStyle: { marginRight: 10 }
               }}
               title="Join with Facebook"
-              titleStyle={{
-                ...styles.buttonTitle,
-                color: this.props.customTheme.buttonTitle
-              }}
+              titleStyle={styles.buttonTitle}
               onPress={this.onClickFacebook}
-              TouchableComponent={TouchableOpacity}
             />
-            <Button
-              buttonStyle={{
-                ...styles.button,
-                backgroundColor: this.props.customTheme.palette.secondary,
-                ...this.props.customTheme.buttonShadow
-              }}
+            <ThemeButton
+              buttonStyle={styles.button}
               icon={{
                 name: 'instagram',
                 type: 'font-awesome',
                 size: 20,
-                color: this.props.customTheme.buttonTitle,
                 containerStyle: { marginRight: 10 }
               }}
               title="Join with Instagram"
-              titleStyle={{
-                ...styles.buttonTitle,
-                color: this.props.customTheme.buttonTitle
-              }}
+              titleStyle={styles.buttonTitle}
               onPress={this.onClickInstagram}
-              TouchableComponent={TouchableOpacity}
             />
             <InstagramLogin
               containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}

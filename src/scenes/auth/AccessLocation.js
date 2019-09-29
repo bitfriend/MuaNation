@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
+import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
@@ -32,19 +32,11 @@ class AccessLocation extends Component {
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/ph-location.png')} />
-          <Button
-            buttonStyle={{
-              ...styles.button,
-              backgroundColor: this.props.customTheme.palette.secondary,
-              ...this.props.customTheme.buttonShadow
-            }}
+          <ThemeButton
+            buttonStyle={styles.button}
             title="Allow location access"
-            titleStyle={{
-              ...styles.buttonTitle,
-              color: this.props.customTheme.buttonTitle
-            }}
+            titleStyle={styles.buttonTitle}
             onPress={this.onClickAllow}
-            TouchableComponent={TouchableOpacity}
           />
         </View>
       </View>
