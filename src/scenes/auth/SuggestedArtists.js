@@ -72,6 +72,8 @@ class SuggestedArtists extends Component {
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
           <View style={{
             ...styles.card,
+            borderColor: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.card,
+            borderWidth: 2,
             backgroundColor: this.props.customTheme.card,
             ...this.props.customTheme.shadows[3]
           }}>
