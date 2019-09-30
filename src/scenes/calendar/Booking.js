@@ -55,7 +55,7 @@ class Booking extends Component {
             color: this.props.customTheme.label
           }}>{this.props.booking.overview}</Text>
         </ScrollView>
-        <View style={{ marginHorizontal: 16 }}>
+        <View style={{ paddingHorizontal: 16 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image source={{ uri: this.props.booking.avatar }} style={{ width: 48, height: 48, borderRadius: 24 }} />
             <Text style={{

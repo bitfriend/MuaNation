@@ -66,6 +66,8 @@ import PopularProduct from './src/scenes/featured/PopularProduct';
 import Discover from './src/scenes/tab/Discover';
 import Bookings from './src/scenes/calendar/Bookings';
 import Booking from './src/scenes/calendar/Booking';
+import Notifications from './src/scenes/calendar/Notifications';
+import Review from './src/scenes/calendar/Review';
 import Profile from './src/scenes/tab/Profile';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
@@ -150,7 +152,9 @@ const DiscoverStackNav = createStackNavigator({
 
 const CalendarStackNav = createStackNavigator({
   Bookings: { screen: Bookings },
-  Booking: { screen: Booking }
+  Booking: { screen: Booking },
+  Notifications: { screen: Notifications },
+  Review: { screen: Review }
 }, {
   initialRouteName: 'Bookings',
   transitionConfig,

@@ -118,7 +118,7 @@ class SaleProduct extends Component {
                 icon={{
                   name: 'close',
                   type: 'material',
-                  size: 20,
+                  size: 24,
                   color: this.props.customTheme.palette.grey0
                 }}
                 TouchableComponent={TouchableOpacity}

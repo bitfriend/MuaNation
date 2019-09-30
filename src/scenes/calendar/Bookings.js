@@ -156,13 +156,13 @@ class Bookings extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader leftIcon={false} title="My bookings" rightIcon={(
-          <View>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Notifications')}>
             <Icon type="font-awesome" name="bell" size={20} color={this.props.customTheme.title} />
             <Badge
               badgeStyle={{ backgroundColor: this.props.customTheme.palette.primary, width: 8, height: 8, borderRadius: 4 }}
               containerStyle={{ position: 'absolute', top: -3, right: -3 }}
             />
-          </View>
+          </TouchableOpacity>
         )} />
         <Calendar
           monthFormat="MMMM"
