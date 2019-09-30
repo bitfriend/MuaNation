@@ -124,17 +124,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold'
   },
-  symbol: {
-    fontFamily: 'Roboto',
-    fontSize: Math.floor(24 * 0.6),
-    fontWeight: 'bold'
-  },
-  price: {
-    marginLeft: 4,
-    fontFamily: 'Lato',
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
   label: {
     fontFamily: 'Roboto',
     fontSize: 18
