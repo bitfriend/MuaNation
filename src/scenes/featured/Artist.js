@@ -165,7 +165,7 @@ class Artist extends Component {
         {this.renderCard()}
         <Text style={{
           ...styles.overview,
-          color: this.props.customTheme.label
+          color: this.props.customTheme.palette.grey0
         }}>{overview}</Text>
         {this.renderActionBar()}
         <CategoryBar

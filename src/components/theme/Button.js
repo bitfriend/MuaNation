@@ -46,7 +46,7 @@ ThemeButton.propTypes = {
   icon: PropTypes.object,
   iconRight: PropTypes.bool,
   title: PropTypes.string,
-  titleStyle: ViewPropTypes.style,
+  titleStyle: PropTypes.object,
   onPress: PropTypes.func,
   isPrimary: PropTypes.bool
 }
