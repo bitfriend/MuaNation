@@ -42,7 +42,7 @@ function getLightTheme() {
     toggledButton: lightPalette.primary,
     toggledButtonTitle: lightPalette.grey3,
     fullStar: lightPalette.warning,
-    emptyStar: lightPalette.grey3
+    emptyStar: lightPalette.grey2
   };
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
@@ -69,11 +70,11 @@ class SaleProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: drawerHeight,
+          height: verticalScale(drawerHeight),
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-40, -drawerHeight]
+              outputRange: [-verticalScale(40), -verticalScale(drawerHeight)]
             })
           }]
         }}>
@@ -118,7 +119,7 @@ class SaleProduct extends Component {
                 icon={{
                   name: 'close',
                   type: 'material',
-                  size: 24,
+                  size: verticalScale(24),
                   color: this.props.customTheme.palette.grey0
                 }}
                 TouchableComponent={TouchableOpacity}
@@ -128,11 +129,7 @@ class SaleProduct extends Component {
                 containerStyle={{ flex: 1 }}
                 buttonStyle={actionStyles.buy}
                 title="Buy"
-                titleStyle={{
-                  fontFamily: 'Roboto',
-                  fontSize: 18,
-                  fontWeight: 'bold'
-                }}
+                titleStyle={actionStyles.buttonTitle}
               />
             </View>
           </View>
@@ -142,87 +139,92 @@ class SaleProduct extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   fullfill: {
     width: '100%',
     height: '100%'
   },
   pageDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 3.5
+    width: '7@vs',
+    height: '7@vs',
+    borderRadius: '3.5@vs'
   },
   pagination: {
-    bottom: 50
+    bottom: '50@vs'
   },
   panel: {
     width: '100%',
     height: '100%',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    paddingHorizontal: 24,
-    paddingBottom: 16
+    borderTopLeftRadius: '40@vs',
+    borderTopRightRadius: '40@vs',
+    paddingHorizontal: '24@vs',
+    paddingBottom: '16@vs'
   },
   drawerWrapper: {
     width: '100%',
-    padding: 16,
+    padding: '16@vs',
     alignItems: 'center'
   },
   drawer: {
-    width: 32,
-    height: 5,
-    borderRadius: 2.5
+    width: '32@vs',
+    height: '5@vs',
+    borderRadius: '2.5@vs'
   }
 });
 
-const productStyles = StyleSheet.create({
+const productStyles = ScaledSheet.create({
   name: {
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold'
   },
   extra: {
-    marginLeft: 12,
-    borderRadius: 4,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
+    marginLeft: '12@vs',
+    borderRadius: '4@vs',
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   symbol: {
     fontFamily: 'Roboto',
-    fontSize: Math.floor(24 * 0.6),
+    fontSize: verticalScale(Math.floor(24 * 0.6)),
     fontWeight: 'bold'
   },
   price: {
-    marginLeft: 4,
+    marginLeft: '4@vs',
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   },
   overview: {
     fontFamily: 'Roboto',
-    fontSize: 18,
-    marginTop: 16,
-    marginBottom: 24
+    fontSize: '18@vs',
+    marginTop: '16@vs',
+    marginBottom: '24@vs'
   }
 });
 
-const actionStyles = StyleSheet.create({
+const actionStyles = ScaledSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: 14
+    marginTop: '14@vs'
   },
   close: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
-    marginRight: 8
+    width: '64@vs',
+    height: '64@vs',
+    borderRadius: '12@vs',
+    marginRight: '8@vs'
   },
   buy: {
-    height: 64,
-    borderRadius: 12
+    height: '64@vs',
+    borderRadius: '12@vs'
+  },
+  buttonTitle: {
+    fontFamily: 'Roboto',
+    fontSize: '18@vs',
+    fontWeight: 'bold'
   }
 });
 
