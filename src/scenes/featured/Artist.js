@@ -64,7 +64,7 @@ class Artist extends Component {
     );
   }
 
-  renderScore(score, marginHorizontal) {
+  renderScore(score, spacing) {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
@@ -74,7 +74,7 @@ class Artist extends Component {
             name="star"
             size={verticalScale(16)}
             color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
-            containerStyle={{ marginHorizontal }}
+            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
           />
         ))}
       </View>
@@ -92,7 +92,7 @@ class Artist extends Component {
             {this.renderSide(followers, 'followers', 'followers')}
             <View style={reviewStyles.container}>
               <TouchableOpacity onPress={this.onReviews}>
-                {this.renderScore(score, verticalScale(2))}
+                {this.renderScore(score, 2)}
                 <Text style={{ ...reviewStyles.text, color: this.props.customTheme.label }}>{reviews} reviews</Text>
               </TouchableOpacity>
             </View>

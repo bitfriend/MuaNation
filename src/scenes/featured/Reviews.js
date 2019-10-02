@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Image, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Image, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -14,11 +15,18 @@ class Reviews extends Component {
     this.props.getReviews(id);
   }
 
-  renderScore(score, size, marginHorizontal) {
+  renderScore(score, size, spacing) {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={size} color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar} containerStyle={{ marginHorizontal }} />
+          <Icon
+            key={index}
+            type="font-awesome"
+            name="star"
+            size={verticalScale(size)}
+            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
+            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
+          />
         ))}
       </View>
     );
@@ -28,7 +36,7 @@ class Reviews extends Component {
     return (
       <View style={cardStyles.container}>
         <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
-        <View style={{ flex: 1, paddingLeft: 16 }}>
+        <View style={cardStyles.body}>
           <View style={{ width: '100%', flexDirection: 'row' }}>
             <Text style={{
               ...cardStyles.name,
@@ -40,13 +48,25 @@ class Reviews extends Component {
             ...cardStyles.overview,
             color: this.props.customTheme.label
           }}>{item.overview}</Text>
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <ScrollView horizontal>
             {item.products.map((product, index) => (
-              <Image key={index} style={{ width: 48, height: 48, borderRadius: 4 }} source={{ uri: product }} />
+              <Image key={index} source={{ uri: product }} style={{
+                ...cardStyles.product,
+                marginRight: index < item.products.length - 1 ? verticalScale(8) : 0
+              }} />
             ))}
-          </View>
+          </ScrollView>
         </View>
       </View>
+    );
+  }
+
+  renderSeparator = () => {
+    return (
+      <View style={{
+        height: verticalScale(StyleSheet.hairlineWidth),
+        backgroundColor: this.props.customTheme.palette.grey3
+      }} />
     );
   }
 
@@ -57,12 +77,12 @@ class Reviews extends Component {
         <View style={{ alignItems: 'center', marginTop: 28, marginBottom: 32 }}>
           {this.renderScore(this.props.navigation.getParam('score'), 32, 4)}
         </View>
-        <View style={{ flex: 1, marginHorizontal: 16 }}>
+        <View style={styles.list}>
           <FlatList
             data={this.props.reviews}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />}
+            ItemSeparatorComponent={this.renderSeparator}
           />
         </View>
       </View>
@@ -70,28 +90,49 @@ class Reviews extends Component {
   }
 }
 
-const cardStyles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  score: {
+    alignItems: 'center',
+    marginTop: '28@vs',
+    marginBottom: '32@vs'
+  },
+  list: {
+    flex: 1,
+    marginHorizontal: '16@vs'
+  }
+});
+
+const cardStyles = ScaledSheet.create({
   container: {
     flexDirection: 'row',
-    paddingVertical: 16
+    paddingVertical: '16@vs'
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
+  },
+  body: {
+    flex: 1,
+    paddingLeft: '16@vs'
   },
   name: {
     flex: 1,
     fontFamily: 'Roboto',
-    fontSize: 14,
+    fontSize: '14@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   overview: {
     width: '100%',
     fontFamily: 'Roboto',
-    fontSize: 14,
-    marginBottom: 8
+    fontSize: '14@vs',
+    marginVertical: '8@vs'
+  },
+  product: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '4@vs'
   }
 });
 

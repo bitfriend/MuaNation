@@ -24,7 +24,7 @@ class Artists extends Component {
     this.props.navigation.navigate('Artist');
   }
 
-  renderScore(score, marginHorizontal) {
+  renderScore(score, spacing) {
     return (
       <Fragment>
         {criteria.map((criterion, index) => (
@@ -34,7 +34,7 @@ class Artists extends Component {
             name="star"
             size={verticalScale(16)}
             color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
-            containerStyle={{ marginHorizontal }}
+            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
           />
         ))}
       </Fragment>
@@ -77,7 +77,7 @@ class Artists extends Component {
             ))}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(16) }}>
-            {this.renderScore(item.score, verticalScale(2))}
+            {this.renderScore(item.score, 2)}
             <Text style={{
               ...styles.reviews,
               color: this.props.customTheme.label
