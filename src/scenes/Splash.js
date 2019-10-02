@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
+import { verticalScale } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 
 class Splash extends Component {
@@ -37,7 +38,10 @@ class Splash extends Component {
         }}
       >
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Image source={require('../../asset/images/logo.png')} style={{ width: 180, height: 172 }} />
+          <Image source={require('../../asset/images/logo.png')} style={{
+            width: verticalScale(180),
+            height: verticalScale(172)
+          }} />
         </View>
       </LinearGradient>
     );

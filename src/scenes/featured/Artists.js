@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
@@ -31,7 +32,7 @@ class Artists extends Component {
             key={index}
             type="font-awesome"
             name="star"
-            size={16}
+            size={verticalScale(16)}
             color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
             containerStyle={{ marginHorizontal }}
           />
@@ -42,14 +43,14 @@ class Artists extends Component {
 
   renderCard = ({ item, index, separators }) => {
     return (
-      <View style={{ paddingHorizontal: 8, marginVertical: 24 }}>
+      <View style={{ paddingHorizontal: verticalScale(8), marginVertical: verticalScale(24) }}>
         <TouchableOpacity onPress={this.onPressCard} style={{
           ...styles.card,
           backgroundColor: this.props.customTheme.card,
           ...this.props.customTheme.shadows[3]
         }}>
           <View style={{ flexDirection: 'row', width: '100%' }}>
-            <View style={{ flex: 1, marginBottom: 8 }}>
+            <View style={{ flex: 1, marginBottom: verticalScale(8) }}>
               {!item.avatar ? (
                 <Image source={require('../../../asset/images/male.png')} style={styles.avatar} />
               ) : (
@@ -65,18 +66,18 @@ class Artists extends Component {
             ...styles.cardName,
             color: this.props.customTheme.title
           }}>{item.fullName}</Text>
-          <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 8, marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: verticalScale(8), marginBottom: verticalScale(16) }}>
             {item.tags.map((tag, subIndex) => (
               <Text key={subIndex} style={{
                 ...styles.tag,
-                marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
+                marginRight: subIndex < item.tags.length - 1 ? verticalScale(4) : 0,
                 color: this.props.customTheme.tagTitle,
                 backgroundColor: this.props.customTheme.tag
               }}>{tag}</Text>
             ))}
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            {this.renderScore(item.score, 2)}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(16) }}>
+            {this.renderScore(item.score, verticalScale(2))}
             <Text style={{
               ...styles.reviews,
               color: this.props.customTheme.label
@@ -111,14 +112,14 @@ class Artists extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
-        <View style={{ height: 240 }}>
+        <View style={{ height: verticalScale(240) }}>
           <FlatList
             data={this.props.featuredArtists}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderCard}
             horizontal
-            ListHeaderComponent={() => <View style={{ width: 8 }} />}
-            ListFooterComponent={() => <View style={{ width: 8 }} />}
+            ListHeaderComponent={() => <View style={{ width: verticalScale(8) }} />}
+            ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -127,7 +128,7 @@ class Artists extends Component {
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
             ItemSeparatorComponent={() => (
-              <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />
+              <View style={{ height: verticalScale(StyleSheet.hairlineWidth), backgroundColor: this.props.customTheme.palette.grey3 }} />
             )}
           />
         </View>
@@ -136,46 +137,46 @@ class Artists extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
   },
   card: {
-    width: 254,
-    height: 192,
-    borderRadius: 12,
-    padding: 24
+    width: '254@vs',
+    height: '192@vs',
+    borderRadius: '12@vs',
+    padding: '24@vs'
   },
   cardName: {
-    fontSize: 16,
+    fontSize: '16@vs',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontSize: 14,
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
+    borderRadius: '4@vs',
+    fontSize: '14@vs',
     textTransform: 'capitalize'
   },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16
+    padding: '16@vs'
   },
   listName: {
-    marginLeft: 16,
+    marginLeft: '16@vs',
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   reviews: {
-    marginLeft: 4,
-    fontSize: 10,
+    marginLeft: '4@vs',
+    fontSize: '10@vs',
     fontWeight: 'bold'
   }
 });

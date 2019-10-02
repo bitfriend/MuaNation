@@ -1,3 +1,4 @@
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { primary, secondary, success, warning, danger, white, black } from './common';
 
 export const palette = {
@@ -28,59 +29,59 @@ import { Platform } from 'react-native';
 
 export const buttonShadow = Platform.select({
   ios: {
-    shadowRadius: 16,
+    shadowRadius: verticalScale(16),
     shadowColor: '#ef4492',
     shadowOpacity: 0.4,
-    shadowOffset: { width: 1, height: 6 }
+    shadowOffset: { width: verticalScale(1), height: verticalScale(6) }
   },
   android: {
-    elevation: 6
+    elevation: verticalScale(6)
   }
 });
 
 export const shadows = [
   Platform.select({
     ios: {
-      shadowRadius: 4,
+      shadowRadius: verticalScale(4),
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: 2 }
+      shadowOffset: { width: 0, height: verticalScale(2) }
     },
     android: {
-      elevation: 2
+      elevation: verticalScale(2)
     }
   }),
   Platform.select({
     ios: {
-      shadowRadius: 8,
+      shadowRadius: verticalScale(8),
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.08,
-      shadowOffset: { width: 1, height: 4 }
+      shadowOffset: { width: verticalScale(1), height: verticalScale(4) }
     },
     android: {
-      elevation: 4
+      elevation: verticalScale(4)
     }
   }),
   Platform.select({
     ios: {
-      shadowRadius: 16,
+      shadowRadius: verticalScale(16),
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.06,
-      shadowOffset: { width: 2, height: 12 }
+      shadowOffset: { width: verticalScale(2), height: verticalScale(12) }
     },
     android: {
-      elevation: 12
+      elevation: verticalScale(12)
     }
   }),
   Platform.select({
     ios: {
-      shadowRadius: 24,
+      shadowRadius: verticalScale(24),
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.06,
-      shadowOffset: { width: 3, height: 16 }
+      shadowOffset: { width: verticalScale(3), height: verticalScale(16) }
     },
     android: {
-      elevation: 16
+      elevation: verticalScale(16)
     }
   }),
 ];

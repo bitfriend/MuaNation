@@ -192,6 +192,7 @@ class PopularProduct extends Component {
                   fontSize: 18,
                   fontWeight: 'bold'
                 }}
+                onPress={() => this.props.navigation.navigate('Booking')}
               />
             </View>
           </View>

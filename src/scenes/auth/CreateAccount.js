@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
@@ -46,9 +47,9 @@ class CreateAccount extends Component {
             color: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey0
           }}>{title}</Text>
           {checked ? (
-            <Icon type="material" name="radio-button-checked" size={20} color={this.props.customTheme.palette.secondary} />
+            <Icon type="material" name="radio-button-checked" size={verticalScale(20)} color={this.props.customTheme.palette.secondary} />
           ) : (
-            <Icon type="material" name="radio-button-unchecked" size={20} color={this.props.customTheme.label} />
+            <Icon type="material" name="radio-button-unchecked" size={verticalScale(20)} color={this.props.customTheme.label} />
           )}
         </View>
         <Text style={{
@@ -66,7 +67,7 @@ class CreateAccount extends Component {
         backgroundColor: this.props.customTheme.container
       }}>
         <SceneHeader />
-        <View style={{ flex: 1, marginHorizontal: 50 }}>
+        <View style={{ flex: 1, marginHorizontal: verticalScale(60) }}>
           <Text style={{
             ...styles.titleText,
             color: this.props.customTheme.title
@@ -95,20 +96,20 @@ class CreateAccount extends Component {
               icon={{
                 name: 'facebook',
                 type: 'font-awesome',
-                size: 20,
-                containerStyle: { marginRight: 10 }
+                size: verticalScale(20),
+                containerStyle: { marginRight: verticalScale(20) }
               }}
               title="Join with Facebook"
               titleStyle={styles.buttonTitle}
               onPress={this.onClickFacebook}
             />
             <ThemeButton
-              buttonStyle={styles.button}
+              buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
               icon={{
                 name: 'instagram',
                 type: 'font-awesome',
-                size: 20,
-                containerStyle: { marginRight: 10 }
+                size: verticalScale(20),
+                containerStyle: { marginRight: verticalScale(10) }
               }}
               title="Join with Instagram"
               titleStyle={styles.buttonTitle}
@@ -148,50 +149,47 @@ class CreateAccount extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 30
+    paddingBottom: '16@vs'
   },
   titleText: {
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   },
   smallText: {
-    fontSize: 14,
+    fontSize: '14@vs',
     fontFamily: 'Roboto',
-    marginTop: 20,
-    marginBottom: 10
+    marginTop: '16@vs',
+    marginBottom: '28@vs'
   },
   card: {
     width: '100%',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderRadius: 12
+    marginVertical: '10@vs',
+    padding: '24@vs',
+    borderWidth: '1@vs',
+    borderRadius: '12@vs'
   },
   caption: {
     flex: 1,
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   },
   overview: {
-    fontSize: 14,
-    fontFamily: 'Roboto',
-    marginTop: 20,
-    marginBottom: 10
+    marginTop: '8@vs',
+    fontSize: '14@vs',
+    fontFamily: 'Roboto'
   },
   button: {
-    width: 254,
-    height: 48,
-    marginTop: 16,
-    borderRadius: 12
+    width: '254@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
   },
   buttonTitle: {
-    fontSize: 16,
+    fontSize: '16@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   }

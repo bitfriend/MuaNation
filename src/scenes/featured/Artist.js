@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 
@@ -35,15 +36,6 @@ class Artist extends Component {
     this.props.navigation.navigate('Relations', { id, fullName, category });
   }
 
-  renderStatsEdge(value, unit, category) {
-    return (
-      <TouchableOpacity style={{ alignItems: 'center', margin: 16 }} onPress={() => this.onRelations(category)}>
-        <Text style={{ color: this.props.customTheme.title, fontSize: 18, fontFamily: 'Roboto', fontWeight: 'bold' }}>{value}</Text>
-        <Text style={{ color: this.props.customTheme.label, fontSize: 14, fontFamily: 'Roboto' }}>{unit}</Text>
-      </TouchableOpacity>
-    );
-  }
-
   onReviews = () => {
     const id = this.props.navigation.getParam('id');
     this.props.navigation.navigate('Reviews', {
@@ -57,11 +49,33 @@ class Artist extends Component {
     this.props.navigation.navigate('PopularProduct');
   }
 
+  renderSide(value, unit, category) {
+    return (
+      <TouchableOpacity style={sideStyles.container} onPress={() => this.onRelations(category)}>
+        <Text style={{
+          ...sideStyles.value,
+          color: this.props.customTheme.title
+        }}>{value}</Text>
+        <Text style={{
+          ...sideStyles.unit,
+          color: this.props.customTheme.label
+        }}>{unit}</Text>
+      </TouchableOpacity>
+    );
+  }
+
   renderScore(score, marginHorizontal) {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
-          <Icon key={index} type="font-awesome" name="star" size={16} color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar} containerStyle={{ marginHorizontal }} />
+          <Icon
+            key={index}
+            type="font-awesome"
+            name="star"
+            size={verticalScale(16)}
+            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
+            containerStyle={{ marginHorizontal }}
+          />
         ))}
       </View>
     );
@@ -73,49 +87,47 @@ class Artist extends Component {
     return (
       <View style={styles.card}>
         <Image source={{ uri: avatar }} style={styles.avatar} />
-        <View style={styles.stats}>
-          {this.renderStatsEdge(followers, 'followers', 'followers')}
-          <TouchableOpacity onPress={this.onReviews}>
-            <View style={{ flex: 1, alignItems: 'center', margin: 16 }}>
-              {this.renderScore(score, 2)}
-              <Text style={{ color: this.props.customTheme.label, fontSize: 14, marginTop: 4 }}>{reviews} reviews</Text>
+        <View style={styles.statsWrapper}>
+          <View style={styles.stats}>
+            {this.renderSide(followers, 'followers', 'followers')}
+            <View style={reviewStyles.container}>
+              <TouchableOpacity onPress={this.onReviews}>
+                {this.renderScore(score, verticalScale(2))}
+                <Text style={{ ...reviewStyles.text, color: this.props.customTheme.label }}>{reviews} reviews</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          {this.renderStatsEdge(following, 'following', 'following')}
+            {this.renderSide(following, 'following', 'following')}
+          </View>
         </View>
       </View>
     );
   }
 
-  renderActionBar() {
+  renderButtons() {
     return (
-      <View style={{
-        flexDirection: 'row',
-        width: '100%',
-        padding: 16
-      }}>
+      <View style={styles.buttonBar}>
         <ThemeButton
           title="Book"
-          containerStyle={{ flex: 1 }}
-          buttonStyle={{ height: 48, borderRadius: 12 }}
-          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
+          containerStyle={bookStyles.container}
+          buttonStyle={bookStyles.button}
+          titleStyle={bookStyles.title}
+          onPress={() => this.props.navigation.navigate('Booking')}
         />
         <ThemeButton
           title="Follow"
-          containerStyle={{ flex: 1, marginLeft: 4 }}
-          buttonStyle={{ height: 48, borderRadius: 12 }}
-          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
+          containerStyle={followStyles.container}
+          buttonStyle={followStyles.button}
+          titleStyle={followStyles.title}
           isPrimary={false}
         />
         <ThemeButton
           icon={{
             name: 'paper-plane',
             type: 'font-awesome',
-            size: 22
+            size: verticalScale(22)
           }}
-          containerStyle={{ marginLeft: 4 }}
-          buttonStyle={{ width: 48, height: 48, borderRadius: 12 }}
-          titleStyle={{ fontSize: 14, fontWeight: 'bold' }}
+          containerStyle={chatStyles.container}
+          buttonStyle={chatStyles.button}
           isPrimary={false}
         />
       </View>
@@ -130,7 +142,7 @@ class Artist extends Component {
             style={{
               width: this.imageWidth,
               height: this.imageHeight,
-              borderRadius: 4
+              borderRadius: verticalScale(8)
             }}
             source={{ uri: item.image }}
             resizeMode={FastImage.resizeMode.cover}
@@ -167,7 +179,7 @@ class Artist extends Component {
           ...styles.overview,
           color: this.props.customTheme.palette.grey0
         }}>{overview}</Text>
-        {this.renderActionBar()}
+        {this.renderButtons()}
         <CategoryBar
           tabs={cateogories}
           activeTabColor={this.props.customTheme.title}
@@ -175,7 +187,7 @@ class Artist extends Component {
           underlineColor={this.props.customTheme.title}
           onSelect={(value) => this.onChangeCategory(value)}
         />
-        <View style={styles.container}>
+        <View style={styles.list}>
           <FlatList
             data={this.props.artistProducts}
             keyExtractor={(item, index) => index.toString()}
@@ -188,50 +200,132 @@ class Artist extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   card: {
     width: '100%',
     alignItems: 'center'
   },
   avatar: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    marginVertical: 16
+    width: '88@vs',
+    height: '88@vs',
+    borderRadius: '44@vs',
+    marginTop: '24@vs',
+    marginBottom: '16@vs'
+  },
+  statsWrapper: {
+    padding: '16@vs'
   },
   stats: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16
+    width: '100%',
+    height: '80@vs',
+    paddingHorizontal: '24@vs',
+    paddingVertical: '18@vs'
   },
   overview: {
-    marginTop: 8,
-    marginHorizontal: 24,
+    marginHorizontal: '24@vs',
     fontFamily: 'Roboto',
-    fontSize: 14
+    fontSize: '14@vs'
   },
-  container: {
+  buttonBar: {
+    flexDirection: 'row',
+    width: '100%',
+    padding: '16@vs'
+  },
+  list: {
     flex: 1,
-    marginHorizontal: 8
+    marginHorizontal: '8@vs'
   },
   listItem: {
-    margin: 8
+    margin: '8@vs'
   },
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8
+    marginVertical: '8@vs'
   },
   name: {
     fontFamily: 'Roboto',
-    fontSize: 14,
+    fontSize: '14@vs',
     fontWeight: 'bold',
     flex: 1
   },
   price: {
     fontFamily: 'Roboto',
-    fontSize: 14,
+    fontSize: '14@vs',
     fontWeight: 'bold'
+  }
+});
+
+const sideStyles = ScaledSheet.create({
+  container: {
+    alignItems: 'center'
+  },
+  value: {
+    fontFamily: 'Roboto',
+    fontSize: '18@vs',
+    fontWeight: 'bold'
+  },
+  unit: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
+  }
+});
+
+const reviewStyles = ScaledSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  text: {
+    marginTop: '2@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs',
+    textAlign: 'center'
+  }
+});
+
+const bookStyles = ScaledSheet.create({
+  container: {
+    flex: 1
+  },
+  button: {
+    height: '48@vs',
+    borderRadius: '12@vs'
+  },
+  title: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs',
+    fontWeight: 'bold'
+  }
+});
+
+const followStyles = ScaledSheet.create({
+  container: {
+    flex: 1,
+    marginLeft: '4@vs'
+  },
+  button: {
+    height: '48@vs',
+    borderRadius: '12@vs'
+  },
+  title: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs',
+    fontWeight: 'bold'
+  }
+});
+
+const chatStyles = ScaledSheet.create({
+  container: {
+    marginLeft: '4@vs'
+  },
+  button: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
   }
 });
 

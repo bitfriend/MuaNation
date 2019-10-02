@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-const saleImageWidth = 254;
+const saleImageWidth = verticalScale(254);
 
 class Products extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
-    this.popularImageWidth = (width - 16 * 3) / 2;
+    this.popularImageWidth = (width - verticalScale(16) * 3) / 2;
     this.popularImageHeight = Math.floor(this.popularImageWidth * 0.8);
   }
 
@@ -21,21 +22,21 @@ class Products extends Component {
       }}>
         <View style={styles.listItem}>
           <View style={{
-            borderRadius: 12,
+            borderRadius: verticalScale(12),
             backgroundColor: this.props.customTheme.card,
             ...this.props.customTheme.shadows[3]
           }}>
             <FastImage
               style={{
                 width: saleImageWidth,
-                height: 180,
-                borderTopLeftRadius: 12,
-                borderTopRightRadius: 12
+                height: verticalScale(180),
+                borderTopLeftRadius: verticalScale(12),
+                borderTopRightRadius: verticalScale(12)
               }}
               source={{ uri: item.image }}
               resizeMode={FastImage.resizeMode.cover}
             />
-            <View style={{ padding: 16 }}>
+            <View style={{ padding: verticalScale(16) }}>
               <Text style={{
                 ...saleStyles.name,
                 color: this.props.customTheme.title
@@ -70,29 +71,30 @@ class Products extends Component {
 
   renderPopularProduct = ({ item, index, separators }) => {
     return (
-      <TouchableOpacity onPress={() => {
+      <TouchableOpacity style={{
+        ...styles.listItem,
+        width: this.popularImageWidth // Must psecify the width of item for multi-column list
+      }} onPress={() => {
         this.props.navigation.navigate('PopularProduct', { id: 0 });
       }}>
-        <View style={styles.listItem}>
-          <FastImage
-            style={{
-              width: this.popularImageWidth,
-              height: this.popularImageHeight,
-              borderRadius: 8
-            }}
-            source={{ uri: item.image }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <View style={popularStyles.caption}>
-            <Text style={{
-              ...popularStyles.name,
-              color: this.props.customTheme.title
-            }}>{item.name}</Text>
-            <Text style={{
-              ...popularStyles.price,
-              color: this.props.customTheme.palette.secondary
-            }}>${item.price.toFixed(2)}</Text>
-          </View>
+        <FastImage
+          style={{
+            width: this.popularImageWidth,
+            height: this.popularImageHeight,
+            borderRadius: verticalScale(8)
+          }}
+          source={{ uri: item.image }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <View style={popularStyles.caption}>
+          <Text style={{
+            ...popularStyles.name,
+            color: this.props.customTheme.title
+          }}>{item.name}</Text>
+          <Text style={{
+            ...popularStyles.price,
+            color: this.props.customTheme.palette.secondary
+          }}>${item.price.toFixed(2)}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -100,8 +102,6 @@ class Products extends Component {
 
   render() {
     const { width: windowWidth } = Dimensions.get('window');
-    const imageWidth = (windowWidth - 16 * 3) / 2;
-    const imageHeight = Math.floor(imageWidth * 0.8);
 
     return (
       <View style={{
@@ -112,14 +112,14 @@ class Products extends Component {
           ...styles.heading,
           color: this.props.customTheme.heading
         }}>SALE</Text>
-        <View style={{ height: 348 }}>
+        <View style={{ height: verticalScale(348) }}>
           <FlatList
             data={this.props.products}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderSaleProduct}
             horizontal
-            ListHeaderComponent={() => <View style={{ width: 8 }} />}
-            ListFooterComponent={() => <View style={{ width: 8 }} />}
+            ListHeaderComponent={() => <View style={{ width: verticalScale(8) }} />}
+            ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
           />
         </View>
         <Text style={{
@@ -131,79 +131,83 @@ class Products extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderPopularProduct}
           numColumns={2}
-          style={{ paddingHorizontal: 8 }}
+          style={{ paddingHorizontal: verticalScale(8) }}
         />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    paddingTop: 16
+    paddingTop: '16@vs'
   },
   heading: {
-    marginHorizontal: 16,
+    marginHorizontal: '16@vs',
     fontFamily: 'Roboto',
-    fontSize: 14,
+    fontSize: '14@vs',
     fontWeight: 'bold'
   },
   listItem: {
-    margin: 8
+    margin: '8@vs'
   }
 });
 
-const saleStyles = StyleSheet.create({
+const saleStyles = ScaledSheet.create({
   name: {
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   overview: {
-    width: saleImageWidth - 16 * 2,
+    width: verticalScale(saleImageWidth - 16 * 2),
     fontFamily: 'Roboto',
-    fontSize: 14
+    fontSize: '14@vs'
   },
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16
+    marginTop: '16@vs'
   },
   extra: {
-    borderRadius: 4,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
+    borderRadius: '4@vs',
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
     fontFamily: 'Roboto',
+    fontSize: '14@vs',
     fontWeight: 'bold'
   },
   symbol: {
-    marginRight: 4,
+    marginRight: '4@vs',
     fontFamily: 'Roboto',
+    fontSize: '14@vs',
     fontWeight: 'bold'
   },
   price: {
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   }
 });
 
-const popularStyles = StyleSheet.create({
+const popularStyles = ScaledSheet.create({
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8
+    marginVertical: '8@vs'
   },
   name: {
     fontFamily: 'Roboto',
+    fontSize: '14@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize',
     flex: 1
   },
   price: {
     fontFamily: 'Roboto',
+    fontSize: '14@vs',
     fontWeight: 'bold'
   }
 });

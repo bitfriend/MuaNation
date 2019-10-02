@@ -130,10 +130,10 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
     inactiveTintColor: common.theme.palette.grey0,
     labelStyle: {
       fontFamily: 'Lato',
-      fontSize: 24,
+      fontSize: verticalScale(24),
       fontWeight: 'bold',
       margin: 0,
-      paddingBottom: 2
+      paddingBottom: verticalScale(2)
     },
     upperCaseLabel: false,
     indicatorStyle: { backgroundColor: common.theme.palette.secondary }
@@ -179,7 +179,8 @@ const FeaturedStackNav = createStackNavigator({
   Relations: { screen: Relations },
   Reviews: { screen: Reviews },
   SaleProduct: { screen: SaleProduct },
-  PopularProduct: { screen: PopularProduct }
+  PopularProduct: { screen: PopularProduct },
+  Booking: { screen: Booking }
 }, {
   initialRouteName: 'FeaturedTabNav',
   transitionConfig,
@@ -199,11 +200,13 @@ const FeaturedStackNav = createStackNavigator({
 
 function getTabeBarLabel(focused, tintColor, title) {
   if (focused) {
-    return <Text style={{ textAlign: 'center', color: tintColor, fontSize: 10 }}>{title}</Text>;
+    return <Text style={{ textAlign: 'center', color: tintColor, fontSize: verticalScale(10) }}>{title}</Text>;
   } else {
     return null;
   }
 }
+
+import { verticalScale } from 'react-native-size-matters';
 
 const AppTabNav = createBottomTabNavigator({
   Featured: {
@@ -211,7 +214,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="font-awesome" name="star" size={25} color={tintColor} />
+        <Icon type="font-awesome" name="star" size={verticalScale(25)} color={tintColor} />
       )
     }
   },
@@ -220,7 +223,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Discover'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="ios-search" size={25} color={tintColor} />
+        <Icon type="ionicon" name="ios-search" size={verticalScale(25)} color={tintColor} />
       )
     }
   },
@@ -229,7 +232,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Calendar'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="ios-calendar" size={25} color={tintColor} />
+        <Icon type="ionicon" name="ios-calendar" size={verticalScale(25)} color={tintColor} />
       )
     }
   },
@@ -238,7 +241,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="md-person" size={25} color={tintColor} />
+        <Icon type="ionicon" name="md-person" size={verticalScale(25)} color={tintColor} />
       )
     }
   }
@@ -250,7 +253,10 @@ const AppTabNav = createBottomTabNavigator({
   tabBarOptions: {
     activeTintColor: common.theme.palette.secondary,
     inactiveTintColor: common.theme.tabTitle,
-    style: { backgroundColor: common.theme.container }
+    style: {
+      backgroundColor: common.theme.container,
+      height: verticalScale(49)
+    }
   }
 });
 
@@ -269,10 +275,10 @@ const theme = {
     inputContainerStyle: {
       borderBottomColor: undefined,
       borderBottomWidth: undefined,
-      borderRadius: 12
+      borderRadius: verticalScale(12)
     },
     leftIconContainerStyle: {
-      marginRight: 8
+      marginRight: verticalScale(8)
     }
   }
 };

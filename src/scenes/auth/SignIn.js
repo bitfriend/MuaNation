@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Modal, Platform, Text, View } from 'react-native';
 import { Input } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import Swiper from 'react-native-swiper';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
@@ -46,22 +47,17 @@ class SignIn extends Component {
       <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{
-            color: this.props.customTheme.title,
-            fontSize: 24,
-            fontWeight: 'bold',
-            fontFamily: 'Lato'
+            ...styles.welcome,
+            color: this.props.customTheme.title
           }}>Welcome to</Text>
-          <View style={{ margin: 10 }}>
+          <View style={{ margin: verticalScale(10) }}>
             <Text style={{
-              color: this.props.customTheme.palette.secondary,
-              fontSize: 38,
-              fontWeight: 'bold',
-              fontFamily: 'Lato'
+              ...styles.mua,
+              color: this.props.customTheme.palette.secondary
             }}>Mua's</Text>
             <Text style={{
-              color: this.props.customTheme.label,
-              fontSize: 14,
-              fontFamily: 'Roboto'
+              ...styles.place,
+              color: this.props.customTheme.label
             }}>place for professionals</Text>
           </View>
         </View>
@@ -71,6 +67,8 @@ class SignIn extends Component {
             dotStyle={styles.pageDot}
             activeDotColor={this.props.customTheme.palette.grey0}
             activeDotStyle={styles.pageDot}
+            containerStyle={{ paddingBottom: verticalScale(16) }}
+            paginationStyle={{ bottom: verticalScale(-8) }}
           >
             <View>
               <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash1.png')} />
@@ -95,24 +93,24 @@ class SignIn extends Component {
       }}>
         {this.renderGallery()}
         <ThemeButton
-          buttonStyle={styles.button}
+          buttonStyle={{ ...styles.button, marginTop: verticalScale(24) }}
           icon={{
             name: 'facebook',
             type: 'font-awesome',
-            size: 20,
-            containerStyle: { marginRight: 10 }
+            size: verticalScale(20),
+            containerStyle: { marginRight: verticalScale(10) }
           }}
           title="Login with Facebook"
           titleStyle={styles.buttonTitle}
           onPress={this.onClickFacebook}
         />
         <ThemeButton
-          buttonStyle={styles.button}
+          buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
           icon={{
             name: 'instagram',
             type: 'font-awesome',
-            size: 20,
-            containerStyle: { marginRight: 10 }
+            size: verticalScale(20),
+            containerStyle: { marginRight: verticalScale(10) }
           }}
           title="Login with Instagram"
           titleStyle={styles.buttonTitle}
@@ -138,13 +136,11 @@ class SignIn extends Component {
           }}
         />
         <Text style={{
-          color: this.props.customTheme.label,
-          fontSize: 14,
-          fontFamily: 'Roboto',
-          marginTop: 24
+          ...styles.question,
+          color: this.props.customTheme.label
         }}>New to the platform?</Text>
         <ThemeButton
-          buttonStyle={styles.button}
+          buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
           title="Create an account"
           titleStyle={{
             ...styles.buttonTitle,
@@ -166,31 +162,49 @@ class SignIn extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingBottom: 30
+    paddingBottom: '16@vs'
+  },
+  welcome: {
+    fontSize: '24@vs',
+    fontWeight: 'bold',
+    fontFamily: 'Lato'
+  },
+  mua: {
+    fontSize: '38@vs',
+    fontWeight: 'bold',
+    fontFamily: 'Lato'
+  },
+  place: {
+    fontSize: '14@vs',
+    fontFamily: 'Roboto'
   },
   banner: {
     width: '100%',
     height: '100%'
   },
   pageDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 3.5
+    width: '7@vs',
+    height: '7@vs',
+    borderRadius: '3.5@vs'
   },
   button: {
-    width: 254,
-    height: 48,
-    marginTop: 16,
-    borderRadius: 12
+    width: '254@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
   },
   buttonTitle: {
-    fontSize: 16,
+    fontSize: '16@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
+  },
+  question: {
+    fontSize: '14@vs',
+    fontFamily: 'Roboto',
+    marginTop: '24@vs'
   }
 });
 

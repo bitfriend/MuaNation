@@ -1,7 +1,8 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Animated, Dimensions, FlatList, Image, Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import Toast from 'react-native-simple-toast';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
@@ -12,8 +13,6 @@ import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
-const slideWidth = 254;
-const slideHeight = 272;
 const criteria = [0, 1, 2, 3, 4];
 
 class SuggestedArtists extends Component {
@@ -55,7 +54,7 @@ class SuggestedArtists extends Component {
             key={index}
             type="font-awesome"
             name="star"
-            size={16}
+            size={verticalScale(16)}
             color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
             containerStyle={{ marginHorizontal }}
           />
@@ -68,39 +67,38 @@ class SuggestedArtists extends Component {
     const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
-      <View style={{ paddingHorizontal: 8, marginVertical: 48 }}>
+      <View style={{ paddingHorizontal: verticalScale(8), marginVertical: verticalScale(48) }}>
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
           <View style={{
             ...styles.card,
             borderColor: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.card,
-            borderWidth: 2,
             backgroundColor: this.props.customTheme.card,
             ...this.props.customTheme.shadows[3]
           }}>
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View style={{ flex: 1, marginBottom: 8 }}>
+              <View style={{ flex: 1, marginBottom: verticalScale(8) }}>
                 <Image source={{ uri: item.avatar }} style={styles.avatar} />
               </View>
               {checked && (
-                <Icon type="font-awesome" name="check-circle" size={24} color={this.props.customTheme.palette.secondary} />
+                <Icon type="font-awesome" name="check-circle" size={verticalScale(24)} color={this.props.customTheme.palette.secondary} />
               )}
             </View>
             <Text style={{
               ...styles.name,
               color: this.props.customTheme.title
             }}>{item.fullName}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: 10, marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: verticalScale(10), marginBottom: verticalScale(16) }}>
               {item.tags.map((tag, subIndex) => (
                 <Text key={subIndex} style={{
                   ...styles.tag,
-                  marginRight: subIndex < item.tags.length - 1 ? 4 : 0,
+                  marginRight: subIndex < item.tags.length - 1 ? verticalScale(4) : 0,
                   color: this.props.customTheme.tagTitle,
                   backgroundColor: this.props.customTheme.tag
                 }}>{tag}</Text>
               ))}
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-              {this.renderScore(item.score, 2)}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(16) }}>
+              {this.renderScore(item.score, verticalScale(2))}
               <Text style={{
                 ...styles.reviews,
                 color: this.props.customTheme.label
@@ -108,7 +106,7 @@ class SuggestedArtists extends Component {
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.products.map((product, subIndex) => (
-                <Image key={subIndex} style={{ width: 64, height: 64, borderRadius: 4 }} source={{ uri: product }} />
+                <Image key={subIndex} style={{ width: verticalScale(64), height: verticalScale(64), borderRadius: verticalScale(4) }} source={{ uri: product }} />
               ))}
             </View>
           </View>
@@ -126,7 +124,7 @@ class SuggestedArtists extends Component {
         backgroundColor: this.props.customTheme.container
       }}>
         <SceneHeader />
-        <View style={{ marginHorizontal: 60 }}>
+        <View style={{ marginHorizontal: verticalScale(60) }}>
           <Text style={{
             ...styles.titleText,
             color: this.props.customTheme.title
@@ -142,8 +140,8 @@ class SuggestedArtists extends Component {
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
             horizontal
-            ListHeaderComponent={() => <View style={{ width: 8 }} />}
-            ListFooterComponent={() => <View style={{ width: 8 }} />}
+            ListHeaderComponent={() => <View style={{ width: verticalScale(8) }} />}
+            ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
           />
         </View>
         <View style={{ alignItems: 'center' }}>
@@ -154,7 +152,7 @@ class SuggestedArtists extends Component {
             onPress={this.onClickFollow}
           />
           <ThemeButton
-            buttonStyle={styles.button}
+            buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
             title="Skip for now"
             titleStyle={styles.buttonTitle}
             onPress={this.onClickSkip}
@@ -165,59 +163,59 @@ class SuggestedArtists extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 30
+    paddingBottom: '16@vs'
   },
   titleText: {
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   },
   smallText: {
-    fontSize: 14,
+    fontSize: '14@vs',
     fontFamily: 'Roboto',
-    marginTop: 20,
-    marginBottom: 10
+    marginTop: '16@vs',
+    marginBottom: '20@vs'
   },
   card: {
-    width: 254,
-    height: 272,
-    padding: 24,
-    borderRadius: 12
+    width: '254@vs',
+    height: '272@vs',
+    padding: '24@vs',
+    borderWidth: '2@vs',
+    borderRadius: '12@vs'
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
   },
   name: {
-    fontSize: 16,
+    fontSize: '16@vs',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    marginHorizontal: 2,
-    borderRadius: 4,
-    fontSize: 14,
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
+    marginHorizontal: '2@vs',
+    borderRadius: '4@vs',
+    fontSize: '14@vs',
     textTransform: 'capitalize'
   },
   reviews: {
-    marginLeft: 4,
-    fontSize: 10
+    marginLeft: '4@vs',
+    fontSize: '10@vs'
   },
   button: {
-    width: 254,
-    height: 48,
-    marginTop: 16,
-    borderRadius: 12
+    width: '254@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
   },
   buttonTitle: {
-    fontSize: 16,
+    fontSize: '16@vs',
     fontWeight: 'bold',
     fontFamily: 'Roboto'
   }

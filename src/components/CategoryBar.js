@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 
 export default class CategoryBar extends PureComponent {
@@ -20,7 +21,7 @@ export default class CategoryBar extends PureComponent {
             <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
               <Text style={[customStyles.tabItem, index === this.state.activeIndex ? {
                 borderBottomColor: this.props.underlineColor,
-                borderBottomWidth: 2,
+                borderBottomWidth: verticalScale(2),
                 color: this.props.activeTabColor,
                 fontWeight: 'bold'
               } : {
@@ -34,12 +35,12 @@ export default class CategoryBar extends PureComponent {
   }
 }
 
-const customStyles = StyleSheet.create({
+const customStyles = ScaledSheet.create({
   tabItem: {
     fontFamily: 'Roboto',
-    fontSize: 18,
-    marginHorizontal: 16,
-    paddingVertical: 16,
+    fontSize: '18@vs',
+    marginHorizontal: '16@vs',
+    paddingVertical: '16@vs',
     textTransform: 'capitalize'
   }
 });

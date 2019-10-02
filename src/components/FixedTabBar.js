@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 
 export default class FixedTabBar extends Component {
@@ -13,21 +14,21 @@ export default class FixedTabBar extends Component {
       flexDirection: 'row'
     };
     if (!label) {
-      tabStyle.padding = 4;
+      tabStyle.padding = verticalScale(4);
     }
     const normalLabelStyle = {
-      ...this.props.labelStyle,
       ...styles.tabItem,
+      ...this.props.labelStyle,
       color: focused ? this.props.activeTintColor : this.props.inactiveTintColor
     };
     const focusedLabelStyle = {
       ...normalLabelStyle,
       borderBottomColor: this.props.activeTintColor,
-      borderBottomWidth: 2
+      borderBottomWidth: verticalScale(2)
     };
     return (
       <View style={tabStyle}>
-        <View style={{ marginHorizontal: 16, flexDirection: 'row' }}>
+        <View style={{ marginHorizontal: verticalScale(16), flexDirection: 'row' }}>
           <Text style={focused ? focusedLabelStyle : normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
           <Text style={normalLabelStyle}>{label.substring(1)}</Text>
         </View>
@@ -39,7 +40,7 @@ export default class FixedTabBar extends Component {
     const { navigationState, getLabelText, style } = this.props;
     const { routes } = navigationState;
     return (
-      <View style={{ ...style, flexDirection: 'row', paddingVertical: 8 }}>
+      <View style={{ ...style, flexDirection: 'row', paddingVertical: verticalScale(8) }}>
         {routes.map((route, index) => (
           <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
             {this.renderItem(index === navigationState.index, getLabelText({ route }))}
@@ -50,10 +51,10 @@ export default class FixedTabBar extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   tabItem: {
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   }
 });
