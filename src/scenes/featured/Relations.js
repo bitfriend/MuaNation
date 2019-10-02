@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -68,26 +68,26 @@ class Relations extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader title={this.props.navigation.getParam('fullName')} />
-        <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 16 }}>
+        <View style={styles.container}>
           {this.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
               <Text style={[styles.tab, tab === this.state.activeTab ? {
                 color: this.props.customTheme.title,
                 fontWeight: 'bold',
                 borderBottomColor: this.props.customTheme.title,
-                borderBottomWidth: 2
+                borderBottomWidth: verticalScale(2)
               } : {
                 color: this.props.customTheme.label
               }]}>{tab}</Text>
             </TouchableOpacity>
           ))}
         </View>
-        <View style={{ flex: 1, marginHorizontal: 16 }}>
+        <View style={styles.list}>
           <FlatList
             data={this.props.relations}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: this.props.customTheme.palette.grey3 }} />}
+            ItemSeparatorComponent={() => <View style={{ height: verticalScale(StyleSheet.hairlineWidth), backgroundColor: this.props.customTheme.palette.grey3 }} />}
           />
         </View>
       </View>
@@ -95,40 +95,49 @@ class Relations extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: '16@vs'
+  },
   tab: {
     width: '100%',
     textAlign: 'center',
-    paddingVertical: 16,
+    paddingVertical: '16@vs',
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     textTransform: 'capitalize'
   },
+  list: {
+    flex: 1,
+    marginHorizontal: '16@vs'
+  },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16
+    paddingVertical: '16@vs'
   },
   name: {
     flex: 1,
     fontFamily: 'Roboto',
-    fontSize: 18,
-    marginHorizontal: 16,
+    fontSize: '18@vs',
+    marginHorizontal: '16@vs',
     textTransform: 'capitalize'
   },
   button: {
-    width: 88,
-    height: 48,
-    borderRadius: 12
+    width: '88@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: 14,
+    fontSize: '14@vs',
     fontWeight: 'bold'
   }
 });
