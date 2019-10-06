@@ -6,7 +6,7 @@ import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-const saleImageWidth = verticalScale(254);
+const saleImageWidth = 254;
 
 class Products extends Component {
   componentDidMount() {
@@ -27,12 +27,7 @@ class Products extends Component {
             ...this.props.customTheme.shadows[3]
           }}>
             <FastImage
-              style={{
-                width: saleImageWidth,
-                height: verticalScale(180),
-                borderTopLeftRadius: verticalScale(12),
-                borderTopRightRadius: verticalScale(12)
-              }}
+              style={saleStyles.banner}
               source={{ uri: item.image }}
               resizeMode={FastImage.resizeMode.cover}
             />
@@ -110,14 +105,14 @@ class Products extends Component {
           ...styles.heading,
           color: this.props.customTheme.heading
         }}>SALE</Text>
-        <View style={{ height: verticalScale(348) }}>
+        <View style={saleStyles.listWrapper}>
           <FlatList
             data={this.props.products}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderSaleProduct}
             horizontal
-            ListHeaderComponent={() => <View style={{ width: verticalScale(8) }} />}
-            ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
+            ListHeaderComponent={() => <View style={saleStyles.listHeader} />}
+            ListFooterComponent={() => <View style={saleStyles.listFooter} />}
           />
         </View>
         <Text style={{
@@ -129,7 +124,7 @@ class Products extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderPopularProduct}
           numColumns={2}
-          style={{ paddingHorizontal: verticalScale(8) }}
+          style={popularStyles.list}
         />
       </View>
     );
@@ -153,6 +148,21 @@ const styles = ScaledSheet.create({
 });
 
 const saleStyles = ScaledSheet.create({
+  listWrapper: {
+    height: '348@vs'
+  },
+  listHeader: {
+    width: '8@vs'
+  },
+  listFooter: {
+    width: '8@vs'
+  },
+  banner: {
+    width: verticalScale(saleImageWidth),
+    height: '180@vs',
+    borderTopLeftRadius: '12@vs',
+    borderTopRightRadius: '12@vs'
+  },
   name: {
     fontFamily: 'Roboto',
     fontSize: '18@vs',
@@ -191,17 +201,20 @@ const saleStyles = ScaledSheet.create({
 });
 
 const popularStyles = ScaledSheet.create({
+  list: {
+    paddingHorizontal: '8@vs'
+  },
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: '8@vs'
   },
   name: {
+    flex: 1,
     fontFamily: 'Roboto',
     fontSize: '14@vs',
     fontWeight: 'bold',
-    textTransform: 'capitalize',
-    flex: 1
+    textTransform: 'capitalize'
   },
   price: {
     fontFamily: 'Roboto',

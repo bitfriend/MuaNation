@@ -157,6 +157,7 @@ const styles = ScaledSheet.create({
     paddingHorizontal: '4@vs',
     paddingVertical: '2@vs',
     borderRadius: '4@vs',
+    fontFamily: 'Roboto',
     fontSize: '14@vs',
     textTransform: 'capitalize'
   },
@@ -174,6 +175,7 @@ const styles = ScaledSheet.create({
   },
   reviews: {
     marginLeft: '4@vs',
+    fontFamily: 'Roboto',
     fontSize: '10@vs',
     fontWeight: 'bold'
   }

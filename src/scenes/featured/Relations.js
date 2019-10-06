@@ -72,10 +72,9 @@ class Relations extends Component {
           {this.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
               <Text style={[styles.tab, tab === this.state.activeTab ? {
+                ...styles.activeTab,
                 color: this.props.customTheme.title,
-                fontWeight: 'bold',
-                borderBottomColor: this.props.customTheme.title,
-                borderBottomWidth: verticalScale(2)
+                borderBottomColor: this.props.customTheme.title
               } : {
                 color: this.props.customTheme.label
               }]}>{tab}</Text>
@@ -109,6 +108,10 @@ const styles = ScaledSheet.create({
     fontSize: '18@vs',
     textTransform: 'capitalize'
   },
+  activeTab: {
+    borderBottomWidth: '2@vs',
+    fontWeight: 'bold'
+  },
   list: {
     flex: 1,
     marginHorizontal: '16@vs'
@@ -125,9 +128,9 @@ const styles = ScaledSheet.create({
   },
   name: {
     flex: 1,
+    marginHorizontal: '16@vs',
     fontFamily: 'Roboto',
     fontSize: '18@vs',
-    marginHorizontal: '16@vs',
     textTransform: 'capitalize'
   },
   button: {

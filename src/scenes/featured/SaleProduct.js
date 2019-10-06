@@ -188,7 +188,7 @@ const productStyles = ScaledSheet.create({
   },
   symbol: {
     fontFamily: 'Roboto',
-    fontSize: verticalScale(Math.floor(24 * 0.6)),
+    fontSize: Math.floor(verticalScale(24) * 0.6),
     fontWeight: 'bold'
   },
   price: {
@@ -198,10 +198,10 @@ const productStyles = ScaledSheet.create({
     fontWeight: 'bold'
   },
   overview: {
-    fontFamily: 'Roboto',
-    fontSize: '18@vs',
     marginTop: '16@vs',
-    marginBottom: '24@vs'
+    marginBottom: '24@vs',
+    fontFamily: 'Roboto',
+    fontSize: '18@vs'
   }
 });
 

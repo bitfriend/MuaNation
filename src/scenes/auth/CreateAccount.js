@@ -155,15 +155,15 @@ const styles = ScaledSheet.create({
     paddingBottom: '16@vs'
   },
   titleText: {
+    fontFamily: 'Roboto',
     fontSize: '24@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   },
   smallText: {
-    fontSize: '14@vs',
-    fontFamily: 'Roboto',
     marginTop: '16@vs',
-    marginBottom: '28@vs'
+    marginBottom: '28@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   },
   card: {
     width: '100%',
@@ -174,14 +174,14 @@ const styles = ScaledSheet.create({
   },
   caption: {
     flex: 1,
+    fontFamily: 'Roboto',
     fontSize: '18@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   },
   overview: {
     marginTop: '8@vs',
-    fontSize: '14@vs',
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   },
   button: {
     width: '254@vs',
@@ -189,9 +189,9 @@ const styles = ScaledSheet.create({
     borderRadius: '12@vs'
   },
   buttonTitle: {
+    fontFamily: 'Roboto',
     fontSize: '16@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   }
 });
 

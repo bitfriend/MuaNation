@@ -200,7 +200,12 @@ const FeaturedStackNav = createStackNavigator({
 
 function getTabeBarLabel(focused, tintColor, title) {
   if (focused) {
-    return <Text style={{ textAlign: 'center', color: tintColor, fontSize: verticalScale(10) }}>{title}</Text>;
+    return <Text style={{
+      textAlign: 'center',
+      color: tintColor,
+      fontFamily: 'Roboto',
+      fontSize: verticalScale(10)
+    }}>{title}</Text>;
   } else {
     return null;
   }

@@ -125,9 +125,9 @@ const cardStyles = ScaledSheet.create({
   },
   overview: {
     width: '100%',
+    marginVertical: '8@vs',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
-    marginVertical: '8@vs'
+    fontSize: '14@vs'
   },
   product: {
     width: '48@vs',

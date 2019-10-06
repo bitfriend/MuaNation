@@ -239,7 +239,7 @@ const styles = ScaledSheet.create({
   },
   symbol: {
     fontFamily: 'Roboto',
-    fontSize: verticalScale(Math.floor(24 * 0.6)),
+    fontSize: Math.floor(verticalScale(24) * 0.6),
     fontWeight: 'bold'
   },
   price: {
@@ -283,9 +283,9 @@ const cardStyles = ScaledSheet.create({
   },
   comment: {
     width: windowWidth * 0.6,
+    marginTop: '4@vs',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
-    marginTop: '4@vs'
+    fontSize: '14@vs'
   }
 });
 

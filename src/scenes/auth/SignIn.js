@@ -169,18 +169,18 @@ const styles = ScaledSheet.create({
     paddingBottom: '16@vs'
   },
   welcome: {
+    fontFamily: 'Lato',
     fontSize: '24@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Lato'
+    fontWeight: 'bold'
   },
   mua: {
+    fontFamily: 'Lato',
     fontSize: '38@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Lato'
+    fontWeight: 'bold'
   },
   place: {
-    fontSize: '14@vs',
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   },
   banner: {
     width: '100%',
@@ -197,14 +197,14 @@ const styles = ScaledSheet.create({
     borderRadius: '12@vs'
   },
   buttonTitle: {
+    fontFamily: 'Roboto',
     fontSize: '16@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   },
   question: {
-    fontSize: '14@vs',
+    marginTop: '24@vs',
     fontFamily: 'Roboto',
-    marginTop: '24@vs'
+    fontSize: '14@vs'
   }
 });
 

@@ -51,15 +51,15 @@ const styles = ScaledSheet.create({
     paddingBottom: '16@vs'
   },
   titleText: {
+    fontFamily: 'Roboto',
     fontSize: '24@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   },
   smallText: {
-    fontSize: '14@vs',
-    fontFamily: 'Roboto',
     marginTop: '20@vs',
-    marginBottom: '10@vs'
+    marginBottom: '10@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   },
   banner: {
     flex: 1,
@@ -73,9 +73,9 @@ const styles = ScaledSheet.create({
     borderRadius: '12@vs'
   },
   buttonTitle: {
+    fontFamily: 'Roboto',
     fontSize: '16@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   }
 });
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import { Modal, Text, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -27,9 +28,14 @@ class EmailModal extends Component {
               color: this.props.customTheme.label
             }}>Please enter the email for Instagram</Text>
             <Input
-              containerStyle={{ padding: 5 }}
+              containerStyle={styles.inputContainer}
               inputContainerStyle={{ backgroundColor: this.props.customTheme.inputContainer }}
-              leftIcon={{ name: 'envelope', type: 'font-awesome', size: 20, color: this.props.customTheme.input }}
+              leftIcon={{
+                name: 'envelope',
+                type: 'font-awesome',
+                size: verticalScale(20),
+                color: this.props.customTheme.input
+              }}
               placeholder="Email"
               placeholderTextColor={this.props.customTheme.placeholder}
               inputStyle={{ color: this.props.customTheme.input }}
@@ -37,23 +43,29 @@ class EmailModal extends Component {
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
-                containerStyle={{ flex: 1, padding: 5 }}
+                containerStyle={buttonStyles.container}
                 buttonStyle={{
-                  backgroundColor: this.props.customTheme.palette.secondary,
-                  borderRadius: 12
+                  ...buttonStyles.button,
+                  backgroundColor: this.props.customTheme.palette.secondary
                 }}
                 title="OK"
-                titleStyle={{ color: this.props.customTheme.buttonTitle }}
+                titleStyle={{
+                  ...buttonStyles.title,
+                  color: this.props.customTheme.buttonTitle
+                }}
                 onPress={() => this.props.onAccept && this.props.onAccept(this.state.email)}
               />
               <Button
-                containerStyle={{ flex: 1, padding: 5 }}
+                containerStyle={buttonStyles.container}
                 buttonStyle={{
-                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string(),
-                  borderRadius: 12
+                  ...buttonStyles.button,
+                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
                 }}
                 title="Cancel"
-                titleStyle={{ color: this.props.customTheme.palette.secondary }}
+                titleStyle={{
+                  ...buttonStyles.title,
+                  color: this.props.customTheme.palette.secondary
+                }}
                 onPress={() => this.props.onReject && this.props.onReject()}
               />
             </View>
@@ -64,19 +76,37 @@ class EmailModal extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'center'
   },
   container: {
-    borderRadius: 12,
-    marginHorizontal: 10,
-    padding: 5
+    borderRadius: '12@vs',
+    marginHorizontal: '10@vs',
+    padding: '5@vs'
   },
   caption: {
-    fontSize: 16,
-    padding: 10
+    padding: '10@vs',
+    fontFamily: 'Roboto',
+    fontSize: '16@vs'
+  },
+  inputContainer: {
+    padding: '5@vs'
+  }
+});
+
+const buttonStyles = ScaledSheet.create({
+  container: {
+    flex: 1,
+    padding: '5@vs'
+  },
+  button: {
+    borderRadius: '12@vs'
+  },
+  title: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   }
 });
 

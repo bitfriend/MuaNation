@@ -19,11 +19,10 @@ export default class CategoryBar extends PureComponent {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {this.props.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
-              <Text style={[customStyles.tabItem, index === this.state.activeIndex ? {
+              <Text style={[styles.tabItem, index === this.state.activeIndex ? {
+                ...styles.activeItem,
                 borderBottomColor: this.props.underlineColor,
-                borderBottomWidth: verticalScale(2),
-                color: this.props.activeTabColor,
-                fontWeight: 'bold'
+                color: this.props.activeTabColor
               } : {
                 color: this.props.inactiveTabColor
               }]}>{tab.label}</Text>
@@ -35,13 +34,17 @@ export default class CategoryBar extends PureComponent {
   }
 }
 
-const customStyles = ScaledSheet.create({
+const styles = ScaledSheet.create({
   tabItem: {
     fontFamily: 'Roboto',
     fontSize: '18@vs',
     marginHorizontal: '16@vs',
     paddingVertical: '16@vs',
     textTransform: 'capitalize'
+  },
+  activeItem: {
+    borderBottomWidth: '2@vs',
+    fontWeight: 'bold'
   }
 });
 

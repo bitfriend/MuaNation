@@ -106,7 +106,7 @@ class SuggestedArtists extends Component {
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.products.map((product, subIndex) => (
-                <Image key={subIndex} style={{ width: verticalScale(64), height: verticalScale(64), borderRadius: verticalScale(4) }} source={{ uri: product }} />
+                <Image key={subIndex} style={styles.product} source={{ uri: product }} />
               ))}
             </View>
           </View>
@@ -167,15 +167,15 @@ const styles = ScaledSheet.create({
     paddingBottom: '16@vs'
   },
   titleText: {
+    fontFamily: 'Roboto',
     fontSize: '24@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
   },
   smallText: {
-    fontSize: '14@vs',
-    fontFamily: 'Roboto',
     marginTop: '16@vs',
-    marginBottom: '20@vs'
+    marginBottom: '20@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   },
   card: {
     width: '254@vs',
@@ -190,21 +190,23 @@ const styles = ScaledSheet.create({
     borderRadius: '24@vs'
   },
   name: {
-    fontSize: '16@vs',
     fontFamily: 'Roboto',
+    fontSize: '16@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   tag: {
-    paddingHorizontal: '4@vs',
-    paddingVertical: '2@vs',
     marginHorizontal: '2@vs',
     borderRadius: '4@vs',
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
+    fontFamily: 'Roboto',
     fontSize: '14@vs',
     textTransform: 'capitalize'
   },
   reviews: {
     marginLeft: '4@vs',
+    fontFamily: 'Roboto',
     fontSize: '10@vs'
   },
   button: {
@@ -213,9 +215,14 @@ const styles = ScaledSheet.create({
     borderRadius: '12@vs'
   },
   buttonTitle: {
+    fontFamily: 'Roboto',
     fontSize: '16@vs',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+    fontWeight: 'bold'
+  },
+  product: {
+    width: '64@vs',
+    height: '64@vs',
+    borderRadius: '4@vs'
   }
 });
 
