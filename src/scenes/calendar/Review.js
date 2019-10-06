@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import StarRating from 'react-native-star-rating';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -23,132 +24,174 @@ class Review extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader />
-        <Text style={styles.overview}>{this.props.notification.overview}</Text>
-        <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{ uri: this.props.notification.avatar }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-            <Text style={{
-              ...styles.label,
-              marginLeft: 16,
-              color: this.props.customTheme.title
-            }}>
-              <Text>by </Text>
-              <Text style={{ fontWeight: 'bold' }}>{this.props.notification.fullName}</Text>
-            </Text>
+        <ScrollView>
+          <Text style={styles.overview}>{this.props.notification.overview}</Text>
+          <View style={styles.card}>
+            <View style={styles.cardFirstLine}>
+              <Image source={{ uri: this.props.notification.avatar }} style={styles.avatar} />
+              <Text style={{
+                ...styles.label,
+                marginLeft: verticalScale(16),
+                color: this.props.customTheme.title
+              }}>
+                <Text>by </Text>
+                <Text style={{ fontWeight: 'bold' }}>{this.props.notification.fullName}</Text>
+              </Text>
+            </View>
+            <View style={styles.cardSecondLine}>
+              <Text style={{
+                ...styles.label,
+                flex: 1,
+                marginLeft: verticalScale(64),
+                color: this.props.customTheme.title
+              }}>
+                <Text>{moment(this.props.notification.createdAt).format('MMM d')} at </Text>
+                <Text style={{ fontWeight: 'bold' }}>{moment(this.props.notification.createdAt).format('h:mm A')}</Text>
+              </Text>
+              <ThemeButton
+                icon={{
+                  name: 'paper-plane',
+                  type: 'font-awesome',
+                  size: verticalScale(22)
+                }}
+                containerStyle={styles.chatContainer}
+                buttonStyle={styles.chat}
+              />
+            </View>
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
-            <Text style={{
-              ...styles.label,
-              flex: 1,
-              marginLeft: 64,
-              color: this.props.customTheme.title
-            }}>
-              <Text>{moment(this.props.notification.createdAt).format('MMM d')} at </Text>
-              <Text style={{ fontWeight: 'bold' }}>{moment(this.props.notification.createdAt).format('h:mm A')}</Text>
-            </Text>
-            <ThemeButton
-              icon={{
-                name: 'paper-plane',
-                type: 'font-awesome',
-                size: 22
-              }}
-              containerStyle={{ marginLeft: 4 }}
-              buttonStyle={{ width: 48, height: 48, borderRadius: 12 }}
+          <View style={{ ...styles.separator, backgroundColor: this.props.customTheme.palette.grey3 }} />
+          <Text style={{ ...styles.title, color: this.props.customTheme.title }}>Leave your review</Text>
+          <View style={styles.ratingWrapper}>
+            <StarRating
+              maxStars={5}
+              rating={this.state.rating}
+              selectedStar={(rating) => this.setState({ rating })}
+              containerStyle={{ width: verticalScale(192) }}
+              starSize={verticalScale(32)}
+              fullStarColor={this.props.customTheme.fullStar}
+              emptyStar="star"
+              emptyStarColor={this.props.customTheme.emptyStar}
             />
           </View>
-        </View>
-        <View style={{ ...styles.separator, backgroundColor: this.props.customTheme.palette.grey3 }} />
-        <Text style={{ ...styles.title, color: this.props.customTheme.title }}>Leave your review</Text>
-        <View style={{ width: '100%', marginHorizontal: 16 }}>
-          <StarRating
-            maxStars={5}
-            rating={this.state.rating}
-            selectedStar={(rating) => this.setState({ rating })}
-            containerStyle={{ width: 192 }}
-            starSize={32}
-            fullStarColor={this.props.customTheme.fullStar}
-            emptyStar="star"
-            emptyStarColor={this.props.customTheme.emptyStar}
-          />
-        </View>
-        <View style={{ marginHorizontal: 16, marginVertical: 24 }}>
-          <View style={{ width: '100%', backgroundColor: this.props.customTheme.palette.grey3, borderRadius: 12, padding: 16 }}>
-            <Text style={{ ...styles.label, color: this.props.customTheme.palette.grey0 }}>
-              <Text>The most professional nail care!</Text>
-              <Text>Thank you, Jane!</Text>
-            </Text>
+          <View style={styles.reviewWrapper}>
+            <View style={{ ...styles.reviewContainer, backgroundColor: this.props.customTheme.palette.grey3 }}>
+              <Text style={{ ...styles.label, color: this.props.customTheme.palette.grey0 }}>
+                <Text>The most professional nail care!</Text>
+                <Text>Thank you, Jane!</Text>
+              </Text>
+            </View>
           </View>
-        </View>
-        <View style={actionStyles.container}>
-          <Button
-            buttonStyle={{
-              ...actionStyles.close,
-              backgroundColor: this.props.customTheme.palette.grey3
-            }}
-            icon={{
-              name: 'close',
-              type: 'material',
-              size: 24,
-              color: this.props.customTheme.palette.grey0
-            }}
-            TouchableComponent={TouchableOpacity}
-            onPress={() => this.props.navigation.pop()}
-          />
-          <ThemeButton
-            containerStyle={{ flex: 1 }}
-            buttonStyle={actionStyles.post}
-            title="Post review"
-            titleStyle={{
-              fontFamily: 'Roboto',
-              fontSize: 18,
-              fontWeight: 'bold'
-            }}
-          />
-        </View>
+          <View style={actionStyles.container}>
+            <Button
+              buttonStyle={{
+                ...actionStyles.close,
+                backgroundColor: this.props.customTheme.palette.grey3
+              }}
+              icon={{
+                name: 'close',
+                type: 'material',
+                size: verticalScale(24),
+                color: this.props.customTheme.palette.grey0
+              }}
+              TouchableComponent={TouchableOpacity}
+              onPress={() => this.props.navigation.pop()}
+            />
+            <ThemeButton
+              containerStyle={{ flex: 1 }}
+              buttonStyle={actionStyles.post}
+              title="Post review"
+              titleStyle={actionStyles.postTitle}
+            />
+          </View>
+        </ScrollView>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   overview: {
-    marginTop: 14,
-    marginHorizontal: 24,
+    marginTop: '14@vs',
+    marginHorizontal: '24@vs',
     fontFamily: 'Roboto',
-    fontSize: 18
+    fontSize: '18@vs'
+  },
+  card: {
+    paddingHorizontal: '16@vs',
+    paddingVertical: '24@vs'
+  },
+  avatar: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
+  },
+  cardFirstLine: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  cardSecondLine: {
+    flexDirection: 'row',
+    marginTop: '4@vs',
+    alignItems: 'center'
+  },
+  chatContainer: {
+    marginLeft: '4@vs'
+  },
+  chat: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
+  },
+  ratingWrapper: {
+    width: '100%',
+    marginHorizontal: '16@vs'
   },
   title: {
-    marginHorizontal: 16,
-    marginVertical: 24,
+    marginHorizontal: '16@vs',
+    marginVertical: '24@vs',
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   },
   label: {
     fontFamily: 'Roboto',
-    fontSize: 18
+    fontSize: '18@vs'
   },
   separator: {
-    marginHorizontal: 16,
-    height: 1
+    marginHorizontal: '16@vs',
+    height: verticalScale(StyleSheet.hairlineWidth)
+  },
+  reviewWrapper: {
+    marginHorizontal: '16@vs',
+    marginTop: '24@vs'
+  },
+  reviewContainer: {
+    width: '100%',
+    borderRadius: '12@vs',
+    padding: '16@vs'
   }
 });
 
-const actionStyles = StyleSheet.create({
+const actionStyles = ScaledSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    paddingHorizontal: 16
+    padding: '16@vs'
   },
   close: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
-    marginRight: 8
+    width: '64@vs',
+    height: '64@vs',
+    borderRadius: '12@vs',
+    marginRight: '8@vs'
   },
   post: {
-    height: 64,
-    borderRadius: 12
+    height: '64@vs',
+    borderRadius: '12@vs'
+  },
+  postTitle: {
+    fontFamily: 'Roboto',
+    fontSize: '18@vs',
+    fontWeight: 'bold'
   }
 });
 

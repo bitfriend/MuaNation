@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -14,7 +15,7 @@ class Booking extends Component {
     this.props.getBooking();
 
     const { width } = Dimensions.get('window');
-    this.imageWidth = width - 16 * 2;
+    this.imageWidth = width - verticalScale(16) * 2;
     this.imageHeight = this.imageWidth * 0.65;
   }
 
@@ -22,125 +23,168 @@ class Booking extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader title="Booking details" />
-        <FastImage
-          style={{
-            width: this.imageWidth,
-            height: this.imageHeight,
-            borderRadius: 12,
-            marginTop: 12,
-            marginHorizontal: 16
-          }}
-          source={{ uri: this.props.booking.image }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 24, marginTop: 28 }}>
-          <Text style={{
-            ...styles.title,
-            color: this.props.customTheme.title
-          }}>{this.props.booking.title}</Text>
-          <View style={{ flexDirection: 'row' }}>
+        <ScrollView>
+          <FastImage
+            style={{
+              ...styles.banner,
+              width: this.imageWidth,
+              height: this.imageHeight
+            }}
+            source={{ uri: this.props.booking.image }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+          <View style={styles.body}>
             <Text style={{
-              ...styles.symbol,
+              ...styles.title,
               color: this.props.customTheme.title
-            }}>$</Text>
-            <Text style={{
-              ...styles.price,
-              color: this.props.customTheme.title
-            }}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
+            }}>{this.props.booking.title}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{
+                ...styles.symbol,
+                color: this.props.customTheme.title
+              }}>$</Text>
+              <Text style={{
+                ...styles.price,
+                color: this.props.customTheme.title
+              }}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
+            </View>
           </View>
-        </View>
-        <ScrollView style={{ marginTop: 16, marginBottom: 24, marginHorizontal: 24 }}>
           <Text style={{
+            ...styles.overview,
             ...styles.label,
             color: this.props.customTheme.label
           }}>{this.props.booking.overview}</Text>
-        </ScrollView>
-        <View style={{ paddingHorizontal: 16 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{ uri: this.props.booking.avatar }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-            <Text style={{
-              ...styles.label,
-              marginLeft: 16,
-              color: this.props.customTheme.title
-            }}>by </Text>
-            <Text style={{
-              ...styles.label,
-              color: this.props.customTheme.title,
-              fontWeight: 'bold'
-            }}>{this.props.booking.fullName}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
-            <Text style={{
-              ...styles.label,
-              marginLeft: 64,
-              color: this.props.customTheme.title
-            }}>{moment(this.props.booking.createdAt).format('MMM d')} at </Text>
-            <Text style={{
-              ...styles.label,
-              flex: 1,
-              color: this.props.customTheme.title,
-              fontWeight: 'bold'
-            }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
-            <ThemeButton
-              icon={{
-                name: 'paper-plane',
-                type: 'font-awesome',
-                size: 22
+          <View style={styles.footer}>
+            <View style={styles.footerFirstLine}>
+              <Image source={{ uri: this.props.booking.avatar }} style={styles.avatar} />
+              <Text style={{
+                ...styles.label,
+                marginLeft: verticalScale(16),
+                color: this.props.customTheme.title
+              }}>by </Text>
+              <Text style={{
+                ...styles.label,
+                color: this.props.customTheme.title,
+                fontWeight: 'bold'
+              }}>{this.props.booking.fullName}</Text>
+            </View>
+            <View style={styles.footerSecondLine}>
+              <Text style={{
+                ...styles.label,
+                marginLeft: verticalScale(64),
+                color: this.props.customTheme.title
+              }}>{moment(this.props.booking.createdAt).format('MMM d')} at </Text>
+              <Text style={{
+                ...styles.label,
+                flex: 1,
+                color: this.props.customTheme.title,
+                fontWeight: 'bold'
+              }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
+              <ThemeButton
+                icon={{
+                  name: 'paper-plane',
+                  type: 'font-awesome',
+                  size: verticalScale(22)
+                }}
+                containerStyle={styles.chatContainer}
+                buttonStyle={styles.chat}
+              />
+            </View>
+            <Button
+              containerStyle={styles.cancelContainer}
+              buttonStyle={{
+                ...styles.cancel,
+                backgroundColor: this.props.customTheme.palette.grey3
               }}
-              containerStyle={{ marginLeft: 4 }}
-              buttonStyle={{ width: 48, height: 48, borderRadius: 12 }}
+              title="Cancel"
+              titleStyle={{
+                ...styles.cancelTitle,
+                color: this.props.customTheme.palette.grey0
+              }}
+              TouchableComponent={TouchableOpacity}
+              onPress={() => this.props.navigation.pop()}
             />
           </View>
-          <Button
-            containerStyle={{ marginVertical: 16 }}
-            buttonStyle={{
-              ...styles.cancel,
-              backgroundColor: this.props.customTheme.palette.grey3
-            }}
-            title="Cancel"
-            titleStyle={{
-              ...styles.cancelTitle,
-              color: this.props.customTheme.palette.grey0
-            }}
-            TouchableComponent={TouchableOpacity}
-            onPress={() => this.props.navigation.pop()}
-          />
-        </View>
+        </ScrollView>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  banner: {
+    borderRadius: '12@vs',
+    marginTop: '12@vs',
+    marginHorizontal: '16@vs'
+  },
+  body: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: '24@vs',
+    marginTop: '28@vs'
+  },
+  overview: {
+    marginTop: '16@vs',
+    marginBottom: '24@vs',
+    marginHorizontal: '24@vs'
+  },
+  footer: {
+    paddingHorizontal: '16@vs'
+  },
+  footerFirstLine: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  footerSecondLine: {
+    flexDirection: 'row',
+    marginTop: '4@vs',
+    alignItems: 'center'
+  },
+  avatar: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
+  },
+  chatContainer: {
+    marginLeft: '4@vs'
+  },
+  chat: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '12@vs'
+  },
   title: {
     flex: 1,
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   symbol: {
     fontFamily: 'Roboto',
-    fontSize: Math.floor(24 * 0.6),
+    fontSize: Math.floor(verticalScale(24) * 0.6),
     fontWeight: 'bold'
   },
   price: {
-    marginLeft: 4,
+    marginLeft: '4@vs',
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   },
   label: {
     fontFamily: 'Roboto',
-    fontSize: 18
+    fontSize: '18@vs'
+  },
+  cancelContainer: {
+    marginVertical: '16@vs'
   },
   cancel: {
-    height: 64,
-    borderRadius: 12
+    height: '64@vs',
+    borderRadius: '12@vs'
   },
   cancelTitle: {
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold'
   }
 });

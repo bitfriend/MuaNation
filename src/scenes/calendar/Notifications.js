@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -21,13 +22,13 @@ class Notifications extends Component {
 
   renderItem = ({ item, index, separators }) => {
     return (
-      <View style={{ padding: 16, flexDirection: 'row' }}>
-        <Image source={{ uri: item.avatar }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-        <View style={{ paddingLeft: 8, flex: 1 }}>
-          <View style={{ width: '100%', height: 40 }}>
+      <View style={styles.listItem}>
+        <Image source={{ uri: item.avatar }} style={styles.avatar} />
+        <View style={styles.itemBody}>
+          <View style={styles.overviewContainer}>
             <Text numberOfLines={2} style={{
-              color: this.props.customTheme.title,
-              fontFamily: 'Roboto'
+              ...styles.overview,
+              color: this.props.customTheme.title
             }}>
               <Text style={{ fontWeight: 'bold' }}>{item.fullName}</Text>
               <Text>{item.processed ? ' waiting for your review!' : ' changed time of booking, new time is '}</Text>
@@ -36,11 +37,10 @@ class Notifications extends Component {
               )}
             </Text>
           </View>
-          <View style={{ paddingVertical: 16 }}>
+          <View style={styles.cardContainer}>
             <TouchableOpacity onPress={() => this.onPress(item)} style={{
-              borderRadius: 12,
+              ...styles.card,
               backgroundColor: this.props.customTheme.container,
-              padding: 24,
               ...this.props.customTheme.shadows[3]
             }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -59,14 +59,14 @@ class Notifications extends Component {
                   }}>{item.price.toFixed(2)}</Text>
                 </View>
               </View>
-              <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center' }}>
+              <View style={styles.detailsContainer}>
                 <Text style={{
                   ...styles.time,
                   color: this.props.customTheme.palette.grey1,
                   backgroundColor: this.props.customTheme.palette.grey2
                 }}>{moment(item.time).format('h:mm A')}</Text>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={{ marginLeft: 8, color: this.props.customTheme.palette.primary }}>View details</Text>
+                  <Text style={{ ...styles.details, color: this.props.customTheme.palette.primary }}>View details</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -85,36 +85,82 @@ class Notifications extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
           ItemSeparatorComponent={() => <View style={{ height: 1, marginHorizontal: 16, backgroundColor: this.props.customTheme.palette.grey3 }} />}
-          style={{ marginTop: 8 }}
+          style={styles.list}
         />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  list: {
+    marginTop: '8@vs'
+  },
+  separator: {
+    height: verticalScale(StyleSheet.hairlineWidth),
+    marginHorizontal: '16@vs'
+  },
+  listItem: {
+    padding: '16@vs',
+    flexDirection: 'row'
+  },
+  avatar: {
+    width: '48@vs',
+    height: '48@vs',
+    borderRadius: '24@vs'
+  },
+  itemBody: {
+    paddingLeft: '8@vs',
+    flex: 1
+  },
+  overviewContainer: {
+    width: '100%',
+    height: '40@vs'
+  },
+  overview: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
+  },
+  cardContainer: {
+    paddingVertical: '16@vs'
+  },
+  card: {
+    borderRadius: '12@vs',
+    padding: '24@vs'
+  },
+  detailsContainer: {
+    marginTop: '10@vs',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  details: {
+    marginLeft: '8@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
+  },
   title: {
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     textAlignVertical: 'center',
     textTransform: 'capitalize'
   },
   symbol: {
-    marginRight: 4,
+    marginRight: '4@vs',
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   price: {
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   },
   time: {
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontFamily: 'Roboto'
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
+    borderRadius: '4@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   }
 });
 
