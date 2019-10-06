@@ -1,6 +1,6 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, Dimensions, FlatList, Image, Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Animated, FlatList, Image, Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import Toast from 'react-native-simple-toast';
@@ -116,8 +116,6 @@ class SuggestedArtists extends Component {
   }
 
   render() {
-    const { width: windowWidth } = Dimensions.get('window');
-
     return (
       <View style={{
         ...styles.container,

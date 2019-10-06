@@ -17,7 +17,7 @@ const criteria = [0, 1, 2, 3, 4];
 class Artist extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
-    this.imageWidth = (width - 16 * 3) / 2;
+    this.imageWidth = (width - verticalScale(16) * 3) / 2;
     this.imageHeight = Math.floor(this.imageWidth * 0.8);
 
     const id = this.props.navigation.getParam('id');

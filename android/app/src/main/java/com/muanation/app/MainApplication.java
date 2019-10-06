@@ -8,7 +8,7 @@ import com.dylanvann.fastimage.FastImageViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 
-import com.reactnativecommunity.slider.ReactSliderPackage;
+
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -45,7 +45,6 @@ public class MainApplication extends Application implements ReactApplication {
           new FastImageViewPackage(),
           new CookieManagerPackage(),
           new RNCWebViewPackage(),
-          new ReactSliderPackage(),
           new FBSDKPackage(mCallbackManager),
           new ReactVideoPackage(),
           new MapsPackage(),

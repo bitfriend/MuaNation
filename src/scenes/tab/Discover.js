@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Alert, Animated, Dimensions, Easing, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Dimensions, Easing, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Slider from '@react-native-community/slider';
 import StarRating from 'react-native-star-rating';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MapView, { Marker } from 'react-native-maps';
 import { Button, Input } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
@@ -33,8 +33,8 @@ class Discover extends Component {
   animatedValue = new Animated.Value(0);
 
   componentDidMount() {
-    const { width } = Dimensions.get('window');
-    this.windowWidth = width;
+    this.windowWidth = Dimensions.get('window').width;
+    this.sliderLength = this.windowWidth - verticalScale(16) * 2;
 
     this.props.getLocation((error) => Alert.alert(error.message));
     this.props.getCriteria();
@@ -107,17 +107,17 @@ class Discover extends Component {
     }
   }
 
-  onMaxDistanceChanged = value => {
-    if (value !== this.props.criteria.distance.max) {
-      this.props.setMaxDistance(value);
+  onMaxDistanceChanged = values => {
+    if (values[0] !== this.props.criteria.distance.max) {
+      this.props.setMaxDistance(values[0]);
     }
   }
 
-  renderControlBar() {
+  renderPickerBar() {
     if (this.state.editingCriterion === 'category') {
       return (
-        <ScrollView horizontal>
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.pickerBar}>
             {this.state.criteria.category.deselected.map((category, index) => (
               <Button
                 key={index}
@@ -142,10 +142,10 @@ class Discover extends Component {
     if (this.state.editingCriterion === 'price') {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <View style={{ marginHorizontal: 16 }}>
+          <View style={styles.sliderWrapper}>
             <MultiSlider
               values={[this.state.criteria.price.min, this.state.criteria.price.max]}
-              sliderLength={this.windowWidth - 16 * 2}
+              sliderLength={this.sliderLength}
               onValuesChange={(values) => this.setState({
                 criteria: {
                   ...this.state.criteria,
@@ -159,7 +159,6 @@ class Discover extends Component {
               min={0}
               max={100}
               step={1}
-              allowOverlap
               snapped
               valuePrefix="$"
               trackStyle={{ backgroundColor: this.props.customTheme.palette.grey3 }}
@@ -167,10 +166,10 @@ class Discover extends Component {
               markerStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
               selectedStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
             />
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ ...styles.sliderEndian, color: this.props.customTheme.palette.grey3 }}>0</Text>
+            <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
+              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>0</Text>
               <View style={{ flex: 1 }} />
-              <Text style={{ ...styles.sliderEndian, color: this.props.customTheme.palette.grey3 }}>100</Text>
+              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>100</Text>
             </View>
           </View>
         </View>
@@ -183,8 +182,8 @@ class Discover extends Component {
             maxStars={5}
             rating={this.state.criteria.score.min}
             selectedStar={this.onMinScoreChanged}
-            containerStyle={{ width: 192 }}
-            starSize={32}
+            containerStyle={styles.rating}
+            starSize={verticalScale(32)}
             fullStarColor={this.props.customTheme.fullStar}
             emptyStar="star"
             emptyStarColor={this.props.customTheme.emptyStar}
@@ -195,36 +194,33 @@ class Discover extends Component {
     if (this.state.editingCriterion === 'distance') {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <View style={{ marginHorizontal: 16 }}>
-            <Text style={{
-              position: 'absolute',
-              left: (this.windowWidth - 16 * 2) * this.state.criteria.distance.max / 10,
-              top: -20,
-              alignSelf: 'center'
-            }}>{this.state.criteria.distance.max} miles</Text>
-            <Slider
-              value={this.state.criteria.distance.max}
-              onValuesChange={(value) => this.setState({
+          <View style={styles.sliderWrapper}>
+            <MultiSlider
+              values={[this.state.criteria.distance.max]}
+              sliderLength={this.sliderLength}
+              onValuesChange={(values) => this.setState({
                 criteria: {
                   ...this.state.criteria,
                   distance: {
-                    max: value
+                    max: values[0]
                   }
                 }
               })}
-              onSlidingComplete={this.onMaxDistanceChanged}
-              minimumValue={0}
-              maximumValue={10}
+              onValuesChangeFinish={this.onMaxDistanceChanged}
+              min={0}
+              max={10}
               step={1}
-              valueSuffix="miles"
-              maximumTrackTintColor={this.props.customTheme.palette.grey3}
-              thumbTintColor={this.props.customTheme.palette.primary}
-              minimumTrackTintColor={this.props.customTheme.palette.primary}
+              snapped
+              valueSuffix=" miles"
+              trackStyle={{ backgroundColor: this.props.customTheme.palette.grey3 }}
+              customMarker={SliderMarker}
+              markerStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
+              selectedStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
             />
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ ...styles.sliderEndian, color: this.props.customTheme.palette.grey3 }}>0</Text>
+            <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
+              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>0</Text>
               <View style={{ flex: 1 }} />
-              <Text style={{ ...styles.sliderEndian, color: this.props.customTheme.palette.grey3 }}>10</Text>
+              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>10</Text>
             </View>
           </View>
         </View>
@@ -262,17 +258,12 @@ class Discover extends Component {
                   latitude: this.props.location.coords.latitude,
                   longitude: this.props.location.coords.longitude
                 }}
-                style={{ width: 120, height: 120 }}
+                style={styles.locationMarker}
                 anchor={{ x: 0.5, y: 0.5 }}
               >
                 <View style={{ ...styles.outerCircle, backgroundColor: Color(this.props.customTheme.palette.primary).alpha(0.08).string() }} />
                 <View style={{ ...styles.innerCircle, backgroundColor: Color(this.props.customTheme.palette.primary).alpha(0.12).string() }} />
-                <Image source={require('../../../asset/images/map-marker-blue.png')} style={{
-                  width: 24,
-                  height: 28,
-                  top: 32,
-                  left: 48
-                }} />
+                <Image source={require('../../../asset/images/map-marker-blue.png')} style={styles.blueMarker} />
               </Marker>
             )}
             {this.props.neighbours.map((neighbour, index) => (
@@ -283,23 +274,20 @@ class Discover extends Component {
                   longitude: neighbour.longitude
                 }}
               >
-                <Image source={require('../../../asset/images/map-marker-pink.png')} style={{
-                  width: 24,
-                  height: 28
-                }} />
+                <Image source={require('../../../asset/images/map-marker-pink.png')} style={styles.redMarker} />
               </Marker>
             ))}
           </MapView>
         </View>
         <Animated.View style={{
           width: '100%',
-          height: 240,
+          height: verticalScale(240),
           position: 'absolute',
           bottom: 0,
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [64, 0]
+              outputRange: [verticalScale(64), 0]
             })
           }]
         }}>
@@ -312,7 +300,7 @@ class Discover extends Component {
               leftIcon={{
                 name: 'search',
                 type: 'font-awesome',
-                size: 20,
+                size: verticalScale(20),
                 color: this.props.customTheme.input
               }}
               leftIconContainerStyle={searchStyles.leftIconContainer}
@@ -325,8 +313,8 @@ class Discover extends Component {
               }}
             />
             <View>
-              <ScrollView horizontal>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 12 }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.controlBar}>
                   {this.state.criteria.category.selected.map((category, index) => this.state.editingCriterion === 'category' ? (
                     <Button
                       key={index}
@@ -344,10 +332,10 @@ class Discover extends Component {
                       icon={{
                         name: 'x',
                         type: 'feather',
-                        size: 14,
+                        size: verticalScale(14),
                         color: this.props.customTheme.checkedButtonTitle
                       }}
-                      iconContainerStyle={{ marginLeft: 4, marginRight: 0 }}
+                      iconContainerStyle={buttonStyle.rightIconContainer}
                       iconRight
                       onPress={() => this.props.deselectCategory(category)}
                     />
@@ -414,10 +402,10 @@ class Discover extends Component {
                     icon={{
                       name: 'star',
                       type: 'font-awesome',
-                      size: 14,
+                      size: verticalScale(14),
                       color: this.state.editingCriterion === 'score' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle
                     }}
-                    iconContainerStyle={{ marginLeft: 0, marginRight: 4 }}
+                    iconContainerStyle={buttonStyle.leftIconContainer}
                     title={`${this.state.criteria.score.min}+`}
                     titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'score' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
                     onPress={() => this.onCriterionClicked('score')}
@@ -437,10 +425,10 @@ class Discover extends Component {
                     icon={{
                       name: 'compass',
                       type: 'font-awesome',
-                      size: 14,
+                      size: verticalScale(14),
                       color: this.state.editingCriterion === 'distance' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle
                     }}
-                    iconContainerStyle={{ marginLeft: 0, marginRight: 4 }}
+                    iconContainerStyle={buttonStyle.leftIconContainer}
                     title={`${this.state.criteria.distance.max} miles`}
                     titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'distance' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
                     onPress={() => this.onCriterionClicked('distance')}
@@ -448,7 +436,7 @@ class Discover extends Component {
                 </View>
               </ScrollView>
             </View>
-            {this.renderControlBar()}
+            {this.renderPickerBar()}
           </View>
         </Animated.View>
       </View>
@@ -456,7 +444,7 @@ class Discover extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     position: 'absolute',
     top: 0,
@@ -476,71 +464,108 @@ const styles = StyleSheet.create({
   panel: {
     width: '100%',
     height: '100%',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40
+    borderTopLeftRadius: '40@vs',
+    borderTopRightRadius: '40@vs'
   },
   drawerWrapper: {
     width: '100%',
-    padding: 16,
+    padding: '16@vs',
     alignItems: 'center'
   },
   drawer: {
-    width: 32,
-    height: 5,
-    borderRadius: 2.5
+    width: '32@vs',
+    height: '5@vs',
+    borderRadius: '2.5@vs'
   },
-  sliderEndian: {
-    fontFamily: 'Roboto',
-    fontSize: 14,
-    fontWeight: 'bold'
+  locationMarker: {
+    width: '120@vs',
+    height: '120@vs'
   },
   outerCircle: {
     position: 'absolute',
     left: 0,
     top: 0,
-    width: 120,
-    height: 120,
-    borderRadius: 60
+    width: '120@vs',
+    height: '120@vs',
+    borderRadius: '60@vs'
   },
   innerCircle: {
     position: 'absolute',
-    left: 32,
-    top: 32,
-    width: 56,
-    height: 56,
-    borderRadius: 28
+    left: '32@vs',
+    top: '32@vs',
+    width: '56@vs',
+    height: '56@vs',
+    borderRadius: '28@vs'
+  },
+  blueMarker: {
+    width: '24@vs',
+    height: '28@vs',
+    top: '32@vs',
+    left: '48@vs'
+  },
+  redMarker: {
+    width: '24@vs',
+    height: '28@vs'
+  },
+  controlBar: {
+    flexDirection: 'row',
+    paddingHorizontal: '12@vs'
+  },
+  pickerBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: '12@vs'
+  },
+  sliderWrapper: {
+    marginHorizontal: '16@vs'
+  },
+  sliderScale: {
+    fontFamily: 'Roboto',
+    fontSize: '14@vs',
+    fontWeight: 'bold'
+  },
+  rating: {
+    width: '192@vs'
   }
 });
 
-const searchStyles = StyleSheet.create({
+const searchStyles = ScaledSheet.create({
   container: {
-    paddingHorizontal: 16,
-    marginBottom: 16
+    paddingHorizontal: '16@vs',
+    marginBottom: '16@vs'
   },
   leftIconContainer: {
-    marginRight: 8
+    marginRight: '8@vs'
   },
   inputContainer: {
-    borderRadius: 12,
+    borderRadius: '12@vs',
     borderBottomWidth: 0
   },
   input: {
     fontFamily: 'Roboto',
-    fontSize: 18
+    fontSize: '18@vs'
   }
 });
 
-const buttonStyle = StyleSheet.create({
+const buttonStyle = ScaledSheet.create({
   container: {
-    marginHorizontal: 4
+    marginHorizontal: '4@vs'
   },
   button: {
-    borderRadius: 8,
-    borderWidth: 2,
-    padding: 8
+    borderRadius: '8@vs',
+    borderWidth: '2@vs',
+    padding: '8@vs'
   },
   title: {
-    fontSize: 14
+    fontSize: '14@vs'
+  },
+  leftIconContainer: {
+    marginLeft: 0,
+    marginRight: '4@vs'
+  },
+  rightIconContainer: {
+    marginLeft: '4@vs',
+    marginRight: 0
   }
 });
 

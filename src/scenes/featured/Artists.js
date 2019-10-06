@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dimensions, Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
@@ -108,8 +108,6 @@ class Artists extends Component {
   }
 
   render() {
-    const { width: windowWidth } = Dimensions.get('window');
-
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <View style={{ height: verticalScale(240) }}>

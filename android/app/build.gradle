@@ -152,7 +152,6 @@ dependencies {
     implementation project(':react-native-fast-image')
     implementation project(':react-native-cookies')
     implementation project(':react-native-webview')
-    implementation project(':@react-native-community_slider')
     implementation project(':react-native-fbsdk')
     implementation project(':react-native-video')
     implementation project(':react-native-maps')

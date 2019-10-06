@@ -282,7 +282,7 @@ const cardStyles = ScaledSheet.create({
     textTransform: 'capitalize'
   },
   comment: {
-    width: verticalScale(windowWidth * 0.6),
+    width: windowWidth * 0.6,
     fontFamily: 'Roboto',
     fontSize: '14@vs',
     marginTop: '4@vs'

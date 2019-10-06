@@ -101,8 +101,6 @@ class Products extends Component {
   }
 
   render() {
-    const { width: windowWidth } = Dimensions.get('window');
-
     return (
       <View style={{
         ...styles.container,
