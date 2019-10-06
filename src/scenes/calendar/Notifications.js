@@ -14,7 +14,7 @@ class Notifications extends Component {
 
   onPress(item) {
     if (item.processed) {
-      this.props.navigation.navigate('Review');
+      this.props.navigation.navigate('Notification');
     } else {
       this.props.navigation.navigate('Booking');
     }

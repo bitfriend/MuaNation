@@ -67,7 +67,7 @@ import Discover from './src/scenes/tab/Discover';
 import Bookings from './src/scenes/calendar/Bookings';
 import Booking from './src/scenes/calendar/Booking';
 import Notifications from './src/scenes/calendar/Notifications';
-import Review from './src/scenes/calendar/Review';
+import Notification from './src/scenes/calendar/Notification';
 import Profile from './src/scenes/tab/Profile';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
@@ -154,7 +154,7 @@ const CalendarStackNav = createStackNavigator({
   Bookings: { screen: Bookings },
   Booking: { screen: Booking },
   Notifications: { screen: Notifications },
-  Review: { screen: Review }
+  Notification: { screen: Notification }
 }, {
   initialRouteName: 'Bookings',
   transitionConfig,

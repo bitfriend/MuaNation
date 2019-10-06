@@ -10,7 +10,7 @@ import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
 import { getNotification } from '../../controllers/calendar/actions';
 
-class Review extends Component {
+class Notification extends Component {
   state = {
     rating: 0,
     comment: ''
@@ -25,7 +25,7 @@ class Review extends Component {
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader />
         <ScrollView>
-          <Text style={styles.overview}>{this.props.notification.overview}</Text>
+          <Text style={{ ...styles.overview, color: this.props.customTheme.label }}>{this.props.notification.overview}</Text>
           <View style={styles.card}>
             <View style={styles.cardFirstLine}>
               <Image source={{ uri: this.props.notification.avatar }} style={styles.avatar} />
@@ -75,7 +75,7 @@ class Review extends Component {
           </View>
           <View style={styles.reviewWrapper}>
             <View style={{ ...styles.reviewContainer, backgroundColor: this.props.customTheme.palette.grey3 }}>
-              <Text style={{ ...styles.label, color: this.props.customTheme.palette.grey0 }}>
+              <Text style={{ ...styles.label, color: this.props.customTheme.label }}>
                 <Text>The most professional nail care!</Text>
                 <Text>Thank you, Jane!</Text>
               </Text>
@@ -207,4 +207,4 @@ const mapDispatchToProps = (dispacth) => ({
   getNotification: () => dispacth(getNotification())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Review);
+export default connect(mapStateToProps, mapDispatchToProps)(Notification);
