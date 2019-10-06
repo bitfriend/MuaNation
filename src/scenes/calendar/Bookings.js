@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Badge, Icon } from 'react-native-elements';
+import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
@@ -30,11 +31,11 @@ class Bookings extends Component {
     switch (direction) {
       case 'left':
         return (
-          <Icon type="material" name="arrow-back" size={20} color={this.props.customTheme.title} />
+          <Icon type="material" name="arrow-back" size={verticalScale(20)} color={this.props.customTheme.title} />
         );
       case 'right':
         return (
-          <Icon type="material" name="arrow-forward" size={20} color={this.props.customTheme.title} />
+          <Icon type="material" name="arrow-forward" size={verticalScale(20)} color={this.props.customTheme.title} />
         );
     }
   }
@@ -60,31 +61,18 @@ class Bookings extends Component {
     }
 
     return (
-      <TouchableOpacity style={{
-        width: 40,
-        height: 40,
-        borderRadius: 12,
-        backgroundColor,
-        justifyContent: 'center'
-      }}>
-        <Text style={{
-          color,
-          fontFamily: 'Roboto',
-          fontSize: 18,
-          fontWeight: 'bold',
-          textAlign: 'center'
-        }}>{date.day}</Text>
+      <TouchableOpacity style={{ ...styles.dayBackground, backgroundColor }}>
+        <Text style={{ ...styles.dayForeground, color }}>{date.day}</Text>
       </TouchableOpacity>
     );
   }
 
   renderItem = ({ item, index, separators }) => {
     return (
-      <View style={{ paddingHorizontal: 16, marginVertical: 8 }}>
+      <View style={styles.itemWrapper}>
         <TouchableOpacity onPress={() => this.onPress(item)} style={{
-          borderRadius: 12,
+          ...styles.listItem,
           backgroundColor: this.props.customTheme.container,
-          padding: 24,
           ...this.props.customTheme.shadows[3]
         }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -103,15 +91,15 @@ class Bookings extends Component {
               }}>{item.price.toFixed(2)}</Text>
             </View>
           </View>
-          <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ marginTop: verticalScale(10), flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{
               ...styles.time,
               color: this.props.customTheme.palette.grey1,
               backgroundColor: this.props.customTheme.palette.grey2
             }}>{moment(item.createdAt).format('h:mm A')}</Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <Icon type="font-awesome" name="compass" size={16} color={this.props.customTheme.palette.primary} />
-              <Text style={{ marginLeft: 8, color: this.props.customTheme.palette.primary }}>Get directions</Text>
+              <Icon type="font-awesome" name="compass" size={verticalScale(16)} color={this.props.customTheme.palette.primary} />
+              <Text style={{ ...styles.direction, color: this.props.customTheme.palette.primary }}>Get directions</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -121,19 +109,13 @@ class Bookings extends Component {
 
   render() {
     let dates = {};
+
     this.props.bookings.map((booking, index) => {
       const date = moment(booking.createdAt).format('YYYY-MM-DD');
       dates[date] = {
         customStyles: {
-          container: {
-            width: 40,
-            height: 40,
-            borderRadius: 12,
-            backgroundColor: this.props.customTheme.palette.secondary
-          },
-          text: {
-            color: this.props.customTheme.title
-          }
+          container: { ...styles.specialDayContainer, backgroundColor: this.props.customTheme.palette.secondary },
+          text: { color: this.props.customTheme.title }
         }
       };
     });
@@ -141,15 +123,8 @@ class Bookings extends Component {
     const today = moment().format('YYYY-MM-DD');
     dates[today] = {
       customStyles: {
-        container: {
-          width: 40,
-          height: 40,
-          borderRadius: 12,
-          backgroundColor: this.props.customTheme.palette.primary
-        },
-        text: {
-          color: this.props.customTheme.title
-        }
+        container: { ...styles.specialDayContainer, backgroundColor: this.props.customTheme.palette.primary },
+        text: { color: this.props.customTheme.title }
       }
     };
 
@@ -157,10 +132,10 @@ class Bookings extends Component {
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
         <SceneHeader leftIcon={false} title="My bookings" rightIcon={(
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Notifications')}>
-            <Icon type="font-awesome" name="bell" size={20} color={this.props.customTheme.title} />
+            <Icon type="font-awesome" name="bell" size={verticalScale(20)} color={this.props.customTheme.title} />
             <Badge
-              badgeStyle={{ backgroundColor: this.props.customTheme.palette.primary, width: 8, height: 8, borderRadius: 4 }}
-              containerStyle={{ position: 'absolute', top: -3, right: -3 }}
+              containerStyle={styles.badgeContainer}
+              badgeStyle={{ ...styles.badge, backgroundColor: this.props.customTheme.palette.primary }}
             />
           </TouchableOpacity>
         )} />
@@ -173,11 +148,11 @@ class Bookings extends Component {
             selectedDayBackgroundColor: this.props.customTheme.palette.secondary,
             selectedDayTextColor: this.props.customTheme.palette.grey0,
             textDisabledColor: this.props.customTheme.palette.grey1,
-            textMonthFontSize: 18,
+            textMonthFontSize: verticalScale(18),
             textMonthFontFamily: 'Roboto',
             textMonthFontWeight: 'bold',
             monthTextColor: this.props.customTheme.title,
-            textDayHeaderFontSize: 18,
+            textDayHeaderFontSize: verticalScale(18),
             textDayHeaderFontFamily: 'Roboto',
             textDayHeaderFontWeight: 'bold',
             dayTextColor: this.props.customTheme.palette.grey0,
@@ -189,14 +164,7 @@ class Bookings extends Component {
           dayComponent={this.renderDay}
           markedDates={dates}
         />
-        <Text style={{
-          paddingTop: 24,
-          paddingBottom: 8,
-          paddingHorizontal: 16,
-          color: this.props.customTheme.label,
-          fontFamily: 'Roboto',
-          fontWeight: 'bold'
-        }}>TODAY</Text>
+        <Text style={{ ...styles.today, color: this.props.customTheme.label }}>TODAY</Text>
         <FlatList
           data={this.props.bookings}
           keyExtractor={(item, index) => index.toString()}
@@ -207,29 +175,79 @@ class Bookings extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  badgeContainer: {
+    position: 'absolute',
+    top: '-3@vs',
+    right: '-3@vs'
+  },
+  badge: {
+    width: '8@vs',
+    height: '8@vs',
+    borderRadius: '4@vs'
+  },
+  dayBackground: {
+    width: '40@vs',
+    height: '40@vs',
+    borderRadius: '12@vs',
+    justifyContent: 'center'
+  },
+  dayForeground: {
+    fontFamily: 'Roboto',
+    fontSize: '18@vs',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  specialDayContainer: {
+    width: '40@vs',
+    height: '40@vs',
+    borderRadius: '12@vs'
+  },
+  itemWrapper: {
+    paddingHorizontal: '16@vs',
+    marginVertical: '8@vs'
+  },
+  listItem: {
+    borderRadius: '12@vs',
+    padding: '24@vs'
+  },
+  today: {
+    paddingTop: '24@vs',
+    paddingBottom: '8@vs',
+    paddingHorizontal: '16@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs',
+    fontWeight: 'bold'
+  },
   title: {
     fontFamily: 'Roboto',
-    fontSize: 18,
+    fontSize: '18@vs',
     fontWeight: 'bold',
     textAlignVertical: 'center',
     textTransform: 'capitalize'
   },
   symbol: {
-    marginRight: 4,
+    marginRight: '4@vs',
     fontFamily: 'Roboto',
+    fontSize: '14@vs',
     fontWeight: 'bold'
   },
   price: {
     fontFamily: 'Lato',
-    fontSize: 24,
+    fontSize: '24@vs',
     fontWeight: 'bold'
   },
   time: {
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontFamily: 'Roboto'
+    paddingHorizontal: '4@vs',
+    paddingVertical: '2@vs',
+    borderRadius: '4@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
+  },
+  direction: {
+    marginLeft: '8@vs',
+    fontFamily: 'Roboto',
+    fontSize: '14@vs'
   }
 });
 
