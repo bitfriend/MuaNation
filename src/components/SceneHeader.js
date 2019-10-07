@@ -9,18 +9,24 @@ import { compose } from 'redux';
 
 class SceneHeader extends Component {
   render() {
+    let leftIcon = undefined;
+    if (this.props.leftIcon === true) {
+      leftIcon = {
+        icon: 'arrow-back',
+        type: 'ionicons',
+        color: this.props.customTheme.palette.grey0,
+        size: verticalScale(20),
+        iconStyle: { padding: verticalScale(10) },
+        containerStyle: { marginLeft: 0 },
+        onPress: () => this.props.navigation.pop()
+      };
+    } else if (typeof this.props.leftIcon === 'object') {
+      leftIcon = this.props.leftIcon;
+    }
     return (
       <Header
         containerStyle={styles.container}
-        leftComponent={this.props.leftIcon === false ? undefined : {
-          icon: 'arrow-back',
-          type: 'ionicons',
-          color: this.props.customTheme.palette.grey0,
-          size: verticalScale(20),
-          iconStyle: { padding: verticalScale(10) },
-          containerStyle: { marginLeft: 0 },
-          onPress: () => this.props.navigation.pop()
-        }}
+        leftComponent={leftIcon}
         centerComponent={this.props.title ? {
           text: this.props.title,
           style: {
@@ -39,6 +45,10 @@ class SceneHeader extends Component {
 
 SceneHeader.propTypes = {
   title: PropTypes.string
+}
+
+SceneHeader.defaultProps = {
+  leftIcon: true
 }
 
 const styles = StyleSheet.create({

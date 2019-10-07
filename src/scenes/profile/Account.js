@@ -14,7 +14,7 @@ const Color = require('color');
 
 const criteria = [0, 1, 2, 3, 4];
 
-class Artist extends Component {
+class Account extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
     this.imageWidth = (width - verticalScale(16) * 3) / 2;
@@ -107,28 +107,19 @@ class Artist extends Component {
     return (
       <View style={styles.buttonBar}>
         <ThemeButton
-          title="Book"
+          title="Add service"
           containerStyle={bookStyles.container}
           buttonStyle={bookStyles.button}
           titleStyle={bookStyles.title}
-          onPress={() => this.props.navigation.navigate('Booking')}
+          onPress={() => this.props.navigation.navigate('AddService')}
         />
         <ThemeButton
-          title="Follow"
+          title="Edit info"
           containerStyle={followStyles.container}
           buttonStyle={followStyles.button}
           titleStyle={followStyles.title}
           isPrimary={false}
-        />
-        <ThemeButton
-          icon={{
-            name: 'paper-plane',
-            type: 'font-awesome',
-            size: verticalScale(22)
-          }}
-          containerStyle={chatStyles.container}
-          buttonStyle={chatStyles.button}
-          isPrimary={false}
+          onPress={() => this.props.navigation.navigate('EditInfo')}
         />
       </View>
     );
@@ -173,7 +164,23 @@ class Artist extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
-        <SceneHeader title={fullName} />
+        <SceneHeader title={fullName} leftIcon={{
+          icon: 'paper-plane',
+          type: 'font-awesome',
+          color: this.props.customTheme.palette.grey0,
+          size: verticalScale(20),
+          iconStyle: styles.leftIcon,
+          containerStyle: { marginLeft: 0 },
+          onPress: () => this.props.navigation.navigate('Messages')
+        }} rightIcon={{
+          icon: 'cog',
+          type: 'font-awesome',
+          color: this.props.customTheme.palette.grey0,
+          size: verticalScale(20),
+          iconStyle: styles.rightIcon,
+          containerStyle: { marginLeft: 0 },
+          onPress: () => this.props.navigation.navigate('Settings')
+        }} />
         {this.renderCard()}
         <Text style={{
           ...styles.overview,
@@ -201,6 +208,13 @@ class Artist extends Component {
 }
 
 const styles = ScaledSheet.create({
+  leftIcon: {
+    padding: '10@vs',
+    transform: [{ rotateY: '180deg' }]
+  },
+  rightIcon: {
+    padding: '10@vs'
+  },
   card: {
     width: '100%',
     alignItems: 'center'
@@ -318,17 +332,6 @@ const followStyles = ScaledSheet.create({
   }
 });
 
-const chatStyles = ScaledSheet.create({
-  container: {
-    marginLeft: '4@vs'
-  },
-  button: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
-  }
-});
-
 const mapStateToProps = ({
   common: { theme },
   artist: { currentArtist, artistProducts }
@@ -342,4 +345,4 @@ const mapDispatchToProps = (dispacth) => ({
   getArtistProducts: (id, category) => dispacth(getArtistProducts(id, category))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Artist);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

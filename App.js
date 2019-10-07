@@ -68,7 +68,12 @@ import Bookings from './src/scenes/calendar/Bookings';
 import Booking from './src/scenes/calendar/Booking';
 import Notifications from './src/scenes/calendar/Notifications';
 import Notification from './src/scenes/calendar/Notification';
-import Profile from './src/scenes/tab/Profile';
+import Account from './src/scenes/profile/Account';
+import AddService from './src/scenes/profile/AddService';
+import EditInfo from './src/scenes/profile/EditInfo';
+import Messages from './src/scenes/profile/Messages';
+import Chat from './src/scenes/profile/Chat';
+import Settings from './src/scenes/profile/Settings';
 
 import LoadingSpinner from './src/components/LoadingSpinner';
 import { Provider, connect } from 'react-redux';
@@ -164,9 +169,14 @@ const CalendarStackNav = createStackNavigator({
 });
 
 const ProfileStackNav = createStackNavigator({
-  Profile: { screen: Profile }
+  Account: { screen: Account },
+  AddService: { screen: AddService },
+  EditInfo: { screen: EditInfo },
+  Messages: { screen: Messages },
+  Chat: { screen: Chat },
+  Settings: { screen: Settings }
 }, {
-  initialRouteName: 'Profile',
+  initialRouteName: 'Account',
   transitionConfig,
   defaultNavigationOptions: {
     header: null
