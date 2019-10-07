@@ -171,7 +171,7 @@ class Account extends Component {
           size: verticalScale(20),
           iconStyle: styles.leftIcon,
           containerStyle: { marginLeft: 0 },
-          onPress: () => this.props.navigation.navigate('Messages')
+          onPress: () => this.props.navigation.navigate('Chats')
         }} rightIcon={{
           icon: 'cog',
           type: 'font-awesome',

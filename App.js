@@ -30,6 +30,7 @@ import relationReducer from './src/controllers/relation/reducer';
 import reviewReducer from './src/controllers/review/reducer';
 import discoverReducer from './src/controllers/discover/reducer';
 import calendarReducer from './src/controllers/calendar/reducer';
+import chatReducer from './src/controllers/chat/reducer';
 
 const appReducer = combineReducers({
   common: commonReducer,
@@ -39,7 +40,8 @@ const appReducer = combineReducers({
   relation: relationReducer,
   review: reviewReducer,
   discover: discoverReducer,
-  calendar: calendarReducer
+  calendar: calendarReducer,
+  chat: chatReducer
 });
 
 const store = createStore(appReducer, applyMiddleware(thunk));
@@ -71,7 +73,7 @@ import Notification from './src/scenes/calendar/Notification';
 import Account from './src/scenes/profile/Account';
 import AddService from './src/scenes/profile/AddService';
 import EditInfo from './src/scenes/profile/EditInfo';
-import Messages from './src/scenes/profile/Messages';
+import Chats from './src/scenes/profile/Chats';
 import Chat from './src/scenes/profile/Chat';
 import Settings from './src/scenes/profile/Settings';
 
@@ -172,7 +174,7 @@ const ProfileStackNav = createStackNavigator({
   Account: { screen: Account },
   AddService: { screen: AddService },
   EditInfo: { screen: EditInfo },
-  Messages: { screen: Messages },
+  Chats: { screen: Chats },
   Chat: { screen: Chat },
   Settings: { screen: Settings }
 }, {
