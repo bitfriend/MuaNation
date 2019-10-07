@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import StarRating from 'react-native-star-rating';
@@ -159,7 +159,7 @@ const styles = ScaledSheet.create({
   },
   separator: {
     marginHorizontal: '16@vs',
-    height: verticalScale(StyleSheet.hairlineWidth)
+    height: '1@vs'
   },
   reviewWrapper: {
     marginHorizontal: '16@vs',

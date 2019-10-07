@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Image, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, FlatList, ScrollView, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
@@ -61,15 +61,6 @@ class Reviews extends Component {
     );
   }
 
-  renderSeparator = () => {
-    return (
-      <View style={{
-        height: verticalScale(StyleSheet.hairlineWidth),
-        backgroundColor: this.props.customTheme.palette.grey3
-      }} />
-    );
-  }
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
@@ -77,14 +68,17 @@ class Reviews extends Component {
         <View style={{ alignItems: 'center', marginTop: 28, marginBottom: 32 }}>
           {this.renderScore(this.props.navigation.getParam('score'), 32, 4)}
         </View>
-        <View style={styles.list}>
-          <FlatList
-            data={this.props.reviews}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderItem}
-            ItemSeparatorComponent={this.renderSeparator}
-          />
-        </View>
+        <FlatList
+          data={this.props.reviews}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+          ItemSeparatorComponent={() => (
+            <View style={{
+              ...styles.separator,
+              backgroundColor: this.props.customTheme.palette.grey3
+            }} />
+          )}
+        />
       </View>
     );
   }
@@ -99,13 +93,17 @@ const styles = ScaledSheet.create({
   list: {
     flex: 1,
     marginHorizontal: '16@vs'
+  },
+  separator: {
+    height: '1@vs',
+    marginHorizontal: '16@vs'
   }
 });
 
 const cardStyles = ScaledSheet.create({
   container: {
     flexDirection: 'row',
-    paddingVertical: '16@vs'
+    padding: '16@vs'
   },
   avatar: {
     width: '48@vs',

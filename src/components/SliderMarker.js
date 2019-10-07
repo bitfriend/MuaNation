@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Platform, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Platform, Text, TouchableHighlight, View } from 'react-native';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 

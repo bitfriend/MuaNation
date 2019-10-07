@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
@@ -187,14 +187,13 @@ class Artist extends Component {
           underlineColor={this.props.customTheme.title}
           onSelect={(value) => this.onChangeCategory(value)}
         />
-        <View style={styles.list}>
-          <FlatList
-            data={this.props.artistProducts}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderItem}
-            numColumns={2}
-          />
-        </View>
+        <FlatList
+          data={this.props.artistProducts}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+          numColumns={2}
+          style={styles.list}
+        />
       </View>
     );
   }
@@ -234,8 +233,7 @@ const styles = ScaledSheet.create({
     padding: '16@vs'
   },
   list: {
-    flex: 1,
-    marginHorizontal: '8@vs'
+    paddingHorizontal: '8@vs'
   },
   listItem: {
     margin: '8@vs'

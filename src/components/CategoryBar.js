@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 

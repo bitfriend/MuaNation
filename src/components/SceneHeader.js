@@ -53,7 +53,7 @@ SceneHeader.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    height: verticalScale(Platform.OS === 'ios' ? 88 : 88 - StatusBar.currentHeight),
+    height: Platform.OS === 'ios' ? verticalScale(88) : verticalScale(88) - StatusBar.currentHeight,
     backgroundColor: 'transparent',
     borderBottomColor: undefined,
     borderBottomWidth: undefined

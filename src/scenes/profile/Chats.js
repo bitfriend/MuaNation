@@ -38,7 +38,7 @@ class Chats extends Component {
 
   renderItem = ({ item, index, separators }) => {
     return (
-      <TouchableOpacity style={styles.listItem}>
+      <TouchableOpacity style={styles.listItem} onPress={() => this.props.navigation.navigate('Chat')}>
         <Image source={{ uri: item.avatar }} style={styles.avatar} />
         <View style={styles.body}>
           <View style={styles.title}>

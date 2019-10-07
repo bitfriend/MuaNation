@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
@@ -14,8 +14,8 @@ class Settings extends Component {
         <View style={styles.container}>
           <TouchableOpacity style={{
             ...styles.item,
-            borderBottomColor: this.props.customTheme.palette.grey3,
-            borderBottomWidth: verticalScale(StyleSheet.hairlineWidth)
+            borderBottomWidth: verticalScale(1),
+            borderBottomColor: this.props.customTheme.palette.grey3
           }}>
             <Text style={{
               ...styles.itemTitle,
@@ -31,8 +31,8 @@ class Settings extends Component {
           <View style={{ flex: 1 }} />
           <TouchableOpacity style={{
             ...styles.item,
-            borderBottomColor: this.props.customTheme.palette.grey3,
-            borderBottomWidth: verticalScale(StyleSheet.hairlineWidth)
+            borderBottomWidth: verticalScale(1),
+            borderBottomColor: this.props.customTheme.palette.grey3
           }}>
             <Text style={{
               ...styles.itemTitle,

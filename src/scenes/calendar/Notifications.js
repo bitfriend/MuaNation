@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -84,7 +84,12 @@ class Notifications extends Component {
           data={this.props.notifications}
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
-          ItemSeparatorComponent={() => <View style={{ height: 1, marginHorizontal: 16, backgroundColor: this.props.customTheme.palette.grey3 }} />}
+          ItemSeparatorComponent={() => (
+            <View style={{
+              ...styles.separator,
+              backgroundColor: this.props.customTheme.palette.grey3 }}
+            />
+          )}
           style={styles.list}
         />
       </View>
@@ -97,7 +102,7 @@ const styles = ScaledSheet.create({
     marginTop: '8@vs'
   },
   separator: {
-    height: verticalScale(StyleSheet.hairlineWidth),
+    height: '1@vs',
     marginHorizontal: '16@vs'
   },
   listItem: {

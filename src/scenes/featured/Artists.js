@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
@@ -120,16 +120,14 @@ class Artists extends Component {
             ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
           />
         </View>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={this.props.artists}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderItem}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: verticalScale(StyleSheet.hairlineWidth), backgroundColor: this.props.customTheme.palette.grey3 }} />
-            )}
-          />
-        </View>
+        <FlatList
+          data={this.props.artists}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+          ItemSeparatorComponent={() => (
+            <View style={{ ...styles.separator, backgroundColor: this.props.customTheme.palette.grey3 }} />
+          )}
+        />
       </View>
     );
   }
@@ -165,6 +163,10 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: '16@vs'
+  },
+  separator: {
+    height: '1@vs',
+    marginHorizontal: '16@vs'
   },
   listName: {
     marginLeft: '16@vs',

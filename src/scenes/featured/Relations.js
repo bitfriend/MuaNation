@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 
@@ -81,12 +81,17 @@ class Relations extends Component {
             </TouchableOpacity>
           ))}
         </View>
-        <View style={styles.list}>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={this.props.relations}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
-            ItemSeparatorComponent={() => <View style={{ height: verticalScale(StyleSheet.hairlineWidth), backgroundColor: this.props.customTheme.palette.grey3 }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{
+                ...styles.separator,
+                backgroundColor: this.props.customTheme.palette.grey3
+              }} />
+            )}
           />
         </View>
       </View>
@@ -112,10 +117,6 @@ const styles = ScaledSheet.create({
     borderBottomWidth: '2@vs',
     fontWeight: 'bold'
   },
-  list: {
-    flex: 1,
-    marginHorizontal: '16@vs'
-  },
   avatar: {
     width: '48@vs',
     height: '48@vs',
@@ -124,7 +125,11 @@ const styles = ScaledSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: '16@vs'
+    padding: '16@vs'
+  },
+  separator: {
+    height: '1@vs',
+    marginHorizontal: '16@vs'
   },
   name: {
     flex: 1,

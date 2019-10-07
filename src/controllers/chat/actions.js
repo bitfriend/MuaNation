@@ -34,14 +34,13 @@ export const getChat = (userId) => {
       let chat = {
         contact: {
           id: faker.random.uuid(),
-          fullName: faker.name.findName()
+          fullName: faker.name.findName(),
+          avatar: faker.image.avatar()
         },
         messages: []
       };
       for (let i = 0; i < 10; i++) {
         chat.messages.push({
-          avatar: faker.image.avatar(),
-          fullName: faker.name.findName(),
           text: faker.lorem.sentence(2),
           time: faker.date.past()
         });

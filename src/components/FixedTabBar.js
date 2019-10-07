@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { verticalScale, ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 
