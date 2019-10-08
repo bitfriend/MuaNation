@@ -40,6 +40,7 @@ class AddService extends Component {
             }}>Add photo(s)</Text>
           </TouchableOpacity>
           <TextInput
+            multiline={true}
             placeholder="Type description"
             placeholderTextColor={this.props.customTheme.label}
             style={{

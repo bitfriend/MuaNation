@@ -7,6 +7,10 @@ import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
 
 class EditInfo extends Component {
+  state = {
+    description: 'Being lucky in life is the result of putting yourself into action for good luck to happen to you. You’ve probably heard the statement “The harder I work the luckier I get”. Another way of putting it is “Whatever you are ready for is ready for you.”'
+  }
+
   onSave = () => {}
 
   render() {
@@ -14,6 +18,7 @@ class EditInfo extends Component {
       <View style={{ flex: 1 }}>
         <SceneHeader title="Edit info" />
         <TextInput
+          multiline={true}
           placeholder="Type description"
           placeholderTextColor={this.props.customTheme.label}
           style={{
@@ -21,7 +26,8 @@ class EditInfo extends Component {
             backgroundColor: this.props.customTheme.palette.grey3,
             color: this.props.customTheme.title
           }}
-        ></TextInput>
+          onChangeText={(description) => this.setState({ description })}
+        >{this.state.description}</TextInput>
         <View style={{ flex: 1 }} />
         <View style={buttonStyles.container}>
           <ThemeButton

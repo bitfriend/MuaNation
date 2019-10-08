@@ -33,8 +33,7 @@ class SceneHeader extends Component {
             color: this.props.customTheme.palette.grey0,
             fontSize: verticalScale(24),
             fontWeight: 'bold',
-            fontFamily: 'Lato',
-            textTransform: 'capitalize'
+            fontFamily: 'Lato'
           }
         } : undefined}
         rightComponent={this.props.rightIcon ? this.props.rightIcon : undefined}
