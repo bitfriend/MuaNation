@@ -31,6 +31,7 @@ import reviewReducer from './src/controllers/review/reducer';
 import discoverReducer from './src/controllers/discover/reducer';
 import calendarReducer from './src/controllers/calendar/reducer';
 import chatReducer from './src/controllers/chat/reducer';
+import serviceReducer from './src/controllers/service/reducer';
 
 const appReducer = combineReducers({
   common: commonReducer,
@@ -41,7 +42,8 @@ const appReducer = combineReducers({
   review: reviewReducer,
   discover: discoverReducer,
   calendar: calendarReducer,
-  chat: chatReducer
+  chat: chatReducer,
+  service: serviceReducer
 });
 
 const store = createStore(appReducer, applyMiddleware(thunk));

@@ -5,7 +5,7 @@ const initialState = {
   chat: {}
 };
 
-export default reviewReducer = (state = initialState, action) => {
+export default chatReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.GET_CHATS_SUCCESS:
       return {
