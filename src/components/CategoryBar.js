@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 
 export default class CategoryBar extends PureComponent {

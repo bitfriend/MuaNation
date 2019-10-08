@@ -1,4 +1,4 @@
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import { verticalScale } from 'react-native-size-matters';
 import { primary, secondary, success, warning, danger, white, black } from './common';
 
 export const palette = {

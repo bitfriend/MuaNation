@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -14,7 +14,6 @@ class Chats extends Component {
 
   getTimeText(time) {
     const t = moment(time);
-    console.log(t.format('YYYY-MM-DD h:mm a'));
     const now = moment();
 
     let delta = now.diff(t, 'years');

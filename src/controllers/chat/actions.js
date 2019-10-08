@@ -32,15 +32,14 @@ export const getChat = (userId) => {
     dispatch(setLoading());
     try {
       let chat = {
-        contact: {
-          id: faker.random.uuid(),
-          fullName: faker.name.findName(),
-          avatar: faker.image.avatar()
-        },
+        id: faker.random.uuid(),
+        fullName: faker.name.findName(),
+        avatar: faker.image.avatar(),
         messages: []
       };
       for (let i = 0; i < 10; i++) {
         chat.messages.push({
+          fromMe: faker.random.boolean(),
           text: faker.lorem.sentence(2),
           time: faker.date.past()
         });

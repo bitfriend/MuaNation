@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Platform, Text, TouchableHighlight, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 
 const ViewPropTypes = require('react-native').ViewPropTypes || View.propTypes;

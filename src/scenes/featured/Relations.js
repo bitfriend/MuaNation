@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
