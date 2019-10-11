@@ -83,6 +83,11 @@ const initialState = {
   theme: {
     name: 'light',
     ...getLightTheme()
+  },
+  statusBar: {
+    backgroundColor: 'transparent',
+    barStyle: 'dark-content',
+    translucent: false
   }
 };
 
@@ -91,6 +96,11 @@ const initialState = {
 //   theme: {
 //     name: 'dark',
 //     ...getDarkTheme()
+//   },
+//   statusBar: {
+//     backgroundColor: 'transparent',
+//     barStyle: 'dark-content',
+//     translucent: false
 //   }
 // };
 
@@ -123,6 +133,14 @@ export default commonReducer = (state = initialState, action) => {
           overlays: lightOverlays,
           buttonShadow: lightButtonShadow,
           shadows: lightShadows
+        }
+      };
+    case types.CHANGE_STATUS_BAR:
+      return {
+        ...state,
+        statusBar: {
+          ...state.statusBar,
+          ...action.payload
         }
       };
     default:

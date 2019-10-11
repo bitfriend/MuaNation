@@ -17,3 +17,9 @@ export const changeTheme = (name) => {
     return dispatch({ type: types.CHANGE_THEME, payload: name });
   }
 }
+
+export const changeStatusBar = (config) => {
+  return (dispatch) => {
+    return dispatch({ type: types.CHANGE_STATUS_BAR, payload: config });
+  }
+}

@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Animated, Easing, StatusBar, Text } from 'react-native';
+import { Animated, Easing, Text } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 
 import {
@@ -310,24 +310,25 @@ const getActiveRouteName = (state) => {
   return state.routeName;
 };
 
-StatusBar.setBackgroundColor('transparent');
-StatusBar.setBarStyle('dark-content');
+import ThemeStatusBar from './src/components/theme/StatusBar';
+import { changeStatusBar } from './src/controllers/common/actions';
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
+          <ThemeStatusBar />
           <AppContainer onNavigationStateChange={(prevState, curState) => {
             switch (getActiveRouteName(curState)) {
               case 'Splash':
               case 'Discover':
               case 'SaleProduct':
               case 'PopularProduct':
-                StatusBar.setTranslucent(true);
+                store.dispatch(changeStatusBar({ translucent: true }));
                 break;
               default:
-                StatusBar.setTranslucent(false);
+                store.dispatch(changeStatusBar({ translucent: false }));
                 break;
             }
           }} />
