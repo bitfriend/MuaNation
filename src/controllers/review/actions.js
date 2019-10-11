@@ -5,6 +5,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getReviews = (userId) => {
   return (dispatch) => {
+    console.log('getReviews');
     dispatch(setLoading());
     try {
       let reviews = [];
@@ -22,9 +23,11 @@ export const getReviews = (userId) => {
         });
       }
       dispatch({ type: types.GET_REVIEWS_SUCCESS, payload: reviews });
+      console.log('getReviews');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_REVIEWS_FAILURE });
+      console.log('getReviews');
       dispatch(clearLoading());
     }
   }

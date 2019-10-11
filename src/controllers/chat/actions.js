@@ -5,6 +5,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getChats = (userId) => {
   return (dispatch) => {
+    console.log('getChats');
     dispatch(setLoading());
     try {
       let chats = [];
@@ -19,9 +20,11 @@ export const getChats = (userId) => {
         });
       }
       dispatch({ type: types.GET_CHATS_SUCCESS, payload: chats });
+      console.log('getChats');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_CHATS_FAILURE });
+      console.log('getChats');
       dispatch(clearLoading());
     }
   }
@@ -29,6 +32,7 @@ export const getChats = (userId) => {
 
 export const getChat = (userId) => {
   return (dispatch) => {
+    console.log('getChat');
     dispatch(setLoading());
     try {
       let chat = {
@@ -45,9 +49,11 @@ export const getChat = (userId) => {
         });
       }
       dispatch({ type: types.GET_CHAT_SUCCESS, payload: chat });
+      console.log('getChat');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_CHAT_FAILURE });
+      console.log('getChat');
       dispatch(clearLoading());
     }
   }

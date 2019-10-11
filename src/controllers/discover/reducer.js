@@ -1,7 +1,6 @@
 import * as types from './types';
 
 const initialState = {
-  location: null,
   neighbours: [],
   criteria: {
     category: {
@@ -23,16 +22,6 @@ const initialState = {
 
 export default discoverReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_LOCATION_SUCCESS:
-      return {
-        ...state,
-        location: action.payload
-      };
-    case types.GET_LOCATION_FAILURE:
-      return {
-        ...state,
-        location: null
-      };
     case types.FETCH_NEIGHBOURS_SUCCESS:
       return {
         ...state,

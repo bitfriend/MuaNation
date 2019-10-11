@@ -7,6 +7,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getFeaturedArtists = (onError) => {
   return (dispatch) => {
+    console.log('getFeaturedArtists');
     dispatch(setLoading());
     // AsyncStorage.getItem('mua_token').then(muaToken => {
     //   console.log('muaToken', muaToken);
@@ -68,9 +69,11 @@ export const getFeaturedArtists = (onError) => {
         });
       }
       dispatch({ type: types.GET_FEATURED_ARTISTS_SUCCESS, payload: artists });
+      console.log('getFeaturedArtists');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_FEATURED_ARTISTS_FAILURE });
+      console.log('getFeaturedArtists');
       dispatch(clearLoading());
     }
   }
@@ -78,6 +81,7 @@ export const getFeaturedArtists = (onError) => {
 
 export const getArtists = (onError) => {
   return (dispatch) => {
+    console.log('getArtists');
     dispatch(setLoading());
     try {
       let artists = [];
@@ -101,9 +105,11 @@ export const getArtists = (onError) => {
         });
       }
       dispatch({ type: types.GET_ARTISTS_SUCCESS, payload: artists });
+      console.log('getArtists');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_ARTISTS_FAILURE });
+      console.log('getArtists');
       dispatch(clearLoading());
     }
   }
@@ -111,6 +117,7 @@ export const getArtists = (onError) => {
 
 export const getSuggestedArtists = () => {
   return (dispatch) => {
+    console.log('getSuggestedArtists');
     dispatch(setLoading());
     try {
       let artists = [];
@@ -133,9 +140,11 @@ export const getSuggestedArtists = () => {
         });
       }
       dispatch({ type: types.GET_SUGGESTED_ARTISTS_SUCCESS, payload: artists });
+      console.log('getSuggestedArtists');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_SUGGESTED_ARTISTS_FAILURE });
+      console.log('getSuggestedArtists');
       dispatch(clearLoading());
     }
   }
@@ -143,6 +152,7 @@ export const getSuggestedArtists = () => {
 
 export const getArtist = (id) => {
   return (dispatch) => {
+    console.log('getArtist');
     dispatch(setLoading());
     try {
       let j, tags = [];
@@ -165,9 +175,11 @@ export const getArtist = (id) => {
         products
       };
       dispatch({ type: types.GET_ARTIST_SUCCESS, payload: currentArtist });
+      console.log('getArtist');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_ARTIST_FAILURE });
+      console.log('getArtist');
       dispatch(clearLoading());
     }
   }
@@ -175,6 +187,7 @@ export const getArtist = (id) => {
 
 export const getArtistProducts = (id, category) => {
   return (dispatch) => {
+    console.log('getArtistProducts');
     dispatch(setLoading());
     try {
       let products = [];
@@ -186,9 +199,11 @@ export const getArtistProducts = (id, category) => {
         });
       }
       dispatch({ type: types.GET_ARTIST_PRODUCTS_SUCCESS, payload: products });
+      console.log('getArtistProducts');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_ARTIST_PRODUCTS_FAILURE });
+      console.log('getArtistProducts');
       dispatch(clearLoading());
     }
   }

@@ -5,6 +5,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getProducts = () => {
   return (dispatch) => {
+    console.log('getProducts');
     dispatch(setLoading());
     try {
       let products = [];
@@ -18,9 +19,11 @@ export const getProducts = () => {
         });
       }
       dispatch({ type: types.GET_PRODUCTS_SUCCESS, payload: products });
+      console.log('getProducts');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_PRODUCTS_FAILURE });
+      console.log('getProducts');
       dispatch(clearLoading());
     }
   }
@@ -28,6 +31,7 @@ export const getProducts = () => {
 
 export const getSaleProduct = (id) => {
   return (dispatch) => {
+    console.log('getSaleProduct');
     dispatch(setLoading());
     try {
       let images = [];
@@ -42,9 +46,11 @@ export const getSaleProduct = (id) => {
         overview: faker.lorem.paragraph(3)
       };
       dispatch({ type: types.GET_SALE_PRODUCT_SUCCESS, payload: saleProduct });
+      console.log('getSaleProduct');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_SALE_PRODUCT_FAILURE });
+      console.log('getSaleProduct');
       dispatch(clearLoading());
     }
   }
@@ -52,6 +58,7 @@ export const getSaleProduct = (id) => {
 
 export const getPopularProduct = (id) => {
   return (dispatch) => {
+    console.log('getPopularProduct');
     dispatch(setLoading());
     try {
       let i, images = [], reviews = [];
@@ -75,9 +82,11 @@ export const getPopularProduct = (id) => {
         reviews
       };
       dispatch({ type: types.GET_POPULAR_PRODUCT_SUCCESS, payload: popularProduct });
+      console.log('getPopularProduct');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_POPULAR_PRODUCT_FAILURE });
+      console.log('getPopularProduct');
       dispatch(clearLoading());
     }
   }

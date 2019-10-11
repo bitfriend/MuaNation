@@ -20,7 +20,9 @@ class LoadingSpinner extends Component {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <ActivityIndicator size={windowWidth * 0.1} color="white" />
+        <ActivityIndicator color="white" style={{
+          transform: [{ scale: 3 }]
+        }} />
       </View>
     );
   }

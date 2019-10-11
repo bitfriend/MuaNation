@@ -5,6 +5,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getCategories = () => {
   return (dispatch) => {
+    console.log('getCategories');
     dispatch(setLoading());
     try {
       let categories = [];
@@ -12,9 +13,11 @@ export const getCategories = () => {
         categories.push(faker.lorem.word());
       }
       dispatch({ type: types.GET_CATEGORIES_SUCCESS, payload: categories });
+      console.log('getCategories');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_CATEGORIES_FAILURE });
+      console.log('getCategories');
       dispatch(clearLoading());
     }
   }

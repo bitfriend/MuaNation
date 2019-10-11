@@ -5,6 +5,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getFollowers = (userId) => {
   return (dispatch) => {
+    console.log('getFollowers');
     dispatch(setLoading());
     try {
       let followers = [];
@@ -16,9 +17,11 @@ export const getFollowers = (userId) => {
         });
       }
       dispatch({ type: types.GET_FOLLOWERS_SUCCESS, payload: followers });
+      console.log('getFollowers');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_FOLLOWERS_FAILURE });
+      console.log('getFollowers');
       dispatch(clearLoading());
     }
   }
@@ -26,6 +29,7 @@ export const getFollowers = (userId) => {
 
 export const getFollowing = (userId) => {
   return (dispatch) => {
+    console.log('getFollowing');
     dispatch(setLoading());
     try {
       let following = [];
@@ -37,9 +41,11 @@ export const getFollowing = (userId) => {
         });
       }
       dispatch({ type: types.GET_FOLLOWING_SUCCESS, payload: following });
+      console.log('getFollowing');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_FOLLOWING_FAILURE });
+      console.log('getFollowing');
       dispatch(clearLoading());
     }
   }

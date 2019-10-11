@@ -6,6 +6,7 @@ import { setLoading, clearLoading } from '../common/actions';
 
 export const getBookings = (userId) => {
   return (dispatch) => {
+    console.log('getBookings');
     dispatch(setLoading());
     try {
       let bookings = [];
@@ -19,9 +20,11 @@ export const getBookings = (userId) => {
         });
       }
       dispatch({ type: types.GET_BOOKINGS_SUCCESS, payload: bookings });
+      console.log('getBookings');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_BOOKINGS_FAILURE });
+      console.log('getBookings');
       dispatch(clearLoading());
     }
   }
@@ -51,6 +54,7 @@ export const getBooking = () => {
 
 export const getNotifications = () => {
   return (dispatch) => {
+    console.log('getNotifications');
     dispatch(setLoading());
     try {
       let notifications = [];
@@ -67,9 +71,11 @@ export const getNotifications = () => {
         });
       }
       dispatch({ type: types.GET_NOTIFICATIONS_SUCCESS, payload: notifications });
+      console.log('getNotifications');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_NOTIFICATIONS_FAILURE });
+      console.log('getNotifications');
       dispatch(clearLoading());
     }
   }
@@ -77,6 +83,7 @@ export const getNotifications = () => {
 
 export const getNotification = () => {
   return (dispatch) => {
+    console.log('getNotification');
     dispatch(setLoading());
     try {
       const startDate = moment(new Date()).add(-1, 'days').format('YYYY-MM-DD');
@@ -88,9 +95,11 @@ export const getNotification = () => {
         createdAt: faker.date.between(startDate, endDate)
       };
       dispatch({ type: types.GET_NOTIFICATION_SUCCESS, payload: notification });
+      console.log('getNotification');
       dispatch(clearLoading());
     } catch (error) {
       dispatch({ type: types.GET_NOTIFICATION_FAILURE });
+      console.log('getNotification');
       dispatch(clearLoading());
     }
   }

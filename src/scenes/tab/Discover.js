@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 import SliderMarker from '../../components/SliderMarker';
 import { setLoading, clearLoading } from '../../controllers/common/actions';
-import { getLocation, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
+import { fetchNeighbours, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controllers/discover/actions';
 
 const Color = require('color');
 
@@ -36,10 +36,17 @@ class Discover extends Component {
     this.windowWidth = Dimensions.get('window').width;
     this.sliderLength = this.windowWidth - verticalScale(16) * 2;
 
-    this.props.getLocation((error) => Alert.alert(error.message));
+    navigator.geolocation.getCurrentPosition(
+      location => {
+        this.props.fetchNeighbours(location.coords.latitude, location.coords.longitude, (error) => Alert.alert(error.message));
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 3000 }
+    );
     this.props.getCriteria();
 
     // Start the map loading
+    console.log('discover');
     this.props.setLoading();
   }
 
@@ -244,6 +251,7 @@ class Discover extends Component {
             ref={(c) => this.mapView = c}
             onMapReady={() => {
               // End the map loading
+              console.log('discover');
               this.props.clearLoading();
             }}
             onRegionChange={region => {
@@ -580,7 +588,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispacth) => ({
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
-  getLocation: (onError) => dispacth(getLocation(onError)),
+  fetchNeighbours: (latitude, longitude, onError) => dispacth(fetchNeighbours(latitude, longitude, onError)),
   getCriteria: () => dispacth(getCriteria()),
   selectCategory: (category) => dispacth(selectCategory(category)),
   deselectCategory: (category) => dispacth(deselectCategory(category)),
