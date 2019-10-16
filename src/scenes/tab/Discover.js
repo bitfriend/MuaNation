@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Animated, Dimensions, Easing, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Alert, Animated, Dimensions, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MapView, { Marker } from 'react-native-maps';
@@ -18,6 +17,7 @@ const Color = require('color');
 class Discover extends Component {
   state = {
     drawed: false,
+    location: null,
     editingCriterion: '',
     criteria: {
       category: {
@@ -38,6 +38,7 @@ class Discover extends Component {
 
     navigator.geolocation.getCurrentPosition(
       location => {
+        this.setState({ location });
         this.props.fetchNeighbours(location.coords.latitude, location.coords.longitude, (error) => Alert.alert(error.message));
       },
       error => Alert.alert(error.message),
@@ -47,7 +48,9 @@ class Discover extends Component {
 
     // Start the map loading
     console.log('discover');
-    this.props.setLoading();
+    if (Platform.OS === 'android') {
+      this.props.setLoading(); // This halts on iOS. Don't know why.
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -242,17 +245,19 @@ class Discover extends Component {
         <View style={{ ...styles.container, backgroundColor: this.props.customTheme.container }}>
           <MapView
             style={styles.map}
-            initialRegion={this.props.location && {
-              latitude: this.props.location.coords.latitude,
-              longitude: this.props.location.coords.longitude,
+            initialRegion={this.state.location && {
+              latitude: this.state.location.coords.latitude,
+              longitude: this.state.location.coords.longitude,
               latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              longitudeDelta: 0.0421
             }}
             ref={(c) => this.mapView = c}
             onMapReady={() => {
               // End the map loading
               console.log('discover');
-              this.props.clearLoading();
+              if (Platform.OS === 'android') {
+                this.props.clearLoading(); // This halts on iOS. Don't know why.
+              }
             }}
             onRegionChange={region => {
               this.mapView.getCamera().then(camera => {
@@ -260,11 +265,11 @@ class Discover extends Component {
               });
             }}
           >
-            {this.props.location && (
+            {this.state.location && (
               <Marker
                 coordinate={{
-                  latitude: this.props.location.coords.latitude,
-                  longitude: this.props.location.coords.longitude
+                  latitude: this.state.location.coords.latitude,
+                  longitude: this.state.location.coords.longitude
                 }}
                 style={styles.locationMarker}
                 anchor={{ x: 0.5, y: 0.5 }}
@@ -579,10 +584,10 @@ const buttonStyle = ScaledSheet.create({
 
 const mapStateToProps = ({
   common: { theme },
-  discover: { location, neighbours, criteria }
+  discover: { neighbours, criteria }
 }) => ({
   customTheme: theme,
-  location, neighbours, criteria
+  neighbours, criteria
 });
 
 const mapDispatchToProps = (dispacth) => ({

@@ -48,7 +48,6 @@
 		313561394BE1D6D29593530E /* libPods-muanationTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6095517721C18C547B2D536 /* libPods-muanationTests.a */; };
 		3A661A12DAA943A9B96CBD1A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97853B7DDF834F0AA5E83B50 /* MaterialIcons.ttf */; };
 		453B3E557AA14641BD9D755C /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACCAF0439184813A67AE768 /* libRNVectorIcons-tvOS.a */; };
-		453D19FF428DF9D3377B8B75 /* libPods-muanation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A25E63500AC18680C36C49C4 /* libPods-muanation.a */; };
 		59F468A3C96C45FAA00C858E /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F54E34A02FB47D6B4C6BC0E /* Lato-Bold.ttf */; };
 		7929501E23DD411898289DC4 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7EEF3A252314945853FE77B /* FontAwesome5_Regular.ttf */; };
 		7C2F014BE98142A2823F64B3 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD4563C6173D4E0AB087DF39 /* Entypo.ttf */; };
@@ -60,13 +59,13 @@
 		A51CC2E92350A10600FA1BB7 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2DF23509FB800FA1BB7 /* libRNVectorIcons.a */; };
 		A51CC2EA2350A11500FA1BB7 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2D923509FB800FA1BB7 /* libRNGestureHandler.a */; };
 		A51CC2EB2350A12100FA1BB7 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2B823509FB800FA1BB7 /* libBVLinearGradient.a */; };
-		A51CC2EC2350A12900FA1BB7 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2B423509FB800FA1BB7 /* libAirMaps.a */; };
 		A51CC2ED2350A13700FA1BB7 /* libLRDRCTSimpleToast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2C323509FB800FA1BB7 /* libLRDRCTSimpleToast.a */; };
 		A51CC2EE2350A14C00FA1BB7 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2CA23509FB800FA1BB7 /* libRCTVideo.a */; };
 		A51CC2EF2350A15900FA1BB7 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2C623509FB800FA1BB7 /* libRCTFBSDK.a */; };
 		A51CC2F02350A17200FA1BB7 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2D523509FB800FA1BB7 /* libRNCWebView.a */; };
 		A51CC2F12350A18300FA1BB7 /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2D223509FB800FA1BB7 /* libRNCookieManagerIOS.a */; };
 		A51CC2F22350A18B00FA1BB7 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2BE23509FB800FA1BB7 /* libFastImage.a */; };
+		A53DB2BD2356F1A30007E5F8 /* libPods-muanation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A53DB2BC2356F1A30007E5F8 /* libPods-muanation.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B1703A2FAEA3489DA0F1B4A3 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5C8004493D284274872EBDDE /* Zocial.ttf */; };
 		B2A39CD2B6444F33972F146F /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A523C80D3A9E41409CCE63BA /* Fontisto.ttf */; };
@@ -346,13 +345,6 @@
 			remoteGlobalIDString = ED296FEE214C9CF800B7C4FE;
 			remoteInfo = "jsiexecutor-tvOS";
 		};
-		A51CC2B323509FB800FA1BB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B1E209591E4478589009714 /* AirMaps.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
-			remoteInfo = AirMaps;
-		};
 		A51CC2B723509FB800FA1BB7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D9E89D17A67D420AB22D16BA /* BVLinearGradient.xcodeproj */;
@@ -501,7 +493,6 @@
 		3308A001348746FA9221062B /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		341D14439FA341F0B2E64186 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		34EE0874CA604AB7BE104838 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		43B7204F9C9449588CB73955 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		461FD6EB9EED23534F3787A9 /* Pods-muanation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-muanation.debug.xcconfig"; path = "Target Support Files/Pods-muanation/Pods-muanation.debug.xcconfig"; sourceTree = "<group>"; };
 		48226FE5AB384E92A7620882 /* libRCTVideo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTVideo.a; sourceTree = "<group>"; };
 		49133A9457FBE259206E79C5 /* Pods-muanation-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-muanation-tvOS.release.xcconfig"; path = "Target Support Files/Pods-muanation-tvOS/Pods-muanation-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -519,7 +510,6 @@
 		758F901730814B14B7913A6A /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		75FF492C1F1D41E0BF4709B2 /* LRDRCTSimpleToast.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = LRDRCTSimpleToast.xcodeproj; path = "../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		7B1E209591E4478589009714 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		882D438D7057567D2344C85C /* Pods-muanationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-muanationTests.debug.xcconfig"; path = "Target Support Files/Pods-muanationTests/Pods-muanationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		921C1806C70D465E81E09D14 /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
@@ -529,6 +519,7 @@
 		A25E63500AC18680C36C49C4 /* libPods-muanation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-muanation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2964C38689C4D1EAB2823F0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		A523C80D3A9E41409CCE63BA /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		A53DB2BC2356F1A30007E5F8 /* libPods-muanation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-muanation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B386EA1D1DA24BA8BE89EB36 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
 		B5DCDE910A434BD4A14B7FC9 /* RNCookieManagerIOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCookieManagerIOS.xcodeproj; path = "../node_modules/react-native-cookies/ios/RNCookieManagerIOS.xcodeproj"; sourceTree = "<group>"; };
@@ -568,13 +559,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53DB2BD2356F1A30007E5F8 /* libPods-muanation.a in Frameworks */,
 				A51CC2F22350A18B00FA1BB7 /* libFastImage.a in Frameworks */,
 				A51CC2F12350A18300FA1BB7 /* libRNCookieManagerIOS.a in Frameworks */,
 				A51CC2F02350A17200FA1BB7 /* libRNCWebView.a in Frameworks */,
 				A51CC2EF2350A15900FA1BB7 /* libRCTFBSDK.a in Frameworks */,
 				A51CC2EE2350A14C00FA1BB7 /* libRCTVideo.a in Frameworks */,
 				A51CC2ED2350A13700FA1BB7 /* libLRDRCTSimpleToast.a in Frameworks */,
-				A51CC2EC2350A12900FA1BB7 /* libAirMaps.a in Frameworks */,
 				A51CC2EB2350A12100FA1BB7 /* libBVLinearGradient.a in Frameworks */,
 				A51CC2EA2350A11500FA1BB7 /* libRNGestureHandler.a in Frameworks */,
 				A51CC2E92350A10600FA1BB7 /* libRNVectorIcons.a in Frameworks */,
@@ -592,7 +583,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				453D19FF428DF9D3377B8B75 /* libPods-muanation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -773,6 +763,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A53DB2BC2356F1A30007E5F8 /* libPods-muanation.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
@@ -821,7 +812,6 @@
 				341D14439FA341F0B2E64186 /* RNVectorIcons.xcodeproj */,
 				01D02D8856B84C5BBC81AFB5 /* RNGestureHandler.xcodeproj */,
 				D9E89D17A67D420AB22D16BA /* BVLinearGradient.xcodeproj */,
-				7B1E209591E4478589009714 /* AirMaps.xcodeproj */,
 				75FF492C1F1D41E0BF4709B2 /* LRDRCTSimpleToast.xcodeproj */,
 				F5BBE522725A4D15919CC669 /* RCTVideo.xcodeproj */,
 				66FF60723A9548A986D278C5 /* RCTFBSDK.xcodeproj */,
@@ -876,7 +866,6 @@
 				172BEC61392E47E7A5BDCEF1 /* libRNVectorIcons.a */,
 				EA3255CC47214C359E088461 /* libRNGestureHandler.a */,
 				0381064928C74EB8A78836F4 /* libBVLinearGradient.a */,
-				43B7204F9C9449588CB73955 /* libAirMaps.a */,
 				0D9C3F761097455BB839CE9A /* libLRDRCTSimpleToast.a */,
 				48226FE5AB384E92A7620882 /* libRCTVideo.a */,
 				CE0EF98ACE854EE99B4DCD3D /* libRCTFBSDK.a */,
@@ -911,14 +900,6 @@
 			children = (
 				A51CC2DF23509FB800FA1BB7 /* libRNVectorIcons.a */,
 				A51CC2E123509FB800FA1BB7 /* libRNVectorIcons-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A51CC2A223509FB700FA1BB7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A51CC2B423509FB800FA1BB7 /* libAirMaps.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1124,10 +1105,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = A51CC2A223509FB700FA1BB7 /* Products */;
-					ProjectRef = 7B1E209591E4478589009714 /* AirMaps.xcodeproj */;
-				},
 				{
 					ProductGroup = A51CC2A823509FB700FA1BB7 /* Products */;
 					ProjectRef = D9E89D17A67D420AB22D16BA /* BVLinearGradient.xcodeproj */;
@@ -1478,13 +1455,6 @@
 			fileType = archive.ar;
 			path = "libjsiexecutor-tvOS.a";
 			remoteRef = A51CC29723509FB300FA1BB7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A51CC2B423509FB800FA1BB7 /* libAirMaps.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = A51CC2B323509FB800FA1BB7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A51CC2B823509FB800FA1BB7 /* libBVLinearGradient.a */ = {
@@ -1865,17 +1835,16 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = muanationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1899,17 +1868,16 @@
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = muanationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1935,17 +1903,16 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\react-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\react-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\react-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\react-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\react-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\react-native-videoios/**",
-					"$(SRCROOT)..\node_modules\react-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\react-native-webviewios",
-					"$(SRCROOT)..\node_modules\react-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\react-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = muanation/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1969,17 +1936,16 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\react-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\react-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\react-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\react-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\react-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\react-native-videoios/**",
-					"$(SRCROOT)..\node_modules\react-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\react-native-webviewios",
-					"$(SRCROOT)..\node_modules\react-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\react-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = muanation/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2009,17 +1975,16 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = "muanation-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2051,17 +2016,16 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = "muanation-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2092,17 +2056,16 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = "muanation-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2133,17 +2096,16 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\react-native-community@async-storageios",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-gesture-handlerios/**",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
-					"$(SRCROOT)..\node_modules\neact-native-simple-toastiosLRDRCTSimpleToast",
-					"$(SRCROOT)..\node_modules\neact-native-videoios/**",
-					"$(SRCROOT)..\node_modules\neact-native-fbsdkiosRCTFBSDK/**",
-					"$(SRCROOT)..\node_modules\neact-native-webviewios",
-					"$(SRCROOT)..\node_modules\neact-native-cookiesiosRNCookieManagerIOS",
-					"$(SRCROOT)..\node_modules\neact-native-fast-imageiosFastImage",
+					"$(SRCROOT)/../node_modules/react-native-community@async-storage/ios",
+					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-cookies/ios/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage",
 				);
 				INFOPLIST_FILE = "muanation-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
