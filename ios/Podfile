@@ -1,0 +1,35 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+inhibit_all_warnings!
+
+workspace 'muanation'
+project 'muanation'
+
+target 'muanation' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for muanation
+  pod 'FBSDKCoreKit', '5.8.0'
+  pod 'FBSDKLoginKit', '5.8.0'
+  pod 'FBSDKShareKit', '5.8.0'
+
+  target 'muanationTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'muanation-tvOS' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for muanation-tvOS
+
+  target 'muanation-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
