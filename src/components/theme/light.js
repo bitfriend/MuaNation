@@ -29,10 +29,10 @@ import { Platform } from 'react-native';
 
 export const buttonShadow = Platform.select({
   ios: {
-    shadowRadius: verticalScale(16),
+    shadowRadius: verticalScale(6),
     shadowColor: '#ef4492',
     shadowOpacity: 0.4,
-    shadowOffset: { width: verticalScale(1), height: verticalScale(6) }
+    shadowOffset: { width: 0, height: verticalScale(6) }
   },
   android: {
     elevation: verticalScale(6)
