@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Image, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import { connect } from 'react-redux';
@@ -35,47 +35,34 @@ class CreateAccount extends Component {
       <TouchableOpacity
         style={{
           ...styles.card,
-          backgroundColor: this.props.customTheme.card,
-          borderColor: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey3,
-          ...this.props.customTheme.shadows[2]
+          borderColor: EStyleSheet.value(checked ? '$secondaryColor' : '$grey3Color'),
+          ...this.props.appTheme.styles.shadow3
         }}
         onPress={onPress}
       >
         <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
           <Text style={{
             ...styles.caption,
-            color: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey0
+            color: EStyleSheet.value(checked ? '$secondaryColor' : '$grey0Color')
           }}>{title}</Text>
           {checked ? (
-            <Icon type="material" name="radio-button-checked" size={verticalScale(20)} color={this.props.customTheme.palette.secondary} />
+            <Icon type="material" name="radio-button-checked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$secondaryColor')} />
           ) : (
-            <Icon type="material" name="radio-button-unchecked" size={verticalScale(20)} color={this.props.customTheme.label} />
+            <Icon type="material" name="radio-button-unchecked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$label')} />
           )}
         </View>
-        <Text style={{
-          ...styles.overview,
-          color: this.props.customTheme.label
-        }}>{description}</Text>
+        <Text style={styles.overview}>{description}</Text>
       </TouchableOpacity>
     );
   }
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
+      <View style={styles.container}>
         <SceneHeader />
-        <View style={{ flex: 1, marginHorizontal: verticalScale(60) }}>
-          <Text style={{
-            ...styles.titleText,
-            color: this.props.customTheme.title
-          }}>Create an account</Text>
-          <Text style={{
-            ...styles.smallText,
-            color: this.props.customTheme.label
-          }}>Please select how do you want to use the app</Text>
+        <View style={styles.body}>
+          <Text style={styles.titleText}>Create an account</Text>
+          <Text style={styles.smallText}>Please select how do you want to use the app</Text>
           <View style={{ flex: 1 }}>
             {this.renderItem({
               checked: this.state.role === 'artist',
@@ -96,27 +83,27 @@ class CreateAccount extends Component {
               icon={{
                 name: 'facebook',
                 type: 'font-awesome',
-                size: verticalScale(20),
-                containerStyle: { marginRight: verticalScale(20) }
+                size: EStyleSheet.value('20rem'),
+                containerStyle: styles.buttonIcon
               }}
               title="Join with Facebook"
               titleStyle={styles.buttonTitle}
               onPress={this.onClickFacebook}
             />
             <ThemeButton
-              buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+              buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
               icon={{
                 name: 'instagram',
                 type: 'font-awesome',
-                size: verticalScale(20),
-                containerStyle: { marginRight: verticalScale(10) }
+                size: EStyleSheet.value('20rem'),
+                containerStyle: styles.buttonIcon
               }}
               title="Join with Instagram"
               titleStyle={styles.buttonTitle}
               onPress={this.onClickInstagram}
             />
             <InstagramLogin
-              containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}
+              containerStyle={styles.instagram}
               ref={c => this.instagramLogin = c}
               clientId="2862949e166644b3a94fc2c483d744f2"
               redirectUrl="https://muanation.com/"
@@ -149,56 +136,71 @@ class CreateAccount extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: '16@vs'
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
+  },
+  body: {
+    flex: 1,
+    marginHorizontal: '60rem'
   },
   titleText: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   smallText: {
-    marginTop: '16@vs',
-    marginBottom: '28@vs',
+    marginTop: '16rem',
+    marginBottom: '28rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   card: {
     width: '100%',
-    marginVertical: '10@vs',
-    padding: '24@vs',
-    borderWidth: '1@vs',
-    borderRadius: '12@vs'
+    marginVertical: '10rem',
+    padding: '24rem',
+    borderWidth: '1rem',
+    borderRadius: '12rem',
+    backgroundColor: '$card'
   },
   caption: {
     flex: 1,
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   },
   overview: {
-    marginTop: '8@vs',
+    marginTop: '8rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   button: {
-    width: '254@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '48rem',
+    borderRadius: '12rem'
+  },
+  buttonIcon: {
+    marginRight: '10rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
+  },
+  instagram: {
+    backgroundColor: '$overlay0Color'
   }
 });
 
 const mapStateToProps = ({
   common: { theme }
 }) => ({
-  customTheme: theme
+  appTheme: theme
 });
 
 const mapDispatchToProps = (dispacth) => ({

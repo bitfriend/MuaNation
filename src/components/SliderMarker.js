@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Platform, Text, TouchableHighlight, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { Text, TouchableHighlight, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
 const ViewPropTypes = require('react-native').ViewPropTypes || View.propTypes;
@@ -44,63 +44,52 @@ SliderMarker.defaultProps = {
   valueSuffix: ''
 };
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   markerStyle: {
-    ...Platform.select({
-      ios: {
-        height: '20@vs',
-        width: '20@vs',
-        borderRadius: '10@vs',
-        borderWidth: '1@vs',
-        borderColor: '#dddddd',
-        backgroundColor: '#ffffff',
-        shadowColor: '#000000',
-        shadowOffset: {
-          width: 0,
-          height: '3@vs'
-        },
-        shadowRadius: '1@vs',
-        shadowOpacity: 0.2
+    '@media ios': {
+      height: '20rem',
+      width: '20rem',
+      borderRadius: '10rem',
+      borderWidth: '1rem',
+      borderColor: '#dddddd',
+      backgroundColor: '#ffffff',
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: '3rem'
       },
-      android: {
-        height: '20@vs',
-        width: '20@vs',
-        borderRadius: '10@vs',
-        backgroundColor: '#0d8675'
-      }
-    })
+      shadowRadius: '1rem',
+      shadowOpacity: 0.2
+    },
+    '@media android': {
+      height: '20rem',
+      width: '20rem',
+      borderRadius: '10rem',
+      backgroundColor: '#0d8675'
+    }
   },
   pressedMarkerStyle: {
-    ...Platform.select({
-      ios: {},
-      android: {
-        height: '20@vs',
-        width: '20@vs',
-        borderRadius: '20@vs'
-      }
-    })
+    '@media android': {
+      height: '20rem',
+      width: '20rem',
+      borderRadius: '20rem'
+    }
   },
   valueStyle: {
-    ...Platform.select({
-      ios: {},
-      android: {
-        top: '-20@vs'
-      }
-    }),
+    '@media android': {
+      top: '-20rem'
+    },
     position: 'absolute',
     alignSelf: 'center',
     color: '#4c39e8',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   pressedValueStyle: {
-    ...Platform.select({
-      ios: {},
-      android: {
-        top: '-16@vs'
-      }
-    })
+    '@media android': {
+      top: '-16rem'
+    }
   },
   disabled: {
     backgroundColor: '#d3d3d3'

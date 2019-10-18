@@ -1,15 +1,12 @@
 
 import React, { Component } from 'react';
 import { Image, Platform, Text, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
-import { connect } from 'react-redux';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
 
-const Color = require('color');
-
-class ImportMedia extends Component {
+export default class ImportMedia extends Component {
   onClickImportInstagram = () => {}
 
   onClickImportCameraRoll = () => {}
@@ -20,20 +17,11 @@ class ImportMedia extends Component {
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
+      <View style={styles.container}>
         <SceneHeader />
-        <View style={{ marginHorizontal: verticalScale(60) }}>
-          <Text style={{
-            ...styles.titleText,
-            color: this.props.customTheme.title
-          }}>Import your media</Text>
-          <Text style={{
-            ...styles.smallText,
-            color: this.props.customTheme.label
-          }}>Do you want to import photos of products &amp; services you've performed?</Text>
+        <View style={styles.caption}>
+          <Text style={styles.titleText}>Import your media</Text>
+          <Text style={styles.smallText}>Do you want to import photos of products &amp; services you've performed?</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/ph-photos.png')} />
@@ -42,27 +30,27 @@ class ImportMedia extends Component {
             icon={{
               name: 'instagram',
               type: 'font-awesome',
-              size: verticalScale(20),
-              containerStyle: { marginRight: verticalScale(10) }
+              size: EStyleSheet.value('20rem'),
+              containerStyle: styles.buttonIcon
             }}
             title="Import from Instagram"
             titleStyle={styles.buttonTitle}
             onPress={this.onClickImportInstagram}
           />
           <ThemeButton
-            buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+            buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
             icon={{
               name: 'camera',
               type: 'font-awesome',
-              size: verticalScale(20),
-              containerStyle: { marginRight: verticalScale(10) }
+              size: EStyleSheet.value('20rem'),
+              containerStyle: styles.buttonIcon
             }}
             title="Import from Camera roll"
             titleStyle={styles.buttonTitle}
             onPress={this.onClickImportCameraRoll}
           />
           <ThemeButton
-            buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+            buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
             title="Skip for now"
             titleStyle={styles.buttonTitle}
             onPress={this.onClickSkip}
@@ -74,43 +62,44 @@ class ImportMedia extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: '16@vs'
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
+  },
+  caption: {
+    marginHorizontal: '60rem'
   },
   titleText: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   smallText: {
-    marginBottom: '10@vs',
+    marginBottom: '10rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
-    marginTop: '20@vs'
+    fontSize: '14rem',
+    marginTop: '20rem'
   },
   banner: {
     flex: 1,
     resizeMode: 'contain',
-    marginVertical: '30@vs'
+    marginVertical: '30rem'
   },
   button: {
-    width: '254@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '48rem',
+    borderRadius: '12rem'
+  },
+  buttonIcon: {
+    marginRight: '10rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   }
 });
-
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
-});
-
-export default connect(mapStateToProps)(ImportMedia);

@@ -1,8 +1,8 @@
 
 import React, { Component, Fragment } from 'react';
-import { Animated, FlatList, Image, Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import Toast from 'react-native-simple-toast';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
@@ -10,8 +10,6 @@ import { connect } from 'react-redux';
 import { getSuggestedArtists } from '../../controllers/artist/actions';
 import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
-
-const Color = require('color');
 
 const criteria = [0, 1, 2, 3, 4];
 
@@ -54,9 +52,9 @@ class SuggestedArtists extends Component {
             key={index}
             type="font-awesome"
             name="star"
-            size={verticalScale(16)}
-            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
-            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
+            size={EStyleSheet.value('16rem')}
+            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+            containerStyle={{ marginHorizontal: EStyleSheet.value(spacing) }}
           />
         ))}
       </Fragment>
@@ -67,42 +65,33 @@ class SuggestedArtists extends Component {
     const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
-      <View style={{ paddingHorizontal: verticalScale(8), marginVertical: verticalScale(48) }}>
+      <View style={styles.cardWrapper}>
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
           <View style={{
             ...styles.card,
-            borderColor: checked ? this.props.customTheme.palette.secondary : this.props.customTheme.card,
-            backgroundColor: this.props.customTheme.card,
-            ...this.props.customTheme.shadows[3]
+            borderColor: EStyleSheet.value(checked ? '$secondaryColor' : '$card'),
+            ...this.props.appTheme.styles.shadow4
           }}>
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View style={{ flex: 1, marginBottom: verticalScale(8) }}>
+              <View style={styles.avatarWrapper}>
                 <Image source={{ uri: item.avatar }} style={styles.avatar} />
               </View>
               {checked && (
-                <Icon type="font-awesome" name="check-circle" size={verticalScale(24)} color={this.props.customTheme.palette.secondary} />
+                <Icon type="font-awesome" name="check-circle" size={EStyleSheet.value('24rem')} color={EStyleSheet.value('$secondaryColor')} />
               )}
             </View>
-            <Text style={{
-              ...styles.name,
-              color: this.props.customTheme.title
-            }}>{item.fullName}</Text>
-            <View style={{ flexDirection: 'row', overflow: 'hidden', marginTop: verticalScale(10), marginBottom: verticalScale(16) }}>
+            <Text style={styles.name}>{item.fullName}</Text>
+            <View style={styles.tagBar}>
               {item.tags.map((tag, subIndex) => (
                 <Text key={subIndex} style={{
                   ...styles.tag,
-                  marginRight: subIndex < item.tags.length - 1 ? verticalScale(4) : 0,
-                  color: this.props.customTheme.tagTitle,
-                  backgroundColor: this.props.customTheme.tag
+                  marginRight: subIndex < item.tags.length - 1 ? EStyleSheet.value('4rem') : 0
                 }}>{tag}</Text>
               ))}
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(16) }}>
+            <View style={styles.scoreReview}>
               {this.renderScore(item.score, 2)}
-              <Text style={{
-                ...styles.reviews,
-                color: this.props.customTheme.label
-              }}>{item.reviews} reviews</Text>
+              <Text style={styles.reviews}>{item.reviews} reviews</Text>
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.products.map((product, subIndex) => (
@@ -117,20 +106,11 @@ class SuggestedArtists extends Component {
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
+      <View style={styles.container}>
         <SceneHeader />
-        <View style={{ marginHorizontal: verticalScale(60) }}>
-          <Text style={{
-            ...styles.titleText,
-            color: this.props.customTheme.title
-          }}>Suggested artists</Text>
-          <Text style={{
-            ...styles.smallText,
-            color: this.props.customTheme.label
-          }}>We’ve hand picked several amazing artists around you to follow</Text>
+        <View style={styles.caption}>
+          <Text style={styles.titleText}>Suggested artists</Text>
+          <Text style={styles.smallText}>We’ve hand picked several amazing artists around you to follow</Text>
         </View>
         <View style={{ flex: 1 }}>
           <FlatList
@@ -138,8 +118,8 @@ class SuggestedArtists extends Component {
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
             horizontal
-            ListHeaderComponent={() => <View style={{ width: verticalScale(8) }} />}
-            ListFooterComponent={() => <View style={{ width: verticalScale(8) }} />}
+            ListHeaderComponent={() => <View style={styles.listMargin} />}
+            ListFooterComponent={() => <View style={styles.listMargin} />}
           />
         </View>
         <View style={{ alignItems: 'center' }}>
@@ -150,7 +130,7 @@ class SuggestedArtists extends Component {
             onPress={this.onClickFollow}
           />
           <ThemeButton
-            buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+            buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
             title="Skip for now"
             titleStyle={styles.buttonTitle}
             onPress={this.onClickSkip}
@@ -161,68 +141,101 @@ class SuggestedArtists extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: '16@vs'
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
+  },
+  caption: {
+    marginHorizontal: '60rem'
   },
   titleText: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   smallText: {
-    marginTop: '16@vs',
-    marginBottom: '20@vs',
+    marginTop: '16rem',
+    marginBottom: '20rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
+  },
+  listMargin: {
+    width: '8rem'
+  },
+  cardWrapper: {
+    paddingHorizontal: '8rem',
+    marginVertical: '48rem'
   },
   card: {
-    width: '254@vs',
-    height: '272@vs',
-    padding: '24@vs',
-    borderWidth: '2@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '272rem',
+    padding: '24rem',
+    borderWidth: '2rem',
+    borderRadius: '12rem',
+    backgroundColor: '$card'
+  },
+  avatarWrapper: {
+    flex: 1,
+    marginBottom: '8rem'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   name: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
+  tagBar: {
+    flexDirection: 'row',
+    overflow: 'hidden',
+    marginTop: '10rem',
+    marginBottom: '16rem'
+  },
   tag: {
-    marginHorizontal: '2@vs',
-    borderRadius: '4@vs',
-    paddingHorizontal: '4@vs',
-    paddingVertical: '2@vs',
+    marginHorizontal: '2rem',
+    borderRadius: '4rem',
+    paddingHorizontal: '4rem',
+    paddingVertical: '2rem',
+    backgroundColor: '$tag',
+    color: '$tagTitle',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     textTransform: 'capitalize'
   },
+  scoreReview: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: '16rem'
+  },
   reviews: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '10@vs'
+    fontSize: '10rem'
   },
   button: {
-    width: '254@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '48rem',
+    borderRadius: '12rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   },
   product: {
-    width: '64@vs',
-    height: '64@vs',
-    borderRadius: '4@vs'
+    width: '64rem',
+    height: '64rem',
+    borderRadius: '4rem'
   }
 });
 
@@ -230,7 +243,7 @@ const mapStateToProps = ({
   common: { theme },
   artist: { suggestedArtists }
 }) => ({
-  customTheme: theme,
+  appTheme: theme,
   suggestedArtists
 });
 

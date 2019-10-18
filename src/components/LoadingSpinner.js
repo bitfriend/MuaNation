@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Dimensions, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { connect } from 'react-redux';
 
 class LoadingSpinner extends Component {
@@ -7,7 +7,6 @@ class LoadingSpinner extends Component {
     console.log('loading', this.props.loading);
     if (this.props.loading === 0)
       return null;
-    const { width: windowWidth } = Dimensions.get('window');
     return (
       <View style={{
         position: 'absolute',

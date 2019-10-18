@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
 export default class FixedTabBar extends Component {
@@ -14,21 +14,21 @@ export default class FixedTabBar extends Component {
       flexDirection: 'row'
     };
     if (!label) {
-      tabStyle.padding = verticalScale(4);
+      tabStyle.padding = EStyleSheet.value('4rem');
     }
     const normalLabelStyle = {
-      ...styles.tabItem,
+      ...styles.label,
       ...this.props.labelStyle,
       color: focused ? this.props.activeTintColor : this.props.inactiveTintColor
     };
-    const focusedLabelStyle = {
+    const focusedLabelStyle = EStyleSheet.create({
       ...normalLabelStyle,
       borderBottomColor: this.props.activeTintColor,
-      borderBottomWidth: verticalScale(2)
-    };
+      borderBottomWidth: '2rem'
+    });
     return (
       <View style={tabStyle}>
-        <View style={{ marginHorizontal: verticalScale(16), flexDirection: 'row' }}>
+        <View style={styles.tabItem}>
           <Text style={focused ? focusedLabelStyle : normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
           <Text style={normalLabelStyle}>{label.substring(1)}</Text>
         </View>
@@ -39,8 +39,13 @@ export default class FixedTabBar extends Component {
   render() {
     const { navigationState, getLabelText, style } = this.props;
     const { routes } = navigationState;
+    const barStyle = EStyleSheet.create({
+      ...style,
+      flexDirection: 'row',
+      paddingVertical: '8rem'
+    });
     return (
-      <View style={{ ...style, flexDirection: 'row', paddingVertical: verticalScale(8) }}>
+      <View style={barStyle}>
         {routes.map((route, index) => (
           <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
             {this.renderItem(index === navigationState.index, getLabelText({ route }))}
@@ -51,10 +56,14 @@ export default class FixedTabBar extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   tabItem: {
+    flexDirection: 'row',
+    marginHorizontal: '16rem'
+  },
+  label: {
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   }
 });

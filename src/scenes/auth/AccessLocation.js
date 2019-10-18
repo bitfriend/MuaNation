@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Image, Platform, Text, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -9,27 +9,18 @@ import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
-class AccessLocation extends Component {
+export default class AccessLocation extends Component {
   onClickAllow = () => {
     this.props.navigation.navigate('SuggestedArtists');
   }
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
+      <View style={styles.container}>
         <SceneHeader />
-        <View style={{ marginHorizontal: verticalScale(60) }}>
-          <Text style={{
-            ...styles.titleText,
-            color: this.props.customTheme.title
-          }}>Location access</Text>
-          <Text style={{
-            ...styles.smallText,
-            color: this.props.customTheme.label
-          }}>We want to help you find best services around, for that we need to know your current location</Text>
+        <View style={styles.caption}>
+          <Text style={styles.titleText}>Location access</Text>
+          <Text style={styles.smallText}>We want to help you find best services around, for that we need to know your current location</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/ph-location.png')} />
@@ -45,44 +36,42 @@ class AccessLocation extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: '16@vs'
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
+  },
+  caption: {
+    marginHorizontal: '60rem'
   },
   titleText: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   smallText: {
-    marginTop: '20@vs',
-    marginBottom: '10@vs',
+    marginTop: '20rem',
+    marginBottom: '10rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   banner: {
     flex: 1,
     resizeMode: 'contain',
-    marginVertical: '48@vs'
+    marginVertical: '48rem'
   },
   button: {
-    width: '254@vs',
-    height: '48@vs',
-    marginTop: '16@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '48rem',
+    marginTop: '16rem',
+    borderRadius: '12rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   }
 });
-
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
-});
-
-export default connect(mapStateToProps)(AccessLocation);

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Platform, StatusBar, StyleSheet } from 'react-native';
 import { Header } from 'react-native-elements';
-import { verticalScale } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 
 class SceneHeader extends Component {
   render() {
@@ -14,9 +12,9 @@ class SceneHeader extends Component {
       leftIcon = {
         icon: 'arrow-back',
         type: 'ionicons',
-        color: this.props.customTheme.palette.grey0,
-        size: verticalScale(20),
-        iconStyle: { padding: verticalScale(10) },
+        color: EStyleSheet.value('$grey0Color'),
+        size: EStyleSheet.value('20rem'),
+        iconStyle: styles.leftIcon,
         containerStyle: { marginLeft: 0 },
         onPress: () => this.props.navigation.pop()
       };
@@ -29,12 +27,7 @@ class SceneHeader extends Component {
         leftComponent={leftIcon}
         centerComponent={this.props.title ? {
           text: this.props.title,
-          style: {
-            color: this.props.customTheme.palette.grey0,
-            fontSize: verticalScale(24),
-            fontWeight: 'bold',
-            fontFamily: 'Lato'
-          }
+          style: styles.center
         } : undefined}
         rightComponent={this.props.rightIcon ? this.props.rightIcon : undefined}
       />
@@ -50,22 +43,27 @@ SceneHeader.defaultProps = {
   leftIcon: true
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
-    height: Platform.OS === 'ios' ? verticalScale(88) : verticalScale(88) - StatusBar.currentHeight,
+    '@media ios': {
+      height: '88rem'
+    },
+    '@media android': {
+      height: EStyleSheet.value('88rem') - StatusBar.currentHeight
+    },
     backgroundColor: 'transparent',
     borderBottomColor: undefined,
     borderBottomWidth: undefined
+  },
+  leftIcon: {
+    padding: '10rem'
+  },
+  center: {
+    color: '$grey0Color',
+    fontSize: '24rem',
+    fontWeight: 'bold',
+    fontFamily: 'Lato'
   }
 });
 
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
-});
-
-export default compose(
-  withNavigation,
-  connect(mapStateToProps)
-)(SceneHeader);
+export default withNavigation(SceneHeader);
