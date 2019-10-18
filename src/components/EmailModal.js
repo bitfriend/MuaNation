@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, Text, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
-import { connect } from 'react-redux';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
 const Color = require('color');
 
-class EmailModal extends Component {
+export default class EmailModal extends Component {
   state = {
     email: ''
   }
@@ -15,57 +14,36 @@ class EmailModal extends Component {
   render() {
     return (
       <Modal animationType="fade" transparent={true} visible={this.props.visible}>
-        <View style={{
-          ...styles.overlay,
-          backgroundColor: this.props.customTheme.overlays[0]
-        }}>
-          <View style={{
-            ...styles.container,
-            backgroundColor: this.props.customTheme.container
-          }}>
-            <Text style={{
-              ...styles.caption,
-              color: this.props.customTheme.label
-            }}>Please enter the email for Instagram</Text>
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            <Text style={styles.caption}>Please enter the email for Instagram</Text>
             <Input
-              containerStyle={styles.inputContainer}
-              inputContainerStyle={{ backgroundColor: this.props.customTheme.inputContainer }}
+              containerStyle={inputStyles.container}
+              inputContainerStyle={inputStyles.inputContainer}
               leftIcon={{
                 name: 'envelope',
                 type: 'font-awesome',
-                size: verticalScale(20),
-                color: this.props.customTheme.input
+                size: EStyleSheet.value('20rem'),
+                color: EStyleSheet.value('$input')
               }}
               placeholder="Email"
-              placeholderTextColor={this.props.customTheme.placeholder}
-              inputStyle={{ color: this.props.customTheme.input }}
+              placeholderTextColor={EStyleSheet.value('$placeholder')}
+              inputStyle={inputStyles.input}
               onChangeText={(email) => this.setState({ email })}
             />
             <View style={{ flexDirection: 'row' }}>
               <Button
                 containerStyle={buttonStyles.container}
-                buttonStyle={{
-                  ...buttonStyles.button,
-                  backgroundColor: this.props.customTheme.palette.secondary
-                }}
+                buttonStyle={buttonStyles.primaryButton}
                 title="OK"
-                titleStyle={{
-                  ...buttonStyles.title,
-                  color: this.props.customTheme.buttonTitle
-                }}
+                titleStyle={buttonStyles.primaryTitle}
                 onPress={() => this.props.onAccept && this.props.onAccept(this.state.email)}
               />
               <Button
                 containerStyle={buttonStyles.container}
-                buttonStyle={{
-                  ...buttonStyles.button,
-                  backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
-                }}
+                buttonStyle={buttonStyles.secondaryButton}
                 title="Cancel"
-                titleStyle={{
-                  ...buttonStyles.title,
-                  color: this.props.customTheme.palette.secondary
-                }}
+                titleStyle={buttonStyles.secondaryTitle}
                 onPress={() => this.props.onReject && this.props.onReject()}
               />
             </View>
@@ -76,37 +54,60 @@ class EmailModal extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '$overlay0Color'
   },
   container: {
-    borderRadius: '12@vs',
-    marginHorizontal: '10@vs',
-    padding: '5@vs'
+    borderRadius: '12rem',
+    marginHorizontal: '10rem',
+    padding: '5rem',
+    backgroundColor: '$container'
   },
   caption: {
-    padding: '10@vs',
+    padding: '10rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '16@vs'
-  },
-  inputContainer: {
-    padding: '5@vs'
+    fontSize: '16rem'
   }
 });
 
-const buttonStyles = ScaledSheet.create({
+const inputStyles = EStyleSheet.create({
+  container: {
+    padding: '5rem'
+  },
+  inputContainer: {
+    backgroundColor: '$inputContainer'
+  },
+  input: {
+    color: '$input'
+  }
+});
+
+const buttonStyles = EStyleSheet.create({
   container: {
     flex: 1,
-    padding: '5@vs'
+    padding: '5rem'
   },
-  button: {
-    borderRadius: '12@vs'
+  primaryButton: {
+    borderRadius: '12rem',
+    backgroundColor: '$secondaryColor'
   },
-  title: {
+  secondaryButton: {
+    borderRadius: '12rem',
+    backgroundColor: Color(EStyleSheet.value('$secondaryColor')).alpha(0.1).string()
+  },
+  primaryTitle: {
+    color: '$buttonTitle',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
+  },
+  secondaryTitle: {
+    color: '$secondaryColor',
+    fontFamily: 'Roboto',
+    fontSize: '14rem'
   }
 });
 
@@ -119,11 +120,3 @@ EmailModal.propTypes = {
 EmailModal.defaultProps = {
   visible: false
 };
-
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
-});
-
-export default connect(mapStateToProps)(EmailModal);

@@ -1,87 +1,80 @@
-import { verticalScale } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { primary, secondary, success, warning, danger, white, black } from './common';
 
-export const palette = {
-  primary,
-  secondary,
-  success,
-  warning,
-  danger,
-  black,
-  white,
-  grey0: '#43393d',
-  grey1: '#8f888b',
-  grey2: '#d8d7dc',
-  grey3: '#edecec'
+export const lightColors = {
+  $primaryColor: primary,
+  $secondaryColor: secondary,
+  $successColor: success,
+  $warningColor: warning,
+  $dangerColor: danger,
+  $blackColor: black,
+  $whiteColor: white,
+  $grey0Color: '#43393d',
+  $grey1Color: '#8f888b',
+  $grey2Color: '#d8d7dc',
+  $grey3Color: '#edecec',
+  $gradient0StartColor: '#ce4d82',
+  $gradient0EndColor: '#4c39e8',
+  $gradient1StartColor: '#ed7d3a',
+  $gradient1EndColor: '#ce4d82',
+  $overlay0Color: 'rgba(20, 7, 12, 0.8)',
+  $overlay1Color: 'rgba(206, 77, 130, 0.8)'
 };
 
-export const gradients = [{
-  start: '#ce4d82',
-  end: '#4c39e8'
-},{
-  start: '#ed7d3a',
-  end: '#ce4d82'
-}];
-
-export const overlays = ['rgba(20, 7, 12, 0.8)', 'rgba(206, 77, 130, 0.8)'];
-
-import { Platform } from 'react-native';
-
-export const buttonShadow = Platform.select({
-  ios: {
-    shadowRadius: verticalScale(6),
-    shadowColor: '#ef4492',
-    shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: verticalScale(6) }
+export const lightStyles = EStyleSheet.create({
+  buttonShadow: {
+    '@media ios': {
+      shadowRadius: '6rem',
+      shadowColor: '#ef4492',
+      shadowOpacity: 0.4,
+      shadowOffset: { width: 0, height: '6rem' }
+    },
+    '@media android': {
+      elevation: '6rem'
+    }
   },
-  android: {
-    elevation: verticalScale(6)
-  }
-});
-
-export const shadows = [
-  Platform.select({
-    ios: {
-      shadowRadius: verticalScale(4),
+  shadow1: {
+    '@media ios': {
+      shadowRadius: '4rem',
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: verticalScale(2) }
+      shadowOffset: { width: 0, height: '2rem' }
     },
-    android: {
-      elevation: verticalScale(2)
+    '@media android': {
+      elevation: '2rem'
     }
-  }),
-  Platform.select({
-    ios: {
-      shadowRadius: verticalScale(8),
+  },
+  shadow2: {
+    '@media ios': {
+      shadowRadius: '8rem',
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.08,
-      shadowOffset: { width: verticalScale(1), height: verticalScale(4) }
+      shadowOffset: { width: '1rem', height: '4rem' }
     },
-    android: {
-      elevation: verticalScale(4)
+    '@media android': {
+      elevation: '4rem'
     }
-  }),
-  Platform.select({
-    ios: {
-      shadowRadius: verticalScale(16),
+  },
+  shadow3: {
+    '@media ios': {
+      shadowRadius: '16rem',
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.06,
-      shadowOffset: { width: verticalScale(2), height: verticalScale(12) }
+      shadowOffset: { width: '2rem', height: '12rem' }
     },
-    android: {
-      elevation: verticalScale(12)
+    '@media android': {
+      elevation: '12rem'
     }
-  }),
-  Platform.select({
-    ios: {
-      shadowRadius: verticalScale(24),
+  },
+  shadow4: {
+    '@media ios': {
+      shadowRadius: '24rem',
       shadowColor: 'rgb(37, 9, 19)',
       shadowOpacity: 0.06,
-      shadowOffset: { width: verticalScale(3), height: verticalScale(16) }
+      shadowOffset: { width: '3rem', height: '16rem' }
     },
-    android: {
-      elevation: verticalScale(16)
+    '@media android': {
+      elevation: '16rem'
     }
-  }),
-];
+  },
+});

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
-import { verticalScale } from 'react-native-size-matters';
-import { connect } from 'react-redux';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-class Splash extends Component {
+export default class Splash extends Component {
   componentDidMount() {
     this._bootstrapAsync();
   }
@@ -30,28 +29,25 @@ class Splash extends Component {
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
-        colors={[this.props.customTheme.gradients[0].start, this.props.customTheme.gradients[0].end]}
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
+        colors={[EStyleSheet.value('$gradient0StartColor'), EStyleSheet.value('$gradient0EndColor')]}
+        style={styles.gradient}
       >
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Image source={require('../../asset/images/logo.png')} style={{
-            width: verticalScale(180),
-            height: verticalScale(172)
-          }} />
+          <Image source={require('../../asset/images/logo.png')} style={styles.logo} />
         </View>
       </LinearGradient>
     );
   }
 }
 
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
+const styles = EStyleSheet.create({
+  gradient: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  logo: {
+    width: '180rem',
+    height: '172rem'
+  }
 });
-
-export default connect(mapStateToProps)(Splash);

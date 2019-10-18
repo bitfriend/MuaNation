@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Image, Modal, Platform, Text, View } from 'react-native';
 import { Input } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import Swiper from 'react-native-swiper';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
@@ -46,29 +46,20 @@ class SignIn extends Component {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{
-            ...styles.welcome,
-            color: this.props.customTheme.title
-          }}>Welcome to</Text>
-          <View style={{ margin: verticalScale(10) }}>
-            <Text style={{
-              ...styles.mua,
-              color: this.props.customTheme.palette.secondary
-            }}>Mua's</Text>
-            <Text style={{
-              ...styles.place,
-              color: this.props.customTheme.label
-            }}>place for professionals</Text>
+          <Text style={styles.welcome}>Welcome to</Text>
+          <View style={styles.where}>
+            <Text style={styles.mua}>Mua's</Text>
+            <Text style={styles.place}>place for professionals</Text>
           </View>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Swiper
-            dotColor={Color(this.props.customTheme.palette.grey0).alpha(0.3).string()}
+            dotColor={Color(EStyleSheet.value('$grey0Color')).alpha(0.3).string()}
             dotStyle={styles.pageDot}
-            activeDotColor={this.props.customTheme.palette.grey0}
+            activeDotColor={EStyleSheet.value('$grey0Color')}
             activeDotStyle={styles.pageDot}
-            containerStyle={{ paddingBottom: verticalScale(16) }}
-            paginationStyle={{ bottom: verticalScale(-8) }}
+            containerStyle={styles.swiperContainer}
+            paginationStyle={styles.swiperPagination}
           >
             <View>
               <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/images/splash1.png')} />
@@ -87,37 +78,34 @@ class SignIn extends Component {
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
+      <View style={styles.container}>
         {this.renderGallery()}
         <ThemeButton
-          buttonStyle={{ ...styles.button, marginTop: verticalScale(24) }}
+          buttonStyle={styles.button}
           icon={{
             name: 'facebook',
             type: 'font-awesome',
-            size: verticalScale(20),
-            containerStyle: { marginRight: verticalScale(10) }
+            size: EStyleSheet.value('20rem'),
+            containerStyle: styles.buttonIconContainer
           }}
           title="Login with Facebook"
           titleStyle={styles.buttonTitle}
           onPress={this.onClickFacebook}
         />
         <ThemeButton
-          buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+          buttonStyle={styles.button}
           icon={{
             name: 'instagram',
             type: 'font-awesome',
-            size: verticalScale(20),
-            containerStyle: { marginRight: verticalScale(10) }
+            size: EStyleSheet.value('20rem'),
+            containerStyle: styles.buttonIconContainer
           }}
           title="Login with Instagram"
           titleStyle={styles.buttonTitle}
           onPress={this.onClickInstagram}
         />
         <InstagramLogin
-          containerStyle={{ backgroundColor: this.props.customTheme.overlays[0] }}
+          containerStyle={styles.instagramContainer}
           ref={c => this.instagramLogin = c}
           clientId="2862949e166644b3a94fc2c483d744f2"
           redirectUrl="https://muanation.com/"
@@ -135,17 +123,11 @@ class SignIn extends Component {
             Alert.alert(reason);
           }}
         />
-        <Text style={{
-          ...styles.question,
-          color: this.props.customTheme.label
-        }}>New to the platform?</Text>
+        <Text style={styles.question}>New to the platform?</Text>
         <ThemeButton
-          buttonStyle={{ ...styles.button, marginTop: verticalScale(16) }}
+          buttonStyle={styles.button}
           title="Create an account"
-          titleStyle={{
-            ...styles.buttonTitle,
-            color: this.props.customTheme.palette.secondary
-          }}
+          titleStyle={styles.buttonTitle}
           onPress={this.onClickSignup}
           isPrimary={false}
         />
@@ -162,56 +144,63 @@ class SignIn extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '$container',
     alignItems: 'center',
-    paddingBottom: '16@vs'
+    paddingBottom: '16rem'
   },
   welcome: {
     fontFamily: 'Lato',
-    fontSize: '24@vs',
-    fontWeight: 'bold'
+    fontSize: '24rem',
+    fontWeight: 'bold',
+    color: '$title'
+  },
+  where: {
+    margin: '10rem'
   },
   mua: {
     fontFamily: 'Lato',
-    fontSize: '38@vs',
-    fontWeight: 'bold'
+    fontSize: '38rem',
+    fontWeight: 'bold',
+    color: '$secondaryColor'
   },
   place: {
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem',
+    color: '$label'
   },
   banner: {
     width: '100%',
     height: '100%'
   },
   pageDot: {
-    width: '7@vs',
-    height: '7@vs',
-    borderRadius: '3.5@vs'
+    width: '7rem',
+    height: '7rem',
+    borderRadius: '3.5rem'
   },
+  swiperContainer: { paddingBottom: '16rem' },
+  swiperPagination: { bottom: '-8rem' },
   button: {
-    width: '254@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '254rem',
+    height: '48rem',
+    borderRadius: '12rem',
+    marginTop: '16rem'
   },
+  buttonIconContainer: { marginRight: '10rem' },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   },
+  instagramContainer: { backgroundColor: '$overlay0Color' },
   question: {
-    marginTop: '24@vs',
+    marginTop: '24rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   }
-});
-
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
 });
 
 const mapDispatchToProps = (dispacth) => ({
@@ -220,4 +209,4 @@ const mapDispatchToProps = (dispacth) => ({
   signInWithInstagramFailure: () => dispacth({ type: types.SIGN_IN_WITH_INSTAGRAM_FAILURE })
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(null, mapDispatchToProps)(SignIn);

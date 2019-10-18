@@ -1,88 +1,57 @@
-import * as types from './types';
-import {
-  palette as lightPalette,
-  gradients as lightGradients,
-  overlays as lightOverlays,
-  buttonShadow as lightButtonShadow,
-  shadows as lightShadows
-} from '../../components/theme/light';
-import {
-  palette as darkPalette,
-  gradients as darkGradients,
-  overlays as darkOverlays,
-  buttonShadow as darkButtonShadow,
-  shadows as darkShadows
-} from '../../components/theme/dark';
+import { Dimensions } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-function getLightTheme() {
-  return {
-    palette: lightPalette,
-    gradients: lightGradients,
-    overlays: lightOverlays,
-    buttonShadow: lightButtonShadow,
-    shadows: lightShadows,
-    container: lightPalette.white,
-    title: lightPalette.black,
-    label: lightPalette.grey1,
-    buttonTitle: lightPalette.white,
-    inputContainer: lightPalette.grey3,
-    input: lightPalette.grey0,
-    placeholder: lightPalette.grey1,
-    card: lightPalette.white,
-    tag: lightPalette.grey2,
-    tagTitle: lightPalette.grey1,
-    tabTitle: lightPalette.grey0,
-    heading: lightPalette.grey1,
-    extra: lightPalette.grey0,
-    drawer: lightPalette.grey2,
-    checkedButton: lightPalette.grey0,
-    checkedButtonTitle: lightPalette.grey3,
-    uncheckedButton: lightPalette.white,
-    uncheckedButtonTitle: lightPalette.grey0,
-    toggledButton: lightPalette.primary,
-    toggledButtonTitle: lightPalette.grey3,
-    fullStar: lightPalette.warning,
-    emptyStar: lightPalette.grey2
-  };
-}
+const { width: windowWidth } = Dimensions.get('window');
+const rem = windowWidth / 375;
 
-function getDarkTheme() {
-  return {
-    palette: darkPalette,
-    gradients: darkGradients,
-    overlays: darkOverlays,
-    buttonShadow: darkButtonShadow,
-    shadows: darkShadows,
-    container: darkPalette.black,
-    title: darkPalette.grey0,
-    label: darkPalette.grey2,
-    buttonTitle: darkPalette.black,
-    inputContainer: darkPalette.grey3,
-    input: darkPalette.grey0,
-    placeholder: darkPalette.grey1,
-    card: darkPalette.grey3,
-    tag: darkPalette.grey2,
-    tagTitle: darkPalette.grey1,
-    tabTitle: darkPalette.grey1,
-    heading: darkPalette.grey2,
-    extra: darkPalette.black,
-    drawer: darkPalette.grey2,
-    checkedButton: darkPalette.grey0,
-    checkedButtonTitle: darkPalette.grey3,
-    uncheckedButton: darkPalette.black,
-    uncheckedButtonTitle: darkPalette.grey0,
-    toggledButton: darkPalette.primary,
-    toggledButtonTitle: darkPalette.grey0,
-    fullStar: darkPalette.warning,
-    emptyStar: darkPalette.grey2
-  };
-}
+// Pre-define $rem to calculate lightStyles and darkStyles
+EStyleSheet.build({
+  $rem: rem
+});
+
+import { lightColors, lightStyles } from '../../components/theme/light';
+import { darkColors, darkStyles } from '../../components/theme/dark';
+
+const themeName = 'light';
+const themeColors = themeName === 'light' ? lightColors : darkColors;
+
+const appColors = {
+  ...themeColors,
+  $container: themeColors[themeName === 'light' ? '$whiteColor' : '$blackColor'],
+  $title: themeColors[themeName === 'light' ? '$blackColor' : '$grey0Color'],
+  $label: themeColors[themeName === 'light' ? '$grey1Color' : '$grey2Color'],
+  $buttonTitle: themeColors[themeName === 'light' ? '$whiteColor' : '$blackColor'],
+  $inputContainer: themeColors['$grey3Color'],
+  $input: themeColors['$grey0Color'],
+  $placeholder: themeColors['$grey1Color'],
+  $card: themeColors[themeName === 'light' ? '$whiteColor' : '$grey3Color'],
+  $tag: themeColors['$grey2Color'],
+  $tagTitle: themeColors['$grey1Color'],
+  $tabTitle: themeColors[themeName === 'light' ? '$grey0Color' : '$grey1Color'],
+  $heading: themeColors[themeName === 'light' ? '$grey1Color' : '$grey2Color'],
+  $extra: themeColors[themeName === 'light' ? '$grey0Color' : '$blackColor'],
+  $drawer: themeColors['$grey2Color'],
+  $checkedButton: themeColors['$grey0Color'],
+  $checkedButtonTitle: themeColors['$grey3Color'],
+  $uncheckedButton: themeColors[themeName === 'light' ? '$whiteColor' : '$blackColor'],
+  $uncheckedButtonTitle: themeColors['$grey0Color'],
+  $toggledButton: themeColors['$primaryColor'],
+  $toggledButtonTitle: themeColors[themeName === 'light' ? '$grey3Color' : '$grey0Color'],
+  $fullStar: themeColors['$warningColor'],
+  $emptyStar: themeColors['$grey2Color']
+};
+
+EStyleSheet.build({
+  $theme: themeName,
+  $rem: rem,
+  ...appColors
+});
 
 const initialState = {
   loading: 0,
   theme: {
-    name: 'light',
-    ...getLightTheme()
+    name: themeName,
+    styles: themeName === 'light' ? lightStyles : darkStyles
   },
   statusBar: {
     backgroundColor: 'transparent',
@@ -91,18 +60,7 @@ const initialState = {
   }
 };
 
-// const initialState = {
-//   loading: 0,
-//   theme: {
-//     name: 'dark',
-//     ...getDarkTheme()
-//   },
-//   statusBar: {
-//     backgroundColor: 'transparent',
-//     barStyle: 'dark-content',
-//     translucent: false
-//   }
-// };
+import * as types from './types';
 
 export default commonReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -119,20 +77,9 @@ export default commonReducer = (state = initialState, action) => {
     case types.CHANGE_THEME:
       return {
         ...state,
-        theme: action.payload === 'dark' ? {
+        theme: {
           name: action.payload,
-          palette: darkPalette,
-          gradients: darkGradients,
-          overlays: darkOverlays,
-          buttonShadow: darkButtonShadow,
-          shadows: darkShadows
-        } : {
-          name: action.payload,
-          palette: lightPalette,
-          gradients: lightGradients,
-          overlays: lightOverlays,
-          buttonShadow: lightButtonShadow,
-          shadows: lightShadows
+          styles: action.payload === 'light' ? lightStyles : darkStyles
         }
       };
     case types.CHANGE_STATUS_BAR:

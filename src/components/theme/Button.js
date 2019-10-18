@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -17,22 +18,22 @@ class ThemeButton extends Component {
           justifyContent: 'center',
           alignItems: 'center'
         }, this.props.isPrimary ? {
-          backgroundColor: this.props.customTheme.palette.secondary,
-          ...this.props.customTheme.buttonShadow
+          backgroundColor: EStyleSheet.value('$secondaryColor'),
+          ...this.props.appTheme.styles.buttonShadow
         } : {
-          backgroundColor: Color(this.props.customTheme.palette.secondary).alpha(0.1).string()
+          backgroundColor: Color(EStyleSheet.value('$secondaryColor')).alpha(0.1).string()
         }]}>
           {this.props.icon && !this.props.iconRight && (
-            <Icon {...this.props.icon} color={this.props.isPrimary ? this.props.customTheme.buttonTitle : this.props.customTheme.palette.secondary} />
+            <Icon {...this.props.icon} color={EStyleSheet.value(this.props.isPrimary ? '$buttonTitle' : '$secondaryColor')} />
           )}
           {!!this.props.title && (
             <Text style={{
               ...this.props.titleStyle,
-              color: this.props.isPrimary ? this.props.customTheme.buttonTitle : this.props.customTheme.palette.secondary
+              color: EStyleSheet.value(this.props.isPrimary ? '$buttonTitle' : '$secondaryColor')
             }}>{this.props.title}</Text>
           )}
           {this.props.icon && this.props.iconRight && (
-            <Icon {...this.props.icon} color={this.props.isPrimary ? this.props.customTheme.buttonTitle : this.props.customTheme.palette.secondary} />
+            <Icon {...this.props.icon} color={EStyleSheet.value(this.props.isPrimary ? '$buttonTitle' : '$secondaryColor')} />
           )}
         </TouchableOpacity>
       </View>
@@ -58,7 +59,7 @@ ThemeButton.defaultProps = {
 const mapStateToProps = ({
   common: { theme }
 }) => ({
-  customTheme: theme
+  appTheme: theme
 });
 
 export default connect(mapStateToProps)(ThemeButton);
