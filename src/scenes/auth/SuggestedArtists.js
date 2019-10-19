@@ -4,7 +4,6 @@ import { FlatList, Image, Text, TouchableWithoutFeedback, View } from 'react-nat
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Toast from 'react-native-simple-toast';
-import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
 import { getSuggestedArtists } from '../../controllers/artist/actions';

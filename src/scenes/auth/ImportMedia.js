@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image, Platform, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import SceneHeader from '../../components/SceneHeader';

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 

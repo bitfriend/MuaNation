@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Animated, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';

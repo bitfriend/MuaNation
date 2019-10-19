@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';

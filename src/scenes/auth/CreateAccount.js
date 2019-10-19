@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { Icon, Input } from 'react-native-elements';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';

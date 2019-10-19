@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Image, Modal, Platform, Text, View } from 'react-native';
-import { Input } from 'react-native-elements';
+import { Alert, Image, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Swiper from 'react-native-swiper';
 import InstagramLogin from 'react-native-instagram-login';

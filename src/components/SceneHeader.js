@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { Header } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { withNavigation } from 'react-navigation';
