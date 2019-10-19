@@ -193,6 +193,15 @@ const ProfileStackNav = createStackNavigator({
   transitionConfig,
   defaultNavigationOptions: {
     header: null
+  },
+  navigationOptions: ({ navigation }) => {
+    let tabBarVisible = false;
+    if (navigation.state.routes) {
+      const currentRoute = navigation.state.routes[navigation.state.routes.length - 1].routeName;
+      if (currentRoute === 'Account')
+        tabBarVisible = true;
+    }
+    return { tabBarVisible };
   }
 });
 
