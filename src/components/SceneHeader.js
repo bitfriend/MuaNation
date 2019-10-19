@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Header } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { withNavigation } from 'react-navigation';
@@ -15,7 +15,7 @@ class SceneHeader extends Component {
         color: EStyleSheet.value('$grey0Color'),
         size: EStyleSheet.value('20rem'),
         iconStyle: styles.leftIcon,
-        containerStyle: { marginLeft: 0 },
+        containerStyle: styles.leftIconContainer,
         onPress: () => this.props.navigation.pop()
       };
     } else if (typeof this.props.leftIcon === 'object') {
@@ -46,17 +46,26 @@ SceneHeader.defaultProps = {
 const styles = EStyleSheet.create({
   container: {
     '@media ios': {
-      height: '88rem'
+      height: EStyleSheet.value('44rem') + getStatusBarHeight(),
+      paddingTop: getStatusBarHeight()
     },
     '@media android': {
-      height: EStyleSheet.value('88rem') - StatusBar.currentHeight
+      height: '44rem',
+      paddingTop: 0
     },
+    paddingHorizontal: '16rem',
     backgroundColor: 'transparent',
     borderBottomColor: undefined,
     borderBottomWidth: undefined
   },
+  leftIconContainer: {
+    width: '40rem',
+    height: '40rem',
+    marginLeft: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   leftIcon: {
-    padding: '10rem'
   },
   center: {
     color: '$grey0Color',
