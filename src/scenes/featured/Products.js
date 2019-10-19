@@ -17,13 +17,10 @@ class Products extends Component {
 
   renderSaleProduct = ({ item, index, separators }) => {
     return (
-      <TouchableOpacity onPress={() => {
-        this.props.navigation.navigate('SaleProduct', { id: 0 });
-      }}>
-        <View style={styles.listItem}>
-          <View style={{
-            ...styles.listItemWrapper,
-            ...this.props.appTheme.styles.shadow4
+      <View style={saleStyles.itemWrapper}>
+        <View style={[saleStyles.item, this.props.appTheme.styles.shadow4]}>
+          <TouchableOpacity onPress={() => {
+            this.props.navigation.navigate('SaleProduct', { id: 0 });
           }}>
             <FastImage style={saleStyles.banner} source={{ uri: item.image }} resizeMode={FastImage.resizeMode.cover} />
             <View style={saleStyles.body}>
@@ -37,17 +34,17 @@ class Products extends Component {
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   }
 
   renderPopularProduct = ({ item, index, separators }) => {
     return (
       <TouchableOpacity style={{
-        ...styles.listItem,
-        width: this.popularImageWidth // Must psecify the width of item for multi-column list
+        ...popularStyles.item,
+        width: this.popularImageWidth // Must specify the width of item for multi-column list
       }} onPress={() => {
         this.props.navigation.navigate('PopularProduct', { id: 0 });
       }}>
@@ -107,14 +104,17 @@ const styles = EStyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: '14rem',
     fontWeight: 'bold'
+  }
+});
+
+const listItemStyles = EStyleSheet.create({
+  container: {
+    margin: '8rem'
   },
-  listItemWrapper: {
+  wrapper: {
     borderRadius: '12rem',
     backgroundColor: '$card',
   },
-  listItem: {
-    margin: '8rem'
-  }
 });
 
 const saleStyles = EStyleSheet.create({
@@ -126,6 +126,13 @@ const saleStyles = EStyleSheet.create({
   },
   listFooter: {
     width: '8rem'
+  },
+  itemWrapper: {
+    padding: '8rem'
+  },
+  item: {
+    borderRadius: '12rem',
+    backgroundColor: '$card'
   },
   banner: {
     width: EStyleSheet.value(saleImageWidth + 'rem'),
@@ -182,6 +189,9 @@ const saleStyles = EStyleSheet.create({
 const popularStyles = EStyleSheet.create({
   list: {
     paddingHorizontal: '8rem'
+  },
+  item: {
+    margin: '8rem'
   },
   caption: {
     flexDirection: 'row',
