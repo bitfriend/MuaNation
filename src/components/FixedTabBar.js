@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
@@ -40,11 +41,7 @@ export default class FixedTabBar extends Component {
     const { navigationState, getLabelText, style } = this.props;
     const { routes } = navigationState;
     return (
-      <View style={{
-        ...style,
-        flexDirection: 'row',
-        paddingVertical: EStyleSheet.value('8rem')
-      }}>
+      <View style={[style, styles.container]}>
         {routes.map((route, index) => (
           <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
             {this.renderItem(index === navigationState.index, getLabelText({ route }))}
@@ -56,6 +53,13 @@ export default class FixedTabBar extends Component {
 }
 
 const styles = EStyleSheet.create({
+  container: {
+    '@media ios': {
+      marginTop: getStatusBarHeight()
+    },
+    flexDirection: 'row',
+    paddingVertical: '8rem'
+  },
   tabItem: {
     flexDirection: 'row',
     marginHorizontal: '16rem'

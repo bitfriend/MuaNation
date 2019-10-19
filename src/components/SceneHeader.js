@@ -14,7 +14,6 @@ class SceneHeader extends Component {
         type: 'ionicons',
         color: EStyleSheet.value('$grey0Color'),
         size: EStyleSheet.value('20rem'),
-        iconStyle: styles.leftIcon,
         containerStyle: styles.leftIconContainer,
         onPress: () => this.props.navigation.pop()
       };
@@ -64,8 +63,6 @@ const styles = EStyleSheet.create({
     marginLeft: 0,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  leftIcon: {
   },
   center: {
     color: '$grey0Color',
