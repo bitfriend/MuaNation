@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -58,37 +58,33 @@ class Chats extends Component {
           data={this.props.chats}
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
-          ItemSeparatorComponent={() => (
-            <View style={{
-              ...styles.separator,
-              backgroundColor: this.props.customTheme.palette.grey3
-            }} />
-          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       </View>
     );
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   listItem: {
     flexDirection: 'row',
-    paddingHorizontal: '16@vs',
-    paddingTop: '16@vs',
-    paddingBottom: '12@vs'
+    paddingHorizontal: '16rem',
+    paddingTop: '16rem',
+    paddingBottom: '12rem'
   },
   separator: {
-    height: '1@vs',
-    marginHorizontal: '16@vs'
+    height: '1rem',
+    marginHorizontal: '16rem',
+    backgroundColor: '$grey3Color'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   body: {
     flex: 1,
-    marginLeft: '8@vs'
+    marginLeft: '8rem'
   },
   title: {
     flexDirection: 'row',
@@ -97,26 +93,24 @@ const styles = ScaledSheet.create({
   name: {
     flex: 1,
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   time: {
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   text: {
     flex: 1,
-    marginTop: '8@vs',
+    marginTop: '8rem',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   chat: { chats }
 }) => ({
-  customTheme: theme,
   chats
 });
 

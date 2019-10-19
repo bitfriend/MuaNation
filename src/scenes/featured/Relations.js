@@ -1,13 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
 import { getFollowers, getFollowing } from '../../controllers/relation/actions';
-
-const Color = require('color');
 
 class Relations extends Component {
   constructor(props) {
@@ -50,10 +48,7 @@ class Relations extends Component {
     return (
       <View style={styles.item}>
         <Image source={{ uri: item.avatar }} style={styles.avatar} />
-        <Text style={{
-          ...styles.name,
-          color: this.props.customTheme.title
-        }}>{item.fullName}</Text>
+        <Text style={styles.name}>{item.fullName}</Text>
         <ThemeButton
           isPrimary={!item.followed}
           buttonStyle={styles.button}
@@ -66,18 +61,12 @@ class Relations extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
+      <View style={styles.container}>
         <SceneHeader title={this.props.navigation.getParam('fullName')} />
-        <View style={styles.container}>
+        <View style={styles.body}>
           {this.tabs.map((tab, index) => (
             <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
-              <Text style={[styles.tab, tab === this.state.activeTab ? {
-                ...styles.activeTab,
-                color: this.props.customTheme.title,
-                borderBottomColor: this.props.customTheme.title
-              } : {
-                color: this.props.customTheme.label
-              }]}>{tab}</Text>
+              <Text style={[styles.tab, tab === this.state.activeTab ? styles.activeTab : styles.inactiveTab]}>{tab}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -86,12 +75,7 @@ class Relations extends Component {
             data={this.props.relations}
             keyExtractor={(item, index) => index.toString()}
             renderItem={this.renderItem}
-            ItemSeparatorComponent={() => (
-              <View style={{
-                ...styles.separator,
-                backgroundColor: this.props.customTheme.palette.grey3
-              }} />
-            )}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
           />
         </View>
       </View>
@@ -99,62 +83,71 @@ class Relations extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '$container'
+  },
+  body: {
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: '16@vs'
+    paddingHorizontal: '16rem'
   },
   tab: {
     width: '100%',
     textAlign: 'center',
-    paddingVertical: '16@vs',
+    paddingVertical: '16rem',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     textTransform: 'capitalize'
   },
   activeTab: {
-    borderBottomWidth: '2@vs',
+    borderBottomWidth: '2rem',
+    borderBottomColor: '$title',
+    color: '$title',
     fontWeight: 'bold'
   },
+  inactiveTab: {
+    color: '$label'
+  },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: '16@vs'
+    padding: '16rem'
   },
   separator: {
-    height: '1@vs',
-    marginHorizontal: '16@vs'
+    height: '1rem',
+    marginHorizontal: '16rem',
+    backgroundColor: '$grey3Color'
   },
   name: {
     flex: 1,
-    marginHorizontal: '16@vs',
+    marginHorizontal: '16rem',
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     textTransform: 'capitalize'
   },
   button: {
-    width: '88@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '88rem',
+    height: '48rem',
+    borderRadius: '12rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   relation: { relations }
 }) => ({
-  customTheme: theme,
   relations
 });
 

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Image, FlatList, ScrollView, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -23,9 +23,9 @@ class Reviews extends Component {
             key={index}
             type="font-awesome"
             name="star"
-            size={verticalScale(size)}
-            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
-            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
+            size={EStyleSheet.value(size + 'rem')}
+            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+            containerStyle={{ marginHorizontal: EStyleSheet.value(spacing + 'rem') }}
           />
         ))}
       </View>
@@ -38,21 +38,15 @@ class Reviews extends Component {
         <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
         <View style={cardStyles.body}>
           <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={{
-              ...cardStyles.name,
-              color: this.props.customTheme.title
-            }}>{item.fullName}</Text>
+            <Text style={cardStyles.name}>{item.fullName}</Text>
             {this.renderScore(item.score, 16, 2)}
           </View>
-          <Text style={{
-            ...cardStyles.overview,
-            color: this.props.customTheme.label
-          }}>{item.overview}</Text>
+          <Text style={cardStyles.overview}>{item.overview}</Text>
           <ScrollView horizontal>
             {item.products.map((product, index) => (
               <Image key={index} source={{ uri: product }} style={{
                 ...cardStyles.product,
-                marginRight: index < item.products.length - 1 ? verticalScale(8) : 0
+                marginRight: index < item.products.length - 1 ? EStyleSheet.value('8rem') : 0
               }} />
             ))}
           </ScrollView>
@@ -63,74 +57,81 @@ class Reviews extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
+      <View style={styles.container}>
         <SceneHeader title={this.props.navigation.getParam('reviews') + ' reviews'} />
-        <View style={{ alignItems: 'center', marginTop: 28, marginBottom: 32 }}>
+        <View style={styles.scoreWrapper}>
           {this.renderScore(this.props.navigation.getParam('score'), 32, 4)}
         </View>
         <FlatList
           data={this.props.reviews}
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
-          ItemSeparatorComponent={() => (
-            <View style={{
-              ...styles.separator,
-              backgroundColor: this.props.customTheme.palette.grey3
-            }} />
-          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       </View>
     );
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '$container'
+  },
+  scoreWrapper: {
+    alignItems: 'center',
+    marginTop: '28rem',
+    marginBottom: '32rem'
+  },
   score: {
     alignItems: 'center',
-    marginTop: '28@vs',
-    marginBottom: '32@vs'
+    marginTop: '28rem',
+    marginBottom: '32rem'
   },
   list: {
     flex: 1,
-    marginHorizontal: '16@vs'
+    marginHorizontal: '16rem'
   },
   separator: {
-    height: '1@vs',
-    marginHorizontal: '16@vs'
+    height: '1rem',
+    marginHorizontal: '16rem',
+    backgroundColor: '$grey3Color'
   }
 });
 
-const cardStyles = ScaledSheet.create({
+const cardStyles = EStyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: '16@vs'
+    padding: '16rem'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   body: {
     flex: 1,
-    paddingLeft: '16@vs'
+    paddingLeft: '16rem'
   },
   name: {
     flex: 1,
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   overview: {
     width: '100%',
-    marginVertical: '8@vs',
+    marginVertical: '8rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   product: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '4@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '4rem'
   }
 });
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -26,10 +26,7 @@ class Notifications extends Component {
         <Image source={{ uri: item.avatar }} style={styles.avatar} />
         <View style={styles.itemBody}>
           <View style={styles.overviewContainer}>
-            <Text numberOfLines={2} style={{
-              ...styles.overview,
-              color: this.props.customTheme.title
-            }}>
+            <Text numberOfLines={2} style={styles.overview}>
               <Text style={{ fontWeight: 'bold' }}>{item.fullName}</Text>
               <Text>{item.processed ? ' waiting for your review!' : ' changed time of booking, new time is '}</Text>
               {!item.processed && (
@@ -38,35 +35,18 @@ class Notifications extends Component {
             </Text>
           </View>
           <View style={styles.cardContainer}>
-            <TouchableOpacity onPress={() => this.onPress(item)} style={{
-              ...styles.card,
-              backgroundColor: this.props.customTheme.container,
-              ...this.props.customTheme.shadows[3]
-            }}>
+            <TouchableOpacity onPress={() => this.onPress(item)} style={[styles.card, this.props.appTheme.styles.shadow4]}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{
-                  ...styles.title,
-                  color: this.props.customTheme.title
-                }}>{item.title}</Text>
+                <Text style={styles.title}>{item.title}</Text>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={{
-                    ...styles.symbol,
-                    color: this.props.customTheme.title
-                  }}>$</Text>
-                  <Text style={{
-                    ...styles.price,
-                    color: this.props.customTheme.title
-                  }}>{item.price.toFixed(2)}</Text>
+                  <Text style={styles.symbol}>$</Text>
+                  <Text style={styles.price}>{item.price.toFixed(2)}</Text>
                 </View>
               </View>
               <View style={styles.detailsContainer}>
-                <Text style={{
-                  ...styles.time,
-                  color: this.props.customTheme.palette.grey1,
-                  backgroundColor: this.props.customTheme.palette.grey2
-                }}>{moment(item.time).format('h:mm A')}</Text>
+                <Text style={styles.time}>{moment(item.time).format('h:mm A')}</Text>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.details, color: this.props.customTheme.palette.primary }}>View details</Text>
+                  <Text style={styles.details}>View details</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -78,18 +58,13 @@ class Notifications extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
+      <View style={styles.container}>
         <SceneHeader title="Notifications" />
         <FlatList
           data={this.props.notifications}
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
-          ItemSeparatorComponent={() => (
-            <View style={{
-              ...styles.separator,
-              backgroundColor: this.props.customTheme.palette.grey3 }}
-            />
-          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
           style={styles.list}
         />
       </View>
@@ -97,75 +72,88 @@ class Notifications extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '$container'
+  },
   list: {
-    marginTop: '8@vs'
+    marginTop: '8rem'
   },
   separator: {
-    height: '1@vs',
-    marginHorizontal: '16@vs'
+    height: '1rem',
+    marginHorizontal: '16rem',
+    backgroundColor: '$grey3Color'
   },
   listItem: {
-    padding: '16@vs',
+    padding: '16rem',
     flexDirection: 'row'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   itemBody: {
-    paddingLeft: '8@vs',
+    paddingLeft: '8rem',
     flex: 1
   },
   overviewContainer: {
     width: '100%',
-    height: '40@vs'
+    height: '40rem'
   },
   overview: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   cardContainer: {
-    paddingVertical: '16@vs'
+    paddingVertical: '16rem'
   },
   card: {
-    borderRadius: '12@vs',
-    padding: '24@vs'
+    borderRadius: '12rem',
+    padding: '24rem',
+    backgroundColor: '$container'
   },
   detailsContainer: {
-    marginTop: '10@vs',
+    marginTop: '10rem',
     flexDirection: 'row',
     alignItems: 'center'
   },
   details: {
-    marginLeft: '8@vs',
+    marginLeft: '8rem',
+    color: '$primaryColor',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   title: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold',
     textAlignVertical: 'center',
     textTransform: 'capitalize'
   },
   symbol: {
-    marginRight: '4@vs',
+    marginRight: '4rem',
+    color: '$title',
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   price: {
+    color: '$title',
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   time: {
-    paddingHorizontal: '4@vs',
-    paddingVertical: '2@vs',
-    borderRadius: '4@vs',
+    paddingHorizontal: '4rem',
+    paddingVertical: '2rem',
+    borderRadius: '4rem',
+    backgroundColor: '$grey2Color',
+    color: '$grey1Color',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   }
 });
 
@@ -173,7 +161,7 @@ const mapStateToProps = ({
   common: { theme },
   calendar: { notifications }
 }) => ({
-  customTheme: theme,
+  appTheme: theme,
   notifications
 });
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, Dimensions, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
@@ -51,18 +51,18 @@ class SaleProduct extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={styles.fullfill}>
+        <View style={{ width: '100%', height: '100%' }}>
           {this.props.images && (
             <Swiper
-              dotColor={Color(this.props.customTheme.container).alpha(0.3).string()}
+              dotColor={Color(EStyleSheet.value('$container')).alpha(0.3).string()}
               dotStyle={styles.pageDot}
-              activeDotColor={this.props.customTheme.container}
+              activeDotColor={EStyleSheet.value('$container')}
               activeDotStyle={styles.pageDot}
               paginationStyle={styles.pagination}
             >
               {this.props.images.map((image, index) => (
                 <View key={index}>
-                  <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
+                  <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: image }} />
                 </View>
               ))}
             </Swiper>
@@ -70,57 +70,35 @@ class SaleProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: verticalScale(drawerHeight),
+          height: EStyleSheet.value(drawerHeight + 'rem'),
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-verticalScale(40), -verticalScale(drawerHeight)]
+              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value(drawerHeight + 'rem')]
             })
           }]
         }}>
-          <View style={{
-            ...styles.panel,
-            backgroundColor: this.props.customTheme.container
-          }}>
+          <View style={styles.panel}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.drawer }} />
+              <View style={styles.drawer} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{
-                ...productStyles.name,
-                color: this.props.customTheme.title
-              }}>{this.props.name}</Text>
-              <Text style={{
-                ...productStyles.extra,
-                color: this.props.customTheme.extra,
-                backgroundColor: this.props.customTheme.palette.warning
-              }}>{this.props.extra}</Text>
+              <Text style={productStyles.name}>{this.props.name}</Text>
+              <Text style={productStyles.extra}>{this.props.extra}</Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Text style={{
-                  ...productStyles.symbol,
-                  color: this.props.customTheme.title
-                }}>$</Text>
-                <Text style={{
-                  ...productStyles.price,
-                  color: this.props.customTheme.title
-                }}>{this.props.price && this.props.price.toFixed(2)}</Text>
+                <Text style={productStyles.symbol}>$</Text>
+                <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
-            <Text numberOfLines={2} style={{
-              ...productStyles.overview,
-              color: this.props.customTheme.label
-            }}>{this.props.overview}</Text>
+            <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
             <View style={actionStyles.container}>
               <Button
-                buttonStyle={{
-                  ...actionStyles.close,
-                  backgroundColor: this.props.customTheme.palette.grey3
-                }}
+                buttonStyle={actionStyles.close}
                 icon={{
                   name: 'close',
                   type: 'material',
-                  size: verticalScale(24),
-                  color: this.props.customTheme.palette.grey0
+                  size: EStyleSheet.value('24rem'),
+                  color: EStyleSheet.value('$grey0Color')
                 }}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
@@ -139,100 +117,107 @@ class SaleProduct extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   fullfill: {
     width: '100%',
     height: '100%'
   },
   pageDot: {
-    width: '7@vs',
-    height: '7@vs',
-    borderRadius: '3.5@vs'
+    width: '7rem',
+    height: '7rem',
+    borderRadius: '3.5rem'
   },
   pagination: {
-    bottom: '50@vs'
+    bottom: '50rem'
   },
   panel: {
     width: '100%',
     height: '100%',
-    borderTopLeftRadius: '40@vs',
-    borderTopRightRadius: '40@vs',
-    paddingHorizontal: '24@vs',
-    paddingBottom: '16@vs'
+    borderTopLeftRadius: '40rem',
+    borderTopRightRadius: '40rem',
+    paddingHorizontal: '24rem',
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
   },
   drawerWrapper: {
     width: '100%',
-    padding: '16@vs',
+    padding: '16rem',
     alignItems: 'center'
   },
   drawer: {
-    width: '32@vs',
-    height: '5@vs',
-    borderRadius: '2.5@vs'
+    width: '32rem',
+    height: '5rem',
+    borderRadius: '2.5rem',
+    backgroundColor: '$drawer'
   }
 });
 
-const productStyles = ScaledSheet.create({
+const productStyles = EStyleSheet.create({
   name: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   },
   extra: {
-    marginLeft: '12@vs',
-    borderRadius: '4@vs',
-    paddingHorizontal: '4@vs',
-    paddingVertical: '2@vs',
+    marginLeft: '12rem',
+    borderRadius: '4rem',
+    paddingHorizontal: '4rem',
+    paddingVertical: '2rem',
+    backgroundColor: '$warningColor',
+    color: '$extra',
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
   symbol: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: Math.floor(verticalScale(24) * 0.6),
+    fontSize: '24rem * 0.6',
     fontWeight: 'bold'
   },
   price: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
+    color: '$title',
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   overview: {
-    marginTop: '16@vs',
-    marginBottom: '24@vs',
+    marginTop: '16rem',
+    marginBottom: '24rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   }
 });
 
-const actionStyles = ScaledSheet.create({
+const actionStyles = EStyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: '14@vs'
+    marginTop: '14rem'
   },
   close: {
-    width: '64@vs',
-    height: '64@vs',
-    borderRadius: '12@vs',
-    marginRight: '8@vs'
+    width: '64rem',
+    height: '64rem',
+    borderRadius: '12rem',
+    marginRight: '8rem',
+    backgroundColor: '$grey3Color'
   },
   buy: {
-    height: '64@vs',
-    borderRadius: '12@vs'
+    height: '64rem',
+    borderRadius: '12rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   product: { saleProduct }
 }) => ({
-  customTheme: theme,
   ...saleProduct
 });
 

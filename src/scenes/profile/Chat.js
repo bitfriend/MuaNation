@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, Image, Text, TextInput, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -32,13 +32,10 @@ class Chat extends Component {
         }}>
           <Text style={[{
             ...styles.message,
-            backgroundColor: item.fromMe ? this.props.customTheme.palette.secondary : this.props.customTheme.palette.grey3,
-            color: item.fromMe ? this.props.customTheme.buttonTitle : this.props.customTheme.title
+            backgroundColor: EStyleSheet.value(item.fromMe ? '$secondaryColor' : '$grey3Color'),
+            color: EStyleSheet.value(item.fromMe ? '$buttonTitle' : '$title')
           }, item.fromMe ? meStyles.message : otherStyles.message]}>{item.text}</Text>
-          <Text style={{
-            ...styles.time,
-            color: this.props.customTheme.label
-          }}>{this.getTimeText(item.time)}</Text>
+          <Text style={styles.time}>{this.getTimeText(item.time)}</Text>
         </View>
       </View>
     );
@@ -59,19 +56,15 @@ class Chat extends Component {
         <View style={styles.inputWrapper}>
           <TextInput
             placeholder="Type your message"
-            placeholderTextColor={this.props.customTheme.placeholder}
-            style={{
-              ...styles.input,
-              backgroundColor: this.props.customTheme.palette.grey3,
-              color: this.props.customTheme.input
-            }}
+            placeholderTextColor={EStyleSheet.value('$placeholder')}
+            style={styles.input}
           />
           <Button
             icon={{
               type: 'font-awesome',
               name: 'paper-plane',
-              size: verticalScale(20),
-              color: this.props.customTheme.palette.secondary
+              size: EStyleSheet.value('20rem'),
+              color: EStyleSheet.value('$secondaryColor')
             }}
             buttonStyle={styles.send}
           />
@@ -81,77 +74,78 @@ class Chat extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   listItem: {
-    marginLeft: '16@vs',
-    marginRight: '44@vs'
+    marginLeft: '16rem',
+    marginRight: '44rem'
   },
   separator: {
-    height: '12@vs'
+    height: '12rem'
   },
   message: {
-    paddingHorizontal: '16@vs',
-    paddingVertical: '12@vs',
-    borderTopRightRadius: '24@vs',
-    borderBottomLeftRadius: '24@vs',
+    paddingHorizontal: '16rem',
+    paddingVertical: '12rem',
+    borderTopRightRadius: '24rem',
+    borderBottomLeftRadius: '24rem',
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   },
   time: {
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   inputWrapper: {
     width: '100%',
     flexDirection: 'row',
-    paddingHorizontal: '16@vs',
-    paddingVertical: '14@vs',
+    paddingHorizontal: '16rem',
+    paddingVertical: '14rem',
     alignItems: 'center'
   },
   input: {
     flex: 1,
-    borderRadius: '12@vs',
-    marginRight: '8@vs',
-    paddingLeft: '16@vs',
-    paddingRight: '8@vs',
-    paddingVertical: '16@vs',
+    borderRadius: '12rem',
+    marginRight: '8rem',
+    paddingLeft: '16rem',
+    paddingRight: '8rem',
+    paddingVertical: '16rem',
+    backgroundColor: '$grey3Color',
+    color: '$input',
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   },
   send: {
     backgroundColor: 'transparent',
-    paddingHorizontal: '8@vs',
-    paddingVertical: '12@vs'
+    paddingHorizontal: '8rem',
+    paddingVertical: '12rem'
   }
 });
 
-const meStyles = ScaledSheet.create({
+const meStyles = EStyleSheet.create({
   message: {
-    marginLeft: '8@vs',
-    borderTopLeftRadius: '24@vs',
-    borderBottomRightRadius: '4@vs'
+    marginLeft: '8rem',
+    borderTopLeftRadius: '24rem',
+    borderBottomRightRadius: '4rem'
   }
 });
 
-const otherStyles = ScaledSheet.create({
+const otherStyles = EStyleSheet.create({
   avatar: {
-    width: '32@vs',
-    height: '32@vs',
-    borderRadius: '16@vs'
+    width: '32rem',
+    height: '32rem',
+    borderRadius: '16rem'
   },
   message: {
-    marginLeft: '16@vs',
-    marginRight: '8@vs',
-    borderTopLeftRadius: '4@vs',
-    borderBottomRightRadius: '24@vs'
+    marginLeft: '16rem',
+    marginRight: '8rem',
+    borderTopLeftRadius: '4rem',
+    borderBottomRightRadius: '24rem'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   chat: { chat }
 }) => ({
-  customTheme: theme,
   ...chat
 });
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
 import ThemeButton from '../../components/theme/Button';
 
-class EditInfo extends Component {
+export default class EditInfo extends Component {
   state = {
     description: 'Being lucky in life is the result of putting yourself into action for good luck to happen to you. You’ve probably heard the statement “The harder I work the luckier I get”. Another way of putting it is “Whatever you are ready for is ready for you.”'
   }
@@ -20,12 +20,8 @@ class EditInfo extends Component {
         <TextInput
           multiline={true}
           placeholder="Type description"
-          placeholderTextColor={this.props.customTheme.label}
-          style={{
-            ...styles.description,
-            backgroundColor: this.props.customTheme.palette.grey3,
-            color: this.props.customTheme.title
-          }}
+          placeholderTextColor={EStyleSheet.value('$label')}
+          style={styles.description}
           onChangeText={(description) => this.setState({ description })}
         >{this.state.description}</TextInput>
         <View style={{ flex: 1 }} />
@@ -43,38 +39,32 @@ class EditInfo extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   description: {
     flex: 1,
-    height: '200@vs',
-    marginTop: '24@vs',
-    marginHorizontal: '16@vs',
-    borderRadius: '12@vs',
-    padding: '16@vs',
+    height: '200rem',
+    marginTop: '24rem',
+    marginHorizontal: '16rem',
+    borderRadius: '12rem',
+    padding: '16rem',
+    backgroundColor: '$grey3Color',
+    color: '$title',
     textAlignVertical: 'top'
   }
 });
 
-const buttonStyles = ScaledSheet.create({
+const buttonStyles = EStyleSheet.create({
   container: {
-    padding: '16@vs'
+    padding: '16rem'
   },
   button: {
     width: '100%',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    height: '48rem',
+    borderRadius: '12rem'
   },
   title: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   }
 });
-
-const mapStateToProps = ({
-  common: { theme }
-}) => ({
-  customTheme: theme
-});
-
-export default connect(mapStateToProps)(EditInfo);

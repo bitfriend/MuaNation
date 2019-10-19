@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../components/SceneHeader';
@@ -24,40 +24,26 @@ class AddService extends Component {
       <View style={{ flex: 1 }}>
         <SceneHeader title="Add service" />
         <ScrollView>
-          <TouchableOpacity style={{
-            ...photoStyles.icon,
-            backgroundColor: this.props.customTheme.palette.grey3
-          }}>
+          <TouchableOpacity style={photoStyles.icon}>
             <Icon
               type="font-awesome"
               name="camera"
-              size={verticalScale(32)}
-              color={this.props.customTheme.label}
+              size={EStyleSheet.value('32rem')}
+              color={EStyleSheet.value('$label')}
             />
-            <Text style={{
-              ...photoStyles.label,
-              color: this.props.customTheme.label
-            }}>Add photo(s)</Text>
+            <Text style={photoStyles.label}>Add photo(s)</Text>
           </TouchableOpacity>
           <TextInput
             multiline={true}
             placeholder="Type description"
-            placeholderTextColor={this.props.customTheme.label}
-            style={{
-              ...styles.description,
-              backgroundColor: this.props.customTheme.palette.grey3,
-              color: this.props.customTheme.title
-            }}
+            placeholderTextColor={EStyleSheet.value('$label')}
+            style={styles.description}
           ></TextInput>
           <View style={styles.priceWrapper}>
             <TextInput
               placeholder="Price"
-              placeholderTextColor={this.props.customTheme.label}
-              style={{
-                ...styles.price,
-                backgroundColor: this.props.customTheme.palette.grey3,
-                color: this.props.customTheme.title
-              }}
+              placeholderTextColor={EStyleSheet.value('$label')}
+              style={styles.price}
             ></TextInput>
             <Text style={styles.symbol}>$</Text>
           </View>
@@ -70,13 +56,13 @@ class AddService extends Component {
                   containerStyle={pickupStyles.container}
                   buttonStyle={{
                     ...pickupStyles.button,
-                    backgroundColor: index === this.state.selectedIndex ? this.props.customTheme.palette.grey0 : this.props.customTheme.uncheckedButton,
-                    borderColor: index === this.state.selectedIndex ? this.props.customTheme.palette.grey0 : this.props.customTheme.palette.grey3
+                    backgroundColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$uncheckedButton'),
+                    borderColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$grey3Color')
                   }}
                   title={category}
                   titleStyle={{
                     ...pickupStyles.title,
-                    color: index === this.state.selectedIndex ? this.props.customTheme.palette.white : this.props.customTheme.uncheckedButtonTitle
+                    color: EStyleSheet.value(index === this.state.selectedIndex ? '$whiteColor' : '$uncheckedButtonTitle')
                   }}
                   onPress={() => this.setState({ selectedIndex: index })}
                 />
@@ -99,107 +85,111 @@ class AddService extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   description: {
     flex: 1,
-    height: '104@vs',
-    marginTop: '24@vs',
-    marginHorizontal: '16@vs',
-    borderRadius: '12@vs',
-    padding: '16@vs',
+    height: '104rem',
+    marginTop: '24rem',
+    marginHorizontal: '16rem',
+    borderRadius: '12rem',
+    padding: '16rem',
+    backgroundColor: '$grey3Color',
+    color: '$title',
     textAlignVertical: 'top'
   },
   priceWrapper: {
-    marginTop: '24@vs',
-    marginHorizontal: '16@vs',
+    marginTop: '24rem',
+    marginHorizontal: '16rem',
     flexDirection: 'row',
     alignItems: 'center'
   },
   price: {
-    width: '118@vs',
-    borderRadius: '12@vs',
-    padding: '16@vs'
+    width: '118rem',
+    borderRadius: '12rem',
+    padding: '16rem',
+    backgroundColor: '$grey3Color',
+    color: '$title'
   },
   symbol: {
-    marginLeft: '16@vs',
+    marginLeft: '16rem',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   },
   serviceType: {
-    marginTop: '24@vs',
-    marginHorizontal: '16@vs',
+    marginTop: '24rem',
+    marginHorizontal: '16rem',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   pickerBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: '12@vs'
+    paddingHorizontal: '12rem'
   }
 });
 
-const photoStyles = ScaledSheet.create({
+const photoStyles = EStyleSheet.create({
   icon: {
     flex: 1,
-    height: '200@vs',
-    marginTop: '20@vs',
-    marginHorizontal: '16@vs',
-    borderRadius: '12@vs',
+    height: '200rem',
+    marginTop: '20rem',
+    marginHorizontal: '16rem',
+    borderRadius: '12rem',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '$grey3Color'
   },
   label: {
+    color: '$label',
     fontFamily: 'Rototo',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   }
 });
 
-const pickupStyles = ScaledSheet.create({
+const pickupStyles = EStyleSheet.create({
   container: {
-    marginHorizontal: '4@vs'
+    marginHorizontal: '4rem'
   },
   button: {
-    borderRadius: '8@vs',
-    borderWidth: '2@vs',
-    padding: '8@vs'
+    borderRadius: '8rem',
+    borderWidth: '2rem',
+    padding: '8rem'
   },
   title: {
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   leftIconContainer: {
     marginLeft: 0,
-    marginRight: '4@vs'
+    marginRight: '4rem'
   },
   rightIconContainer: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
     marginRight: 0
   }
 });
 
-const buttonStyles = ScaledSheet.create({
+const buttonStyles = EStyleSheet.create({
   container: {
-    padding: '16@vs'
+    padding: '16rem'
   },
   button: {
     width: '100%',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    height: '48rem',
+    borderRadius: '12rem'
   },
   title: {
     fontFamily: 'Roboto',
-    fontSize: '16@vs',
+    fontSize: '16rem',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   service: { categories }
 }) => ({
-  customTheme: theme,
   categories
 });
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
@@ -11,8 +11,8 @@ const saleImageWidth = 254;
 class Products extends Component {
   componentDidMount() {
     const { width } = Dimensions.get('window');
-    this.popularImageWidth = (width - verticalScale(16) * 3) / 2;
-    this.popularImageHeight = Math.floor(this.popularImageWidth * 0.8);
+    this.popularImageWidth = (width - EStyleSheet.value('16rem') * 3) / 2;
+    this.popularImageHeight = this.popularImageWidth * 0.8;
   }
 
   renderSaleProduct = ({ item, index, separators }) => {
@@ -22,39 +22,18 @@ class Products extends Component {
       }}>
         <View style={styles.listItem}>
           <View style={{
-            borderRadius: verticalScale(12),
-            backgroundColor: this.props.customTheme.card,
-            ...this.props.customTheme.shadows[3]
+            ...styles.listItemWrapper,
+            ...this.props.appTheme.styles.shadow4
           }}>
-            <FastImage
-              style={saleStyles.banner}
-              source={{ uri: item.image }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <View style={{ padding: verticalScale(16) }}>
-              <Text style={{
-                ...saleStyles.name,
-                color: this.props.customTheme.title
-              }}>{item.name}</Text>
-              <Text numberOfLines={2} ellipsizeMode="tail" style={{
-                ...saleStyles.overview,
-                color: this.props.customTheme.label
-              }}>{item.overview}</Text>
+            <FastImage style={saleStyles.banner} source={{ uri: item.image }} resizeMode={FastImage.resizeMode.cover} />
+            <View style={saleStyles.body}>
+              <Text style={saleStyles.name}>{item.name}</Text>
+              <Text numberOfLines={2} ellipsizeMode="tail" style={saleStyles.overview}>{item.overview}</Text>
               <View style={saleStyles.caption}>
-                <Text style={{
-                  ...saleStyles.extra,
-                  color: this.props.customTheme.extra,
-                  backgroundColor: this.props.customTheme.palette.warning
-                }}>{item.extra}</Text>
+                <Text style={saleStyles.extra}>{item.extra}</Text>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={{
-                    ...saleStyles.symbol,
-                    color: this.props.customTheme.title
-                  }}>$</Text>
-                  <Text style={{
-                    ...saleStyles.price,
-                    color: this.props.customTheme.title
-                  }}>{item.price.toFixed(2)}</Text>
+                  <Text style={saleStyles.symbol}>$</Text>
+                  <Text style={saleStyles.price}>{item.price.toFixed(2)}</Text>
                 </View>
               </View>
             </View>
@@ -76,20 +55,14 @@ class Products extends Component {
           style={{
             width: this.popularImageWidth,
             height: this.popularImageHeight,
-            borderRadius: verticalScale(8)
+            borderRadius: EStyleSheet.value('8rem')
           }}
           source={{ uri: item.image }}
           resizeMode={FastImage.resizeMode.cover}
         />
         <View style={popularStyles.caption}>
-          <Text style={{
-            ...popularStyles.name,
-            color: this.props.customTheme.title
-          }}>{item.name}</Text>
-          <Text style={{
-            ...popularStyles.price,
-            color: this.props.customTheme.palette.secondary
-          }}>${item.price.toFixed(2)}</Text>
+          <Text style={popularStyles.name}>{item.name}</Text>
+          <Text style={popularStyles.price}>${item.price.toFixed(2)}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -97,14 +70,8 @@ class Products extends Component {
 
   render() {
     return (
-      <View style={{
-        ...styles.container,
-        backgroundColor: this.props.customTheme.container
-      }}>
-        <Text style={{
-          ...styles.heading,
-          color: this.props.customTheme.heading
-        }}>SALE</Text>
+      <View style={styles.container}>
+        <Text style={styles.heading}>SALE</Text>
         <View style={saleStyles.listWrapper}>
           <FlatList
             data={this.props.products}
@@ -115,10 +82,7 @@ class Products extends Component {
             ListFooterComponent={() => <View style={saleStyles.listFooter} />}
           />
         </View>
-        <Text style={{
-          ...styles.heading,
-          color: this.props.customTheme.heading
-        }}>POPULAR</Text>
+        <Text style={styles.heading}>POPULAR</Text>
         <FlatList
           data={this.props.products}
           keyExtractor={(item, index) => index.toString()}
@@ -131,94 +95,111 @@ class Products extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: '16@vs'
+    paddingTop: '16rem',
+    backgroundColor: '$container'
   },
   heading: {
-    marginHorizontal: '16@vs',
+    marginHorizontal: '16rem',
+    color: '$heading',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
+  listItemWrapper: {
+    borderRadius: '12rem',
+    backgroundColor: '$card',
+  },
   listItem: {
-    margin: '8@vs'
+    margin: '8rem'
   }
 });
 
-const saleStyles = ScaledSheet.create({
+const saleStyles = EStyleSheet.create({
   listWrapper: {
-    height: '348@vs'
+    height: '348rem'
   },
   listHeader: {
-    width: '8@vs'
+    width: '8rem'
   },
   listFooter: {
-    width: '8@vs'
+    width: '8rem'
   },
   banner: {
-    width: verticalScale(saleImageWidth),
-    height: '180@vs',
-    borderTopLeftRadius: '12@vs',
-    borderTopRightRadius: '12@vs'
+    width: EStyleSheet.value(saleImageWidth + 'rem'),
+    height: '180rem',
+    borderTopLeftRadius: '12rem',
+    borderTopRightRadius: '12rem'
+  },
+  body: {
+    padding: '16rem'
   },
   name: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   overview: {
-    width: verticalScale(saleImageWidth - 16 * 2),
+    width: EStyleSheet.value(`${saleImageWidth - 16 * 2}rem`),
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: '16@vs'
+    marginTop: '16rem'
   },
   extra: {
-    borderRadius: '4@vs',
-    paddingHorizontal: '4@vs',
-    paddingVertical: '2@vs',
+    borderRadius: '4rem',
+    paddingHorizontal: '4rem',
+    paddingVertical: '2rem',
+    backgroundColor: '$warningColor',
+    color: '$extra',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   symbol: {
-    marginRight: '4@vs',
+    marginRight: '4rem',
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   price: {
+    color: '$title',
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   }
 });
 
-const popularStyles = ScaledSheet.create({
+const popularStyles = EStyleSheet.create({
   list: {
-    paddingHorizontal: '8@vs'
+    paddingHorizontal: '8rem'
   },
   caption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: '8@vs'
+    marginVertical: '8rem'
   },
   name: {
     flex: 1,
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   price: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   }
 });
@@ -227,7 +208,7 @@ const mapStateToProps = ({
   common: { theme },
   product: { products }
 }) => ({
-  customTheme: theme,
+  appTheme: theme,
   products
 });
 

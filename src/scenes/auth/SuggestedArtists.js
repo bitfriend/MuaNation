@@ -44,7 +44,7 @@ class SuggestedArtists extends Component {
     this.props.navigation.navigate('Featured');
   }
 
-  renderScore(score, spacing) {
+  renderScore(score) {
     return (
       <Fragment>
         {criteria.map((criterion, index) => (
@@ -54,7 +54,7 @@ class SuggestedArtists extends Component {
             name="star"
             size={EStyleSheet.value('16rem')}
             color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
-            containerStyle={{ marginHorizontal: EStyleSheet.value(spacing) }}
+            containerStyle={styles.star}
           />
         ))}
       </Fragment>
@@ -90,7 +90,7 @@ class SuggestedArtists extends Component {
               ))}
             </View>
             <View style={styles.scoreReview}>
-              {this.renderScore(item.score, 2)}
+              {this.renderScore(item.score)}
               <Text style={styles.reviews}>{item.reviews} reviews</Text>
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -215,6 +215,9 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: '16rem'
+  },
+  star: {
+    marginHorizontal: '2rem'
   },
   reviews: {
     marginLeft: '4rem',

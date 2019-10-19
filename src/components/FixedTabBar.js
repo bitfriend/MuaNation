@@ -21,11 +21,11 @@ export default class FixedTabBar extends Component {
       ...this.props.labelStyle,
       color: focused ? this.props.activeTintColor : this.props.inactiveTintColor
     };
-    const focusedLabelStyle = EStyleSheet.create({
+    const focusedLabelStyle = {
       ...normalLabelStyle,
       borderBottomColor: this.props.activeTintColor,
-      borderBottomWidth: '2rem'
-    });
+      borderBottomWidth: EStyleSheet.value('2rem')
+    };
     return (
       <View style={tabStyle}>
         <View style={styles.tabItem}>
@@ -39,13 +39,12 @@ export default class FixedTabBar extends Component {
   render() {
     const { navigationState, getLabelText, style } = this.props;
     const { routes } = navigationState;
-    const barStyle = EStyleSheet.create({
-      ...style,
-      flexDirection: 'row',
-      paddingVertical: '8rem'
-    });
     return (
-      <View style={barStyle}>
+      <View style={{
+        ...style,
+        flexDirection: 'row',
+        paddingVertical: EStyleSheet.value('8rem')
+      }}>
         {routes.map((route, index) => (
           <TouchableOpacity key={index} onPress={() => this.onPress(route.routeName)}>
             {this.renderItem(index === navigationState.index, getLabelText({ route }))}

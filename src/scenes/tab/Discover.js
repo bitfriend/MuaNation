@@ -4,7 +4,7 @@ import StarRating from 'react-native-star-rating';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MapView, { Marker } from 'react-native-maps';
 import { Button, Input } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { isEqual } from 'lodash/fp';
 import { connect } from 'react-redux';
 
@@ -34,7 +34,7 @@ class Discover extends Component {
 
   componentDidMount() {
     this.windowWidth = Dimensions.get('window').width;
-    this.sliderLength = this.windowWidth - verticalScale(16) * 2;
+    this.sliderLength = this.windowWidth - EStyleSheet.value('16rem') * 2;
 
     navigator.geolocation.getCurrentPosition(
       location => {
@@ -134,13 +134,13 @@ class Discover extends Component {
                 containerStyle={buttonStyle.container}
                 buttonStyle={{
                   ...buttonStyle.button,
-                  backgroundColor: this.props.customTheme.uncheckedButton,
-                  borderColor: this.props.customTheme.palette.grey3
+                  backgroundColor: EStyleSheet.value('$uncheckedButton'),
+                  borderColor: EStyleSheet.value('$grey3Color')
                 }}
                 title={category}
                 titleStyle={{
                   ...buttonStyle.title,
-                  color: this.props.customTheme.uncheckedButtonTitle
+                  color: EStyleSheet.value('$uncheckedButtonTitle')
                 }}
                 onPress={() => this.props.selectCategory(category)}
               />
@@ -171,15 +171,15 @@ class Discover extends Component {
               step={1}
               snapped
               valuePrefix="$"
-              trackStyle={{ backgroundColor: this.props.customTheme.palette.grey3 }}
+              trackStyle={sliderStyles.track}
               customMarker={SliderMarker}
-              markerStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
-              selectedStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
+              markerStyle={sliderStyles.marker}
+              selectedStyle={sliderStyles.selected}
             />
             <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
-              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>0</Text>
+              <Text style={styles.sliderScale}>0</Text>
               <View style={{ flex: 1 }} />
-              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>100</Text>
+              <Text style={styles.sliderScale}>100</Text>
             </View>
           </View>
         </View>
@@ -193,10 +193,10 @@ class Discover extends Component {
             rating={this.state.criteria.score.min}
             selectedStar={this.onMinScoreChanged}
             containerStyle={styles.rating}
-            starSize={verticalScale(32)}
-            fullStarColor={this.props.customTheme.fullStar}
+            starSize={EStyleSheet.value('32rem')}
+            fullStarColor={EStyleSheet.value('$fullStar')}
             emptyStar="star"
-            emptyStarColor={this.props.customTheme.emptyStar}
+            emptyStarColor={EStyleSheet.value('$emptyStar')}
           />
         </View>
       );
@@ -222,15 +222,15 @@ class Discover extends Component {
               step={1}
               snapped
               valueSuffix=" miles"
-              trackStyle={{ backgroundColor: this.props.customTheme.palette.grey3 }}
+              trackStyle={sliderStyles.track}
               customMarker={SliderMarker}
-              markerStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
-              selectedStyle={{ backgroundColor: this.props.customTheme.palette.primary }}
+              markerStyle={sliderStyles.marker}
+              selectedStyle={sliderStyles.selected}
             />
             <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 }}>
-              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>0</Text>
+              <Text style={styles.sliderScale}>0</Text>
               <View style={{ flex: 1 }} />
-              <Text style={{ ...styles.sliderScale, color: this.props.customTheme.palette.grey2 }}>10</Text>
+              <Text style={styles.sliderScale}>10</Text>
             </View>
           </View>
         </View>
@@ -240,9 +240,10 @@ class Discover extends Component {
   }
 
   render() {
+    const primaryColor = EStyleSheet.value('$primaryColor');
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ ...styles.container, backgroundColor: this.props.customTheme.container }}>
+        <View style={styles.container}>
           <MapView
             style={styles.map}
             initialRegion={this.state.location && {
@@ -274,19 +275,16 @@ class Discover extends Component {
                 style={styles.locationMarker}
                 anchor={{ x: 0.5, y: 0.5 }}
               >
-                <View style={{ ...styles.outerCircle, backgroundColor: Color(this.props.customTheme.palette.primary).alpha(0.08).string() }} />
-                <View style={{ ...styles.innerCircle, backgroundColor: Color(this.props.customTheme.palette.primary).alpha(0.12).string() }} />
+                <View style={{ ...styles.outerCircle, backgroundColor: Color(primaryColor).alpha(0.08).string() }} />
+                <View style={{ ...styles.innerCircle, backgroundColor: Color(primaryColor).alpha(0.12).string() }} />
                 <Image source={require('../../../asset/images/map-marker-blue.png')} style={styles.blueMarker} />
               </Marker>
             )}
             {this.props.neighbours.map((neighbour, index) => (
-              <Marker
-                key={index}
-                coordinate={{
-                  latitude: neighbour.latitude,
-                  longitude: neighbour.longitude
-                }}
-              >
+              <Marker key={index} coordinate={{
+                latitude: neighbour.latitude,
+                longitude: neighbour.longitude
+              }}>
                 <Image source={require('../../../asset/images/map-marker-pink.png')} style={styles.redMarker} />
               </Marker>
             ))}
@@ -294,36 +292,37 @@ class Discover extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: verticalScale(240),
+          height: EStyleSheet.value('240rem'),
           position: 'absolute',
           bottom: 0,
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [verticalScale(64), 0]
+              outputRange: [EStyleSheet.value('64rem'), 0]
             })
           }]
         }}>
-          <View style={{ ...styles.panel, backgroundColor: this.props.customTheme.container }}>
+          <View style={{
+            width: '100%',
+            height: '100%',
+            ...styles.panel
+          }}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.drawer }} />
+              <View style={styles.drawer} />
             </TouchableOpacity>
             <Input
               containerStyle={searchStyles.container}
               leftIcon={{
                 name: 'search',
                 type: 'font-awesome',
-                size: verticalScale(20),
-                color: this.props.customTheme.input
+                size: EStyleSheet.value('20rem'),
+                color: EStyleSheet.value('$input')
               }}
               leftIconContainerStyle={searchStyles.leftIconContainer}
               placeholder="Search"
-              placeholderTextColor={this.props.customTheme.placeholder}
-              inputContainerStyle={{ ...searchStyles.inputContainer, backgroundColor: this.props.customTheme.inputContainer }}
-              inputStyle={{
-                ...searchStyles.input,
-                color: this.props.customTheme.input
-              }}
+              placeholderTextColor={EStyleSheet.value('$placeholder')}
+              inputContainerStyle={searchStyles.inputContainer}
+              inputStyle={searchStyles.input}
             />
             <View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -334,19 +333,19 @@ class Discover extends Component {
                       containerStyle={buttonStyle.container}
                       buttonStyle={{
                         ...buttonStyle.button,
-                        backgroundColor: this.props.customTheme.checkedButton,
-                        borderColor: this.props.customTheme.checkedButton
+                        backgroundColor: EStyleSheet.value('$checkedButton'),
+                        borderColor: EStyleSheet.value('$checkedButton')
                       }}
                       title={category}
                       titleStyle={{
                         ...buttonStyle.title,
-                        color: this.props.customTheme.checkedButtonTitle
+                        color: EStyleSheet.value('$checkedButtonTitle')
                       }}
                       icon={{
                         name: 'x',
                         type: 'feather',
-                        size: verticalScale(14),
-                        color: this.props.customTheme.checkedButtonTitle
+                        size: EStyleSheet.value('14rem'),
+                        color: EStyleSheet.value('$checkedButtonTitle')
                       }}
                       iconContainerStyle={buttonStyle.rightIconContainer}
                       iconRight
@@ -358,92 +357,84 @@ class Discover extends Component {
                       containerStyle={buttonStyle.container}
                       buttonStyle={{
                         ...buttonStyle.button,
-                        backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.palette.grey3
+                        backgroundColor: EStyleSheet.value('$uncheckedButton'),
+                        borderColor: EStyleSheet.value('$grey3Color')
                       }}
                       title={category}
                       titleStyle={{
                         ...buttonStyle.title,
-                        color: this.props.customTheme.uncheckedButtonTitle
+                        color: EStyleSheet.value('$uncheckedButtonTitle')
                       }}
                     />
                   ))}
                   <Button
                     containerStyle={buttonStyle.container}
-                    buttonStyle={[
-                      buttonStyle.button,
-                      this.state.editingCriterion === 'category' ? {
-                        backgroundColor: this.props.customTheme.toggledButton,
-                        borderColor: this.props.customTheme.toggledButton
-                      } : {
-                        backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.palette.grey3
-                      }
-                    ]}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$uncheckedButton'),
+                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$grey3Color')
+                    }}
                     title={this.state.editingCriterion === 'category' ? 'Done' : '+Add'}
-                    titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'category' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                    }}
                     onPress={() => this.onCriterionClicked('category')}
                   />
                   <Button
                     containerStyle={buttonStyle.container}
-                    buttonStyle={[
-                      buttonStyle.button,
-                      this.state.editingCriterion === 'price' ? {
-                        backgroundColor: this.props.customTheme.toggledButton,
-                        borderColor: this.props.customTheme.toggledButton
-                      } : {
-                        backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.palette.grey3
-                      }
-                    ]}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$uncheckedButton'),
+                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$grey3Color')
+                    }}
                     title={`$${this.state.criteria.price.min} - ${this.state.criteria.price.max}`}
-                    titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'price' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                    }}
                     onPress={() => this.onCriterionClicked('price')}
                   />
                   <Button
                     containerStyle={buttonStyle.container}
-                    buttonStyle={[
-                      buttonStyle.button,
-                      this.state.editingCriterion === 'score' ? {
-                        backgroundColor: this.props.customTheme.toggledButton,
-                        borderColor: this.props.customTheme.toggledButton
-                      } : {
-                        backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.palette.grey3
-                      }
-                    ]}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$uncheckedButton'),
+                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$grey3Color')
+                    }}
                     icon={{
                       name: 'star',
                       type: 'font-awesome',
-                      size: verticalScale(14),
-                      color: this.state.editingCriterion === 'score' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle
+                      size: EStyleSheet.value('14rem'),
+                      color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
                     }}
                     iconContainerStyle={buttonStyle.leftIconContainer}
                     title={`${this.state.criteria.score.min}+`}
-                    titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'score' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                    }}
                     onPress={() => this.onCriterionClicked('score')}
                   />
                   <Button
                     containerStyle={buttonStyle.container}
-                    buttonStyle={[
-                      buttonStyle.button,
-                      this.state.editingCriterion === 'distance' ? {
-                        backgroundColor: this.props.customTheme.toggledButton,
-                        borderColor: this.props.customTheme.toggledButton
-                      } : {
-                        backgroundColor: this.props.customTheme.uncheckedButton,
-                        borderColor: this.props.customTheme.palette.grey3
-                      }
-                    ]}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$uncheckedButton'),
+                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$grey3Color')
+                    }}
                     icon={{
                       name: 'compass',
                       type: 'font-awesome',
-                      size: verticalScale(14),
-                      color: this.state.editingCriterion === 'distance' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle
+                      size: EStyleSheet.value('14rem'),
+                      color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
                     }}
                     iconContainerStyle={buttonStyle.leftIconContainer}
                     title={`${this.state.criteria.distance.max} miles`}
-                    titleStyle={{ ...buttonStyle.title, color: this.state.editingCriterion === 'distance' ? this.props.customTheme.toggledButtonTitle : this.props.customTheme.uncheckedButtonTitle }}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                    }}
                     onPress={() => this.onCriterionClicked('distance')}
                   />
                 </View>
@@ -457,13 +448,14 @@ class Discover extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: '$container',
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
@@ -475,118 +467,131 @@ const styles = ScaledSheet.create({
     bottom: 0
   },
   panel: {
-    width: '100%',
-    height: '100%',
-    borderTopLeftRadius: '40@vs',
-    borderTopRightRadius: '40@vs'
+    borderTopLeftRadius: '40rem',
+    borderTopRightRadius: '40rem',
+    backgroundColor: '$container'
   },
   drawerWrapper: {
     width: '100%',
-    padding: '16@vs',
+    padding: '16rem',
     alignItems: 'center'
   },
   drawer: {
-    width: '32@vs',
-    height: '5@vs',
-    borderRadius: '2.5@vs'
+    width: '32rem',
+    height: '5rem',
+    borderRadius: '2.5rem',
+    backgroundColor: '$drawer'
   },
   locationMarker: {
-    width: '120@vs',
-    height: '120@vs'
+    width: '120rem',
+    height: '120rem'
   },
   outerCircle: {
     position: 'absolute',
     left: 0,
     top: 0,
-    width: '120@vs',
-    height: '120@vs',
-    borderRadius: '60@vs'
+    width: '120rem',
+    height: '120rem',
+    borderRadius: '60rem'
   },
   innerCircle: {
     position: 'absolute',
-    left: '32@vs',
-    top: '32@vs',
-    width: '56@vs',
-    height: '56@vs',
-    borderRadius: '28@vs'
+    left: '32rem',
+    top: '32rem',
+    width: '56rem',
+    height: '56rem',
+    borderRadius: '28rem'
   },
   blueMarker: {
-    width: '24@vs',
-    height: '28@vs',
-    top: '32@vs',
-    left: '48@vs'
+    width: '24rem',
+    height: '28rem',
+    top: '32rem',
+    left: '48rem'
   },
   redMarker: {
-    width: '24@vs',
-    height: '28@vs'
+    width: '24rem',
+    height: '28rem'
   },
   controlBar: {
     flexDirection: 'row',
-    paddingHorizontal: '12@vs'
+    paddingHorizontal: '12rem'
   },
   pickerBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: '12@vs'
+    paddingHorizontal: '12rem'
   },
   sliderWrapper: {
-    marginHorizontal: '16@vs'
+    marginHorizontal: '16rem'
   },
   sliderScale: {
+    color: '$grey2Color',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold'
   },
   rating: {
-    width: '192@vs'
+    width: '192rem'
   }
 });
 
-const searchStyles = ScaledSheet.create({
+const searchStyles = EStyleSheet.create({
   container: {
-    paddingHorizontal: '16@vs',
-    marginBottom: '16@vs'
+    paddingHorizontal: '16rem',
+    marginBottom: '16rem'
   },
   leftIconContainer: {
-    marginRight: '8@vs'
+    marginRight: '8rem'
   },
   inputContainer: {
-    borderRadius: '12@vs',
-    borderBottomWidth: 0
+    borderRadius: '12rem',
+    borderBottomWidth: 0,
+    backgroundColor: '$inputContainer'
   },
   input: {
+    color: '$input',
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   }
 });
 
-const buttonStyle = ScaledSheet.create({
+const buttonStyle = EStyleSheet.create({
   container: {
-    marginHorizontal: '4@vs'
+    marginHorizontal: '4rem'
   },
   button: {
-    borderRadius: '8@vs',
-    borderWidth: '2@vs',
-    padding: '8@vs'
+    borderRadius: '8rem',
+    borderWidth: '2rem',
+    padding: '8rem'
   },
   title: {
-    fontSize: '14@vs'
+    fontSize: '14rem'
   },
   leftIconContainer: {
     marginLeft: 0,
-    marginRight: '4@vs'
+    marginRight: '4rem'
   },
   rightIconContainer: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
     marginRight: 0
   }
 });
 
+const sliderStyles = EStyleSheet.create({
+  track: {
+    backgroundColor: '$grey3Color'
+  },
+  marker: {
+    backgroundColor: '$primaryColor'
+  },
+  selected: {
+    backgroundColor: '$primaryColor'
+  }
+});
+
 const mapStateToProps = ({
-  common: { theme },
   discover: { neighbours, criteria }
 }) => ({
-  customTheme: theme,
   neighbours, criteria
 });
 

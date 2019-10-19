@@ -121,6 +121,22 @@ const AuthStackNav = createStackNavigator({
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+const topTabStyles = EStyleSheet.create({
+  tabBar: {
+    backgroundColor: '$container'
+  },
+  label: {
+    margin: 0,
+    paddingBottom: '2rem',
+    fontFamily: 'Lato',
+    fontSize: '24rem',
+    fontWeight: 'bold'
+  },
+  indicator: {
+    backgroundColor: '$secondaryColor'
+  }
+});
+
 const FeaturedTabNav = createMaterialTopTabNavigator({
   Artists: {
     screen: Artists,
@@ -133,18 +149,12 @@ const FeaturedTabNav = createMaterialTopTabNavigator({
 }, {
   tabBarComponent: props => <FixedTabBar {...props} />,
   tabBarOptions: {
-    style: { backgroundColor: () => EStyleSheet.value('$container') },
-    activeTintColor: () => EStyleSheet.value('$secondaryColor'),
-    inactiveTintColor: () => EStyleSheet.value('$grey0Color'),
-    labelStyle: {
-      fontFamily: 'Lato',
-      fontSize: () => EStyleSheet.value('24rem'),
-      fontWeight: 'bold',
-      margin: 0,
-      paddingBottom: () => EStyleSheet.value('2rem')
-    },
+    style: topTabStyles.tabBar,
+    activeTintColor: EStyleSheet.value('$secondaryColor'),
+    inactiveTintColor: EStyleSheet.value('$grey0Color'),
+    labelStyle: topTabStyles.label,
     upperCaseLabel: false,
-    indicatorStyle: { backgroundColor: () => EStyleSheet.value('$secondaryColor') }
+    indicatorStyle: topTabStyles.indicator
   }
 });
 
@@ -217,12 +227,19 @@ function getTabeBarLabel(focused, tintColor, title) {
       textAlign: 'center',
       color: tintColor,
       fontFamily: 'Roboto',
-      fontSize: () => EStyleSheet.value('10rem')
+      fontSize: EStyleSheet.value('10rem')
     }}>{title}</Text>;
   } else {
     return null;
   }
 }
+
+const bottomTabStyles = EStyleSheet.create({
+  tabBar: {
+    height: '49rem',
+    backgroundColor: '$container'
+  }
+});
 
 const AppTabNav = createBottomTabNavigator({
   Featured: {
@@ -230,7 +247,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="font-awesome" name="star" size={() => EStyleSheet.value('25rem')} color={tintColor} />
+        <Icon type="font-awesome" name="star" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
     }
   },
@@ -239,7 +256,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Discover'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="ios-search" size={() => EStyleSheet.value('25rem')} color={tintColor} />
+        <Icon type="ionicon" name="ios-search" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
     }
   },
@@ -248,7 +265,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Calendar'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="ios-calendar" size={() => EStyleSheet.value('25rem')} color={tintColor} />
+        <Icon type="ionicon" name="ios-calendar" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
     }
   },
@@ -257,7 +274,7 @@ const AppTabNav = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
-        <Icon type="ionicon" name="md-person" size={() => EStyleSheet.value('25rem')} color={tintColor} />
+        <Icon type="ionicon" name="md-person" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
     }
   }
@@ -267,12 +284,9 @@ const AppTabNav = createBottomTabNavigator({
   swipeEnabled: false,
   lazy: false,
   tabBarOptions: {
-    activeTintColor: () => EStyleSheet.value('$secondaryColor'),
-    inactiveTintColor: () => EStyleSheet.value('$tabTitle'),
-    style: {
-      backgroundColor: () => EStyleSheet.value('$container'),
-      height: () => EStyleSheet.value('49rem')
-    }
+    activeTintColor: EStyleSheet.value('$secondaryColor'),
+    inactiveTintColor: EStyleSheet.value('$tabTitle'),
+    style: bottomTabStyles.tabBar
   }
 });
 
@@ -291,10 +305,10 @@ const theme = {
     inputContainerStyle: {
       borderBottomColor: undefined,
       borderBottomWidth: undefined,
-      borderRadius: () => EStyleSheet.value('12rem')
+      borderRadius: EStyleSheet.value('12rem')
     },
     leftIconContainerStyle: {
-      marginRight: () => EStyleSheet.value('8rem')
+      marginRight: EStyleSheet.value('8rem')
     }
   }
 };

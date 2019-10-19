@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -15,76 +15,67 @@ class Booking extends Component {
     this.props.getBooking();
 
     const { width } = Dimensions.get('window');
-    this.imageWidth = width - verticalScale(16) * 2;
+    this.imageWidth = width - EStyleSheet.value('16rem') * 2;
     this.imageHeight = this.imageWidth * 0.65;
   }
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: this.props.customTheme.container }}>
+      <View style={styles.container}>
         <SceneHeader title="Booking details" />
         <ScrollView>
           <FastImage
             style={{
-              ...styles.banner,
               width: this.imageWidth,
-              height: this.imageHeight
+              height: this.imageHeight,
+              ...styles.banner
             }}
             source={{ uri: this.props.booking.image }}
             resizeMode={FastImage.resizeMode.cover}
           />
           <View style={styles.body}>
-            <Text style={{
-              ...styles.title,
-              color: this.props.customTheme.title
-            }}>{this.props.booking.title}</Text>
+            <Text style={styles.title}>{this.props.booking.title}</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{
-                ...styles.symbol,
-                color: this.props.customTheme.title
-              }}>$</Text>
-              <Text style={{
-                ...styles.price,
-                color: this.props.customTheme.title
-              }}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
+              <Text style={styles.symbol}>$</Text>
+              <Text style={styles.price}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
             </View>
           </View>
           <Text style={{
             ...styles.overview,
             ...styles.label,
-            color: this.props.customTheme.label
+            color: EStyleSheet.value('$label')
           }}>{this.props.booking.overview}</Text>
           <View style={styles.footer}>
             <View style={styles.footerFirstLine}>
               <Image source={{ uri: this.props.booking.avatar }} style={styles.avatar} />
               <Text style={{
                 ...styles.label,
-                marginLeft: verticalScale(16),
-                color: this.props.customTheme.title
+                marginLeft: EStyleSheet.value('16rem'),
+                color: EStyleSheet.value('$title')
               }}>by </Text>
               <Text style={{
                 ...styles.label,
-                color: this.props.customTheme.title,
+                color: EStyleSheet.value('$title'),
                 fontWeight: 'bold'
               }}>{this.props.booking.fullName}</Text>
             </View>
             <View style={styles.footerSecondLine}>
               <Text style={{
                 ...styles.label,
-                marginLeft: verticalScale(64),
-                color: this.props.customTheme.title
+                marginLeft: EStyleSheet.value('64rem'),
+                color: EStyleSheet.value('$title')
               }}>{moment(this.props.booking.createdAt).format('MMM d')} at </Text>
               <Text style={{
                 ...styles.label,
                 flex: 1,
-                color: this.props.customTheme.title,
+                color: EStyleSheet.value('$title'),
                 fontWeight: 'bold'
               }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
               <ThemeButton
                 icon={{
                   name: 'paper-plane',
                   type: 'font-awesome',
-                  size: verticalScale(22)
+                  size: EStyleSheet.value('22rem')
                 }}
                 containerStyle={styles.chatContainer}
                 buttonStyle={styles.chat}
@@ -92,15 +83,9 @@ class Booking extends Component {
             </View>
             <Button
               containerStyle={styles.cancelContainer}
-              buttonStyle={{
-                ...styles.cancel,
-                backgroundColor: this.props.customTheme.palette.grey3
-              }}
+              buttonStyle={styles.cancel}
               title="Cancel"
-              titleStyle={{
-                ...styles.cancelTitle,
-                color: this.props.customTheme.palette.grey0
-              }}
+              titleStyle={styles.cancelTitle}
               TouchableComponent={TouchableOpacity}
               onPress={() => this.props.navigation.pop()}
             />
@@ -111,25 +96,29 @@ class Booking extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
+const styles = EStyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '$container'
+  },
   banner: {
-    borderRadius: '12@vs',
-    marginTop: '12@vs',
-    marginHorizontal: '16@vs'
+    borderRadius: '12rem',
+    marginTop: '12rem',
+    marginHorizontal: '16rem'
   },
   body: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: '24@vs',
-    marginTop: '28@vs'
+    marginHorizontal: '24rem',
+    marginTop: '28rem'
   },
   overview: {
-    marginTop: '16@vs',
-    marginBottom: '24@vs',
-    marginHorizontal: '24@vs'
+    marginTop: '16rem',
+    marginBottom: '24rem',
+    marginHorizontal: '24rem'
   },
   footer: {
-    paddingHorizontal: '16@vs'
+    paddingHorizontal: '16rem'
   },
   footerFirstLine: {
     flexDirection: 'row',
@@ -137,63 +126,66 @@ const styles = ScaledSheet.create({
   },
   footerSecondLine: {
     flexDirection: 'row',
-    marginTop: '4@vs',
+    marginTop: '4rem',
     alignItems: 'center'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   chatContainer: {
-    marginLeft: '4@vs'
+    marginLeft: '4rem'
   },
   chat: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '12@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '12rem'
   },
   title: {
     flex: 1,
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
   symbol: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: Math.floor(verticalScale(24) * 0.6),
+    fontSize: '24rem * 0.6',
     fontWeight: 'bold'
   },
   price: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
+    color: '$title',
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   label: {
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   },
   cancelContainer: {
-    marginVertical: '16@vs'
+    marginVertical: '16rem'
   },
   cancel: {
-    height: '64@vs',
-    borderRadius: '12@vs'
+    height: '64rem',
+    borderRadius: '12rem',
+    backgroundColor: '$grey3Color'
   },
   cancelTitle: {
+    color: '$grey0Color',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   calendar: { booking }
 }) => ({
-  customTheme: theme,
   booking
 });
 

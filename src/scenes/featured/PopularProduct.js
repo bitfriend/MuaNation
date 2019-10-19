@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, FlatList, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { verticalScale, ScaledSheet } from 'react-native-size-matters';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import Swiper from 'react-native-swiper';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
@@ -12,8 +12,6 @@ import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
-const drawerHeight = 402;
-const { width: windowWidth } = Dimensions.get('window');
 const criteria = [0, 1, 2, 3, 4];
 
 class PopularProduct extends Component {
@@ -50,7 +48,7 @@ class PopularProduct extends Component {
     }
   }
 
-  renderScore(score, size, spacing) {
+  renderScore(score) {
     return (
       <View style={{ flexDirection: 'row' }}>
         {criteria.map((criterion, index) => (
@@ -58,9 +56,9 @@ class PopularProduct extends Component {
             key={index}
             type="font-awesome"
             name="star"
-            size={verticalScale(size)}
-            color={score > criterion ? this.props.customTheme.fullStar : this.props.customTheme.emptyStar}
-            containerStyle={{ marginHorizontal: verticalScale(spacing) }}
+            size={EStyleSheet.value('16rem')}
+            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+            containerStyle={cardStyles.star}
           />
         ))}
       </View>
@@ -69,23 +67,14 @@ class PopularProduct extends Component {
 
   renderCard = ({ item, index, separators }) => {
     return (
-      <View style={{
-        ...cardStyles.container,
-        backgroundColor: this.props.customTheme.palette.grey3
-      }}>
+      <View style={cardStyles.container}>
         <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
         <View style={cardStyles.body}>
           <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={{
-              ...cardStyles.name,
-              color: this.props.customTheme.title
-            }}>{item.fullName}</Text>
-            {this.renderScore(item.score, 16, 2)}
+            <Text style={cardStyles.name}>{item.fullName}</Text>
+            {this.renderScore(item.score)}
           </View>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={{
-            ...cardStyles.comment,
-            color: this.props.customTheme.label
-          }}>{item.comment}</Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={cardStyles.comment}>{item.comment}</Text>
         </View>
       </View>
     );
@@ -95,18 +84,18 @@ class PopularProduct extends Component {
     console.log('artists', this.props.artists);
     return (
       <View style={{ flex: 1 }}>
-        <View style={styles.fullfill}>
+        <View style={{ width: '100%', height: '100%' }}>
           {this.props.images && (
             <Swiper
-              dotColor={Color(this.props.customTheme.container).alpha(0.3).string()}
+              dotColor={Color(EStyleSheet.value('$container')).alpha(0.3).string()}
               dotStyle={styles.pageDot}
-              activeDotColor={this.props.customTheme.container}
+              activeDotColor={EStyleSheet.value('$container')}
               activeDotStyle={styles.pageDot}
               paginationStyle={styles.pagination}
             >
               {this.props.images.map((image, index) => (
                 <View key={index}>
-                  <Image resizeMode="cover" style={styles.fullfill} source={{ uri: image }} />
+                  <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: image }} />
                 </View>
               ))}
             </Swiper>
@@ -114,39 +103,27 @@ class PopularProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: verticalScale(drawerHeight),
+          height: EStyleSheet.value('$drawerHeight'),
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-verticalScale(40), -verticalScale(drawerHeight)]
+              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value('$drawerHeight')]
             })
           }]
         }}>
-          <View style={{ ...styles.panel, backgroundColor: this.props.customTheme.container }}>
+          <View style={styles.panel}>
             <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={{ ...styles.drawer, backgroundColor: this.props.customTheme.drawer }} />
+              <View style={styles.drawer} />
             </TouchableOpacity>
             <View style={styles.body}>
-              <Text style={{
-                ...styles.name,
-                color: this.props.customTheme.title
-              }}>{this.props.name}</Text>
+              <Text style={styles.name}>{this.props.name}</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={{
-                  ...styles.symbol,
-                  color: this.props.customTheme.title
-                }}>$</Text>
-                <Text style={{
-                  ...styles.price,
-                  color: this.props.customTheme.title
-                }}>{this.props.price && this.props.price.toFixed(2)}</Text>
+                <Text style={styles.symbol}>$</Text>
+                <Text style={styles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
               </View>
             </View>
             <ScrollView style={styles.overviewWrapper}>
-              <Text style={{
-                ...styles.overview,
-                color: this.props.customTheme.label
-              }}>{this.props.overview}</Text>
+              <Text style={styles.overview}>{this.props.overview}</Text>
             </ScrollView>
             {this.props.reviews && (
               <View style={listStyles.container}>
@@ -163,15 +140,12 @@ class PopularProduct extends Component {
             )}
             <View style={actionStyles.container}>
               <Button
-                buttonStyle={{
-                  ...actionStyles.close,
-                  backgroundColor: this.props.customTheme.palette.grey3
-                }}
+                buttonStyle={actionStyles.close}
                 icon={{
                   name: 'close',
                   type: 'material',
-                  size: verticalScale(24),
-                  color: this.props.customTheme.palette.grey0
+                  size: EStyleSheet.value('24rem'),
+                  color: EStyleSheet.value('$grey0Color')
                 }}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => this.props.navigation.pop()}
@@ -182,7 +156,7 @@ class PopularProduct extends Component {
                 icon={{
                   name: 'date-range',
                   type: 'material',
-                  size: verticalScale(20)
+                  size: EStyleSheet.value('20rem')
                 }}
                 title="Book"
                 titleStyle={actionStyles.buttonTitle}
@@ -196,143 +170,151 @@ class PopularProduct extends Component {
   }
 }
 
-const styles = ScaledSheet.create({
-  fullfill: {
-    width: '100%',
-    height: '100%'
-  },
+const styles = EStyleSheet.create({
+  $drawerHeight: '402rem',
   pageDot: {
-    width: '7@vs',
-    height: '7@vs',
-    borderRadius: '3.5@vs'
+    width: '7rem',
+    height: '7rem',
+    borderRadius: '3.5rem'
   },
   pagination: {
-    bottom: '50@vs'
+    bottom: '50rem'
   },
   panel: {
     width: '100%',
     height: '100%',
-    borderTopLeftRadius: '40@vs',
-    borderTopRightRadius: '40@vs',
-    paddingBottom: '16@vs'
+    borderTopLeftRadius: '40rem',
+    borderTopRightRadius: '40rem',
+    paddingBottom: '16rem',
+    backgroundColor: '$container'
   },
   drawerWrapper: {
     width: '100%',
-    padding: '16@vs',
+    padding: '16rem',
     alignItems: 'center'
   },
   drawer: {
-    width: '32@vs',
-    height: '5@vs',
-    borderRadius: '2.5@vs'
+    width: '32rem',
+    height: '5rem',
+    borderRadius: '2.5rem',
+    backgroundColor: '$drawer'
   },
   body: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: '24@vs'
+    paddingHorizontal: '24rem'
   },
   name: {
     flex: 1,
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   },
   symbol: {
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: Math.floor(verticalScale(24) * 0.6),
+    fontSize: '24rem * 0.6',
     fontWeight: 'bold'
   },
   price: {
-    marginLeft: '4@vs',
+    marginLeft: '4rem',
+    color: '$title',
     fontFamily: 'Lato',
-    fontSize: '24@vs',
+    fontSize: '24rem',
     fontWeight: 'bold'
   },
   overviewWrapper: {
-    marginTop: '16@vs',
-    marginBottom: '24@vs',
-    marginHorizontal: '24@vs'
+    marginTop: '16rem',
+    marginBottom: '24rem',
+    marginHorizontal: '24rem'
   },
   overview: {
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '18@vs'
+    fontSize: '18rem'
   }
 });
 
-const cardStyles = ScaledSheet.create({
+const cardStyles = EStyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: '16@vs',
-    borderRadius: '12@vs'
+    padding: '16rem',
+    borderRadius: '12rem',
+    backgroundColor: '$grey3Color'
   },
   avatar: {
-    width: '48@vs',
-    height: '48@vs',
-    borderRadius: '24@vs'
+    width: '48rem',
+    height: '48rem',
+    borderRadius: '24rem'
   },
   body: {
     flex: 1,
-    paddingLeft: '16@vs'
+    paddingLeft: '16rem'
   },
   name: {
     flex: 1,
+    color: '$title',
     fontFamily: 'Roboto',
-    fontSize: '14@vs',
+    fontSize: '14rem',
     fontWeight: 'bold',
     textTransform: 'capitalize'
   },
+  star: {
+    marginHorizontal: '2rem'
+  },
   comment: {
-    width: windowWidth * 0.6,
-    marginTop: '4@vs',
+    width: '60%',
+    marginTop: '4rem',
+    color: '$label',
     fontFamily: 'Roboto',
-    fontSize: '14@vs'
+    fontSize: '14rem'
   }
 });
 
-const listStyles = ScaledSheet.create({
+const listStyles = EStyleSheet.create({
   container: {
-    height: '96@vs'
+    height: '96rem'
   },
   header: {
-    width: '24@vs'
+    width: '24rem'
   },
   footer: {
-    width: '24@vs'
+    width: '24rem'
   },
   separator: {
-    width: '8@vs'
+    width: '8rem'
   }
 });
 
-const actionStyles = ScaledSheet.create({
+const actionStyles = EStyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    paddingTop: '14@vs',
-    paddingHorizontal: '24@vs'
+    paddingTop: '14rem',
+    paddingHorizontal: '24rem'
   },
   close: {
-    width: '64@vs',
-    height: '64@vs',
-    borderRadius: '12@vs',
-    marginRight: '8@vs'
+    width: '64rem',
+    height: '64rem',
+    borderRadius: '12rem',
+    marginRight: '8rem',
+    backgroundColor: '$grey3Color'
   },
   book: {
-    height: '64@vs',
-    borderRadius: '12@vs'
+    height: '64rem',
+    borderRadius: '12rem'
   },
   buttonTitle: {
     fontFamily: 'Roboto',
-    fontSize: '18@vs',
+    fontSize: '18rem',
     fontWeight: 'bold'
   }
 });
 
 const mapStateToProps = ({
-  common: { theme },
   product: { popularProduct }
 }) => ({
-  customTheme: theme,
   ...popularProduct
 });
 
