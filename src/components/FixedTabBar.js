@@ -17,21 +17,22 @@ export default class FixedTabBar extends Component {
     if (!label) {
       tabStyle.padding = EStyleSheet.value('4rem');
     }
-    const normalLabelStyle = {
+    const labelStyle = {
       ...styles.label,
       ...this.props.labelStyle,
       color: focused ? this.props.activeTintColor : this.props.inactiveTintColor
     };
-    const focusedLabelStyle = {
-      ...normalLabelStyle,
+    const wrapperStyle = focused ? {
       borderBottomColor: this.props.activeTintColor,
       borderBottomWidth: EStyleSheet.value('2rem')
-    };
+    } : undefined;
     return (
       <View style={tabStyle}>
         <View style={styles.tabItem}>
-          <Text style={focused ? focusedLabelStyle : normalLabelStyle}>{label.charAt(0).toUpperCase()}</Text>
-          <Text style={normalLabelStyle}>{label.substring(1)}</Text>
+          <View style={wrapperStyle}>
+            <Text style={labelStyle}>{label.charAt(0).toUpperCase()}</Text>
+          </View>
+          <Text style={labelStyle}>{label.substring(1)}</Text>
         </View>
       </View>
     );
