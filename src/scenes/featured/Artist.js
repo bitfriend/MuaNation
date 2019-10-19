@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
@@ -18,7 +18,7 @@ class Artist extends Component {
   componentDidMount() {
     const { width: windowWidth } = Dimensions.get('window');
     this.imageWidth = (windowWidth - EStyleSheet.value('16rem') * 3) / 2;
-    this.imageHeight = this.imageWidth * 0.6;
+    this.imageHeight = this.imageWidth * 0.8;
 
     const id = this.props.navigation.getParam('id');
     this.props.getArtist(id);
@@ -87,7 +87,9 @@ class Artist extends Component {
             <View style={reviewStyles.container}>
               <TouchableOpacity onPress={this.onReviews}>
                 {this.renderScore(score)}
-                <Text style={reviewStyles.text}>{reviews} reviews</Text>
+                <ScrollView style={reviewStyles.textWrapper}>
+                  <Text style={reviewStyles.text}>{reviews} reviews</Text>
+                </ScrollView>
               </TouchableOpacity>
             </View>
             {this.renderSide(following, 'following', 'following')}
@@ -274,6 +276,9 @@ const reviewStyles = EStyleSheet.create({
   },
   star: {
     marginHorizontal: '2rem'
+  },
+  textWrapper: {
+    height: '100rem'
   },
   text: {
     marginTop: '2rem',
