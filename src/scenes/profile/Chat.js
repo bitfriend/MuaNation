@@ -30,11 +30,9 @@ class Chat extends Component {
           alignItems: 'center',
           flexDirection: item.fromMe ? 'row-reverse' : 'row'
         }}>
-          <Text style={[{
-            ...styles.message,
-            backgroundColor: EStyleSheet.value(item.fromMe ? '$secondaryColor' : '$grey3Color'),
-            color: EStyleSheet.value(item.fromMe ? '$buttonTitle' : '$title')
-          }, item.fromMe ? meStyles.message : otherStyles.message]}>{item.text}</Text>
+          <View style={[styles.message, item.fromMe ? meStyles.message : otherStyles.message]}>
+            <Text style={[styles.msgText, item.fromMe ? meStyles.msgText : otherStyles.msgText]}>{item.text}</Text>
+          </View>
           <Text style={styles.time}>{this.getTimeText(item.time)}</Text>
         </View>
       </View>
@@ -86,7 +84,9 @@ const styles = EStyleSheet.create({
     paddingHorizontal: '16rem',
     paddingVertical: '12rem',
     borderTopRightRadius: '24rem',
-    borderBottomLeftRadius: '24rem',
+    borderBottomLeftRadius: '24rem'
+  },
+  msgText: {
     fontFamily: 'Roboto',
     fontSize: '18rem'
   },
@@ -125,7 +125,11 @@ const meStyles = EStyleSheet.create({
   message: {
     marginLeft: '8rem',
     borderTopLeftRadius: '24rem',
-    borderBottomRightRadius: '4rem'
+    borderBottomRightRadius: '4rem',
+    backgroundColor: '$secondaryColor'
+  },
+  msgText: {
+    color: '$buttonTitle'
   }
 });
 
@@ -139,7 +143,11 @@ const otherStyles = EStyleSheet.create({
     marginLeft: '16rem',
     marginRight: '8rem',
     borderTopLeftRadius: '4rem',
-    borderBottomRightRadius: '24rem'
+    borderBottomRightRadius: '24rem',
+    backgroundColor: '$grey3Color'
+  },
+  msgText: {
+    color: '$title'
   }
 });
 
