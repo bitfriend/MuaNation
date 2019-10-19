@@ -12,6 +12,8 @@ import ThemeButton from '../../components/theme/Button';
 
 const Color = require('color');
 
+const drawerHeight = 402;
+
 const criteria = [0, 1, 2, 3, 4];
 
 class PopularProduct extends Component {
@@ -103,11 +105,11 @@ class PopularProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: EStyleSheet.value('$drawerHeight'),
+          height: EStyleSheet.value(drawerHeight + 'rem'),
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value('$drawerHeight')]
+              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value(drawerHeight + 'rem')]
             })
           }]
         }}>
@@ -171,7 +173,6 @@ class PopularProduct extends Component {
 }
 
 const styles = EStyleSheet.create({
-  $drawerHeight: '402rem',
   pageDot: {
     width: '7rem',
     height: '7rem',
