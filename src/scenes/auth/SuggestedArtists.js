@@ -1,4 +1,3 @@
-
 import React, { Component, Fragment } from 'react';
 import { FlatList, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -53,7 +52,7 @@ class SuggestedArtists extends Component {
             name="star"
             size={EStyleSheet.value('16rem')}
             color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
-            containerStyle={styles.star}
+            containerStyle={cardStyles.star}
           />
         ))}
       </Fragment>
@@ -64,37 +63,37 @@ class SuggestedArtists extends Component {
     const checked = this.state.checkedArtists.indexOf(index) !== -1;
 
     return (
-      <View style={styles.cardWrapper}>
+      <View style={cardStyles.wrapper}>
         <TouchableWithoutFeedback onPress={() => this.onClickItem(index)}>
           <View style={{
-            ...styles.card,
+            ...cardStyles.container,
             borderColor: EStyleSheet.value(checked ? '$secondaryColor' : '$card'),
             ...this.props.appTheme.styles.shadow4
           }}>
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <View style={styles.avatarWrapper}>
-                <Image source={{ uri: item.avatar }} style={styles.avatar} />
+              <View style={{ flex: 1 }}>
+                <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
               </View>
               {checked && (
                 <Icon type="font-awesome" name="check-circle" size={EStyleSheet.value('24rem')} color={EStyleSheet.value('$secondaryColor')} />
               )}
             </View>
-            <Text style={styles.name}>{item.fullName}</Text>
-            <View style={styles.tagBar}>
+            <Text style={cardStyles.name}>{item.fullName}</Text>
+            <View style={cardStyles.tagBar}>
               {item.tags.map((tag, subIndex) => (
                 <Text key={subIndex} style={{
-                  ...styles.tag,
+                  ...cardStyles.tag,
                   marginRight: subIndex < item.tags.length - 1 ? EStyleSheet.value('4rem') : 0
                 }}>{tag}</Text>
               ))}
             </View>
-            <View style={styles.scoreReview}>
+            <View style={cardStyles.scoreReview}>
               {this.renderScore(item.score)}
-              <Text style={styles.reviews}>{item.reviews} reviews</Text>
+              <Text style={cardStyles.reviews}>{item.reviews} reviews</Text>
             </View>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.products.map((product, subIndex) => (
-                <Image key={subIndex} style={styles.product} source={{ uri: product }} />
+                <Image key={subIndex} style={cardStyles.product} source={{ uri: product }} />
               ))}
             </View>
           </View>
@@ -165,11 +164,24 @@ const styles = EStyleSheet.create({
   listMargin: {
     width: '8rem'
   },
-  cardWrapper: {
-    paddingHorizontal: '8rem',
-    marginVertical: '48rem'
+  button: {
+    width: '254rem',
+    height: '48rem',
+    borderRadius: '12rem'
   },
-  card: {
+  buttonTitle: {
+    fontFamily: 'Roboto',
+    fontSize: '16rem',
+    fontWeight: 'bold'
+  }
+});
+
+const cardStyles = EStyleSheet.create({
+  wrapper: {
+    paddingHorizontal: '8rem',
+    justifyContent: 'center'
+  },
+  container: {
     width: '254rem',
     height: '272rem',
     padding: '24rem',
@@ -177,16 +189,13 @@ const styles = EStyleSheet.create({
     borderRadius: '12rem',
     backgroundColor: '$card'
   },
-  avatarWrapper: {
-    flex: 1,
-    marginBottom: '8rem'
-  },
   avatar: {
     width: '48rem',
     height: '48rem',
     borderRadius: '24rem'
   },
   name: {
+    marginTop: '8rem',
     color: '$title',
     fontFamily: 'Roboto',
     fontSize: '16rem',
@@ -223,16 +232,6 @@ const styles = EStyleSheet.create({
     color: '$label',
     fontFamily: 'Roboto',
     fontSize: '10rem'
-  },
-  button: {
-    width: '254rem',
-    height: '48rem',
-    borderRadius: '12rem'
-  },
-  buttonTitle: {
-    fontFamily: 'Roboto',
-    fontSize: '16rem',
-    fontWeight: 'bold'
   },
   product: {
     width: '64rem',
