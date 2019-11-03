@@ -19,9 +19,9 @@
 {
   // You can skip this line if you have the latest version of the SDK installed
   [[FBSDKApplicationDelegate sharedInstance] application:application
-    didFinishLaunchingWithOptions:launchOptions];
+                           didFinishLaunchingWithOptions:launchOptions];
+
   // Add any custom logic here.
-  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"muanation"
