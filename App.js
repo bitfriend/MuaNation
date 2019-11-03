@@ -6,6 +6,8 @@
  * @flow
  */
 
+console.disableYellowBox = true;
+
 import React, { Component } from 'react';
 import { Animated, Easing, Text } from 'react-native';
 import { Icon, ThemeProvider } from 'react-native-elements';
@@ -81,8 +83,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { getProducts } from './src/controllers/product/actions';
-
-console.disableYellowBox = true;
 
 const transitionConfig = () => {
   return {
