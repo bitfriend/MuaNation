@@ -230,7 +230,7 @@ const FeaturedStackNav = createStackNavigator({
   }
 });
 
-function getTabeBarLabel(focused, tintColor, title) {
+function getTabBarLabel(focused, tintColor, title) {
   if (focused) {
     return <Text style={{
       textAlign: 'center',
@@ -254,7 +254,7 @@ const AppTabNav = createBottomTabNavigator({
   Featured: {
     screen: FeaturedStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="font-awesome" name="star" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -263,7 +263,7 @@ const AppTabNav = createBottomTabNavigator({
   Discover: {
     screen: DiscoverStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Discover'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Discover'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="ios-search" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -272,7 +272,7 @@ const AppTabNav = createBottomTabNavigator({
   Calendar: {
     screen: CalendarStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Calendar'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Calendar'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="ios-calendar" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -281,7 +281,7 @@ const AppTabNav = createBottomTabNavigator({
   Profile: {
     screen: ProfileStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="md-person" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
