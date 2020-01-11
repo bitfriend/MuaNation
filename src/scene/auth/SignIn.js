@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 
 import ThemeButton from '../../component/theme/Button';
 import EmailModal from '../../component/EmailModal';
+import { apiRequest } from '../../controller/api/actions';
 import { setLoading, clearLoading } from '../../controller/common/actions';
 import { signInWithFacebookSuccess, signInWithFacebookFailure, signInWithInstagram } from '../../controller/auth/actions';
 import * as types from '../../controller/auth/types';
@@ -60,38 +61,37 @@ class SignIn extends Component {
               }
               console.log('facebook login successful', res);
               AsyncStorage.getItem('mua_token').then(muaToken => {
-                fetch('https://muanation.com/api/users/add.json', {
+                this.props.apiRequest({
+                  callback: true,
+                  url: '/users/add.json',
                   method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${muaToken}`
-                  },
-                  body: qs.stringify({
+                  data: {
                     type: 'facebook',
                     facebook_id: res.id,
                     email: res.email
-                  })
-                }).then(response => {
-                  return response.json();
-                }).then(response => {
-                  if (response.message.success) {
-                    this.props.signInWithFacebookSuccess({
-                      facebook_id: res.id,
-                      username: res.name,
-                      email: res.email,
-                      facebook_token: result.accessToken
-                    });
-                    this.props.clearLoading();
-                    this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
-                  } else {
+                  },
+                  onSuccess: (json) => {
+                    if (json.message.success) {
+                      this.props.signInWithFacebookSuccess({
+                        facebook_id: res.id,
+                        username: res.name,
+                        email: res.email,
+                        facebook_token: result.accessToken
+                      });
+                      this.props.clearLoading();
+                      this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+                    } else {
+                      this.props.signInWithFacebookFailure();
+                      this.props.clearLoading();
+                      Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
+                    }
+                  },
+                  onFailure: (error) => {
                     this.props.signInWithFacebookFailure();
                     this.props.clearLoading();
-                    Toast.showWithGravity(response.message.msg, Toast.SHORT, Toast.CENTER);
-                  }
-                }).catch(error => {
-                  this.props.signInWithFacebookFailure();
-                  this.props.clearLoading();
-                  Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+                    Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+                  },
+                  label: 'Login'
                 });
               }).catch(error => {
                 this.props.signInWithFacebookFailure();
@@ -293,6 +293,7 @@ const styles = EStyleSheet.create({
 });
 
 const mapDispatchToProps = (dispacth) => ({
+  apiRequest: (params) => dispacth(apiRequest(params)),
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
   signInWithFacebookSuccess: (payload) => dispacth(signInWithFacebookSuccess(payload)),

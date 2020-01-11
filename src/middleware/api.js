@@ -29,90 +29,53 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
   if (!!label) {
     dispatch(apiStart(label));
   }
+  let operation = null;
 
   if (method === 'GET') {
     let path = baseURL + url;
     if (!isEmpty(data)) {
       path += '?' + qs.stringify(data);
     }
-    fetch(path).then(response => response.json()).then(json => {
-      if (callback) {
-        onSuccess(json);
-      } else {
-        dispatch(onSuccess(json));
-      }
-    }).catch(error => {
-      console.log(url, error);
-      dispatch(apiError(error));
-      if (callback) {
-        onFailure(error);
-      } else {
-        dispatch(onFailure(error));
-      }
-
-      if (error.response && error.response.status === 403) {
-        dispatch(accessDenied(window.location.pathname));
-      }
-    }).finally(() => {
-      if (!!label) {
-        dispatch(apiEnd(label));
-      }
-    });
+    operation = fetch(path);
   } else if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
-    fetch(baseURL + url, {
+    operation = fetch(baseURL + url, {
       method,
       body: JSON.stringify(data),
       headers: headers || {
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
-    }).then(response => response.json()).then(json => {
-      if (callback) {
-        onSuccess(json);
-      } else {
-        dispatch(onSuccess(json));
-      }
-    }).catch(error => {
-      console.log(url, error);
-      dispatch(apiError(error));
-      if (callback) {
-        onFailure(error);
-      } else {
-        dispatch(onFailure(error));
-      }
-
-      if (error.response && error.response.status === 403) {
-        dispatch(accessDenied(window.location.pathname));
-      }
-    }).finally(() => {
-      if (!!label) {
-        dispatch(apiEnd(label));
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${accessToken}`
       }
     });
   } else if (method === 'DELETE') {
-    fetch(baseURL + url, {
+    operation = fetch(baseURL + url, {
       method
-    }).then(response => response.json()).then(json => {
-      if (callback) {
-        onSuccess(json);
-      } else {
-        dispatch(onSuccess(json));
-      }
-    }).catch(error => {
-      console.log(url, error);
-      dispatch(apiError(error));
-      if (callback) {
-        onFailure(error);
-      } else {
-        dispatch(onFailure(error));
-      }
-
-      if (error.response && error.response.status === 403) {
-        dispatch(accessDenied(window.location.pathname));
-      }
-    }).finally(() => {
-      if (!!label) {
-        dispatch(apiEnd(label));
-      }
     });
   }
+
+  if (!operation) {
+    return;
+  }
+  operation.then(response => response.json()).then(json => {
+    if (callback) {
+      onSuccess(json);
+    } else {
+      dispatch(onSuccess(json));
+    }
+  }).catch(error => {
+    console.log(url, error);
+    dispatch(apiError(error));
+    if (callback) {
+      onFailure(error);
+    } else {
+      dispatch(onFailure(error));
+    }
+
+    if (error.response && error.response.status === 403) {
+      dispatch(accessDenied(window.location.pathname));
+    }
+  }).finally(() => {
+    if (!!label) {
+      dispatch(apiEnd(label));
+    }
+  });
 }
