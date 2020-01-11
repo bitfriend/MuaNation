@@ -8,7 +8,6 @@ import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
 import Toast from 'react-native-simple-toast';
 import { SwitchActions } from 'react-navigation';
-import qs from 'qs';
 import { connect } from 'react-redux';
 
 import ThemeButton from '../../component/theme/Button';
