@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Alert, Dimensions, Image, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import Swiper from 'react-native-swiper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk';
 import InstagramLogin from 'react-native-instagram-login';
@@ -24,16 +23,16 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [
-        '../../../asset/image/splash1.png',
-        '../../../asset/image/splash2.png',
-        '../../../asset/image/splash3.png'
-      ],
       activeImage: 0,
       modalVisible: false,
       instagramEmail: '',
       instagramToken: ''
     };
+    this.images = [
+      require('../../../asset/image/splash1.png'),
+      require('../../../asset/image/splash2.png'),
+      require('../../../asset/image/splash3.png')
+    ];
     this.windowWidth = Dimensions.get('window').width;
   }
 
@@ -153,16 +152,16 @@ class SignIn extends Component {
         </View>
         <View style={{ flex: 1 }}>
           <Carousel
-            data={this.state.images}
+            data={this.images}
             renderItem={({ item, index }) => (
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/splash1.png')} />
+              <Image resizeMode="contain" style={styles.banner} source={item} />
             )}
             sliderWidth={this.windowWidth}
             itemWidth={EStyleSheet.value('331rem')}
             onSnapToItem={(index) => this.setState({ activeImage: index })}
           />
           <Pagination
-            dotsLength={this.state.images.length}
+            dotsLength={this.images.length}
             activeDotIndex={this.state.activeImage}
             containerStyle={paginationStyles.container}
             dotContainerStyle={paginationStyles.dotContainer}
@@ -296,8 +295,6 @@ const styles = EStyleSheet.create({
   }
 });
 
-const dotColor = Color(EStyleSheet.value('$grey0Color')).alpha(0.3).string();
-
 const paginationStyles = EStyleSheet.create({
   container: {
     paddingTop: '16rem',
@@ -308,8 +305,8 @@ const paginationStyles = EStyleSheet.create({
   },
   dot: {
     width: '7rem',
-    height: '8rem',
-    borderRadius: '4rem',
+    height: '7rem',
+    borderRadius: '3.5rem',
     backgroundColor: '$grey0Color'
   }
 });

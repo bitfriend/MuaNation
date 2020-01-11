@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Animated, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { Component, Fragment } from 'react';
+import { Animated, Dimensions, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Swiper from 'react-native-swiper';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -17,9 +17,15 @@ const drawerHeight = 402;
 const criteria = [0, 1, 2, 3, 4];
 
 class PopularProduct extends Component {
-  state = {
-    drawed: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeImage: 0,
+      drawed: false
+    };
+    this.windowWidth = Dimensions.get('window').width;
+    this.windowHeight = Dimensions.get('window').height;
+  }
 
   animatedValue = new Animated.Value(0);
 
@@ -83,24 +89,32 @@ class PopularProduct extends Component {
   }
 
   render() {
-    console.log('artists', this.props.artists);
     return (
       <View style={{ flex: 1 }}>
         <View style={{ width: '100%', height: '100%' }}>
           {this.props.images && (
-            <Swiper
-              dotColor={Color(EStyleSheet.value('$container')).alpha(0.3).string()}
-              dotStyle={styles.pageDot}
-              activeDotColor={EStyleSheet.value('$container')}
-              activeDotStyle={styles.pageDot}
-              paginationStyle={styles.pagination}
-            >
-              {this.props.images.map((image, index) => (
-                <View key={index}>
-                  <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: image }} />
-                </View>
-              ))}
-            </Swiper>
+            <Fragment>
+              <Carousel
+                data={this.props.images}
+                renderItem={({ item, index }) => (
+                  <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
+                )}
+                sliderWidth={this.windowWidth}
+                itemWidth={this.windowWidth}
+                itemHeight={this.windowHeight}
+                onSnapToItem={(index) => this.setState({ activeImage: index })}
+              />
+              <Pagination
+                dotsLength={this.props.images.length}
+                activeDotIndex={this.state.activeImage}
+                containerStyle={paginationStyles.container}
+                dotContainerStyle={paginationStyles.dotContainer}
+                dotStyle={paginationStyles.dot}
+                inactiveDotStyle={paginationStyles.dot}
+                inactiveDotOpacity={0.3}
+                inactiveDotScale={1}
+              />
+            </Fragment>
           )}
         </View>
         <Animated.View style={{
@@ -173,14 +187,6 @@ class PopularProduct extends Component {
 }
 
 const styles = EStyleSheet.create({
-  pageDot: {
-    width: '7rem',
-    height: '7rem',
-    borderRadius: '3.5rem'
-  },
-  pagination: {
-    bottom: '50rem'
-  },
   panel: {
     width: '100%',
     height: '100%',
@@ -234,6 +240,24 @@ const styles = EStyleSheet.create({
     color: '$label',
     fontFamily: 'Roboto',
     fontSize: '18rem'
+  }
+});
+
+const paginationStyles = EStyleSheet.create({
+  container: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    paddingBottom: '50rem'
+  },
+  dotContainer: {
+    marginHorizontal: '5rem'
+  },
+  dot: {
+    width: '7rem',
+    height: '7rem',
+    borderRadius: '3.5rem',
+    backgroundColor: '$container'
   }
 });
 
