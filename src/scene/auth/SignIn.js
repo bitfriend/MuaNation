@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, Image, Text, View } from 'react-native';
+import { Alert, Dimensions, Image, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Swiper from 'react-native-swiper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk';
@@ -20,11 +21,21 @@ import * as types from '../../controller/auth/types';
 const Color = require('color');
 
 class SignIn extends Component {
-  state = {
-    modalVisible: false,
-    instagramEmail: '',
-    instagramToken: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: [
+        '../../../asset/image/splash1.png',
+        '../../../asset/image/splash2.png',
+        '../../../asset/image/splash3.png'
+      ],
+      activeImage: 0,
+      modalVisible: false,
+      instagramEmail: '',
+      instagramToken: ''
+    };
+    this.windowWidth = Dimensions.get('window').width;
+  }
 
   componentDidMount() {
     // CookieManager.clearAll().then((res) => {
@@ -140,25 +151,26 @@ class SignIn extends Component {
             <Text style={styles.place}>place for professionals</Text>
           </View>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          <Swiper
-            dotColor={Color(EStyleSheet.value('$grey0Color')).alpha(0.3).string()}
-            dotStyle={styles.pageDot}
-            activeDotColor={EStyleSheet.value('$grey0Color')}
-            activeDotStyle={styles.pageDot}
-            containerStyle={styles.swiperContainer}
-            paginationStyle={styles.swiperPagination}
-          >
-            <View>
+        <View style={{ flex: 1 }}>
+          <Carousel
+            data={this.state.images}
+            renderItem={({ item, index }) => (
               <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/splash1.png')} />
-            </View>
-            <View>
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/splash2.png')} />
-            </View>
-            <View>
-              <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/splash3.png')} />
-            </View>
-          </Swiper>
+            )}
+            sliderWidth={this.windowWidth}
+            itemWidth={EStyleSheet.value('331rem')}
+            onSnapToItem={(index) => this.setState({ activeImage: index })}
+          />
+          <Pagination
+            dotsLength={this.state.images.length}
+            activeDotIndex={this.state.activeImage}
+            containerStyle={paginationStyles.container}
+            dotContainerStyle={paginationStyles.dotContainer}
+            dotStyle={paginationStyles.dot}
+            inactiveDotStyle={paginationStyles.dot}
+            inactiveDotOpacity={0.3}
+            inactiveDotScale={1}
+          />
         </View>
       </View>
     );
@@ -263,13 +275,6 @@ const styles = EStyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  pageDot: {
-    width: '7rem',
-    height: '7rem',
-    borderRadius: '3.5rem'
-  },
-  swiperContainer: { paddingBottom: '16rem' },
-  swiperPagination: { bottom: '-8rem' },
   button: {
     width: '254rem',
     height: '48rem',
@@ -288,6 +293,24 @@ const styles = EStyleSheet.create({
     color: '$label',
     fontFamily: 'Roboto',
     fontSize: '14rem'
+  }
+});
+
+const dotColor = Color(EStyleSheet.value('$grey0Color')).alpha(0.3).string();
+
+const paginationStyles = EStyleSheet.create({
+  container: {
+    paddingTop: '16rem',
+    paddingBottom: '-8rem'
+  },
+  dotContainer: {
+    marginHorizontal: '5rem'
+  },
+  dot: {
+    width: '7rem',
+    height: '8rem',
+    borderRadius: '4rem',
+    backgroundColor: '$grey0Color'
   }
 });
 
