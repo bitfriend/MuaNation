@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { AccessToken, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk';
 import InstagramLogin from 'react-native-instagram-login';
 import CookieManager from 'react-native-cookies';
+import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
 import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 import EmailModal from '../../component/EmailModal';
-import { joinWithFacebook, joinWithInstagram } from '../../controller/auth/actions';
+import { apiRequest } from '../../controller/api/actions';
+import { setLoading, clearLoading } from '../../controller/common/actions';
+import * as types from '../../controller/auth/types';
 
 const Color = require('color');
 
@@ -22,12 +26,157 @@ class CreateAccount extends Component {
   };
 
   onClickFacebook = () => {
-    this.props.joinWithFacebook(this.state.role, this.props.navigation, (msg) => Alert.alert(msg));
+    this.props.setLoading();
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      (result) => {
+        if (result.isCancelled) {
+          console.log('facebook login cancelled');
+          this.props.clearLoading();
+          this.props.joinFailure();
+          return;
+        }
+        AccessToken.getCurrentAccessToken().then(
+          (result) => {
+            console.log('get token successful', result.accessToken);
+            const request = new GraphRequest('/me', {
+              accessToken: result.accessToken,
+              parameters: {
+                fields: { string: ['id', 'name', 'email'].join(',') }
+              }
+            }, (error, res) => {
+              if (error) {
+                console.log('facebook get info failed', error);
+                this.props.clearLoading();
+                this.props.joinFailure();
+                Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+                return;
+              }
+              console.log('facebook login successful', res);
+              this.props.apiRequest({
+                callback: true,
+                url: '/users/add.json',
+                method: 'POST',
+                data: {
+                  type: 'facebook',
+                  facebook_id: res.id,
+                  username: res.name,
+                  email: res.email,
+                  password: '1234567890',
+                  facebook_token: result.accessToken,
+                  role: this.state.role,
+                  active: 1
+                },
+                onSuccess: (json) => {
+                  if (json.message.success) {
+                    this.props.joinSuccess();
+                    AsyncStorage.setItem('mua_token', json.data.token).then(() => {
+                      this.props.clearLoading();
+                      this.props.navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+                    }).catch(error => {
+                      this.props.clearLoading();
+                      Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+                    });
+                  } else {
+                    this.props.joinFailure();
+                    this.props.clearLoading();
+                    Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
+                  }
+                },
+                onFailure: (error) => {
+                  this.props.signInFailure();
+                  this.props.clearLoading();
+                  Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+                },
+                label: 'Login'
+              });
+            });
+            new GraphRequestManager().addRequest(request).start();
+          },
+          (reason) => {
+            console.log('facebook get token failed', reason);
+            this.props.clearLoading();
+            this.props.joinFailure();
+            Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+          }
+        );
+      },
+      (reason) => {
+        console.log('facebook login failed', reason);
+        this.props.clearLoading();
+        this.props.joinFailure();
+        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+      }
+    ).catch(reason => {
+      console.log('facebook login failed', reason);
+      this.props.clearLoading();
+      this.props.joinFailure();
+      Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+    });
   }
 
   onClickInstagram = () => {
     // this.instagramLogin.show();
     this.props.navigation.navigate('ImportMedia');
+  }
+
+  joinWithInstagram(role, token, email) {
+    this.props.setLoading();
+    this.props.apiRequest({
+      callback: true,
+      baseURL: 'https://api.instagram.com/v1',
+      url: '/users/self/',
+      method: 'GET',
+      data: {
+        access_token: token
+      },
+      onSuccess: (json) => {
+        console.log('get user info successful', res.data);
+        this.props.apiRequest({
+          callback: true,
+          url: '/users/add.json',
+          method: 'POST',
+          data: {
+            type: 'instagram',
+            instagram_id: res.data.id,
+            username: res.data.full_name,
+            email,
+            password: '1234567890',
+            instagram_token: token,
+            role
+          },
+          onSuccess: (json) => {
+            if (json.message.success) {
+              dispatch({ type: types.JOIN_WITH_INSTAGRAM_SUCCESS });
+              AsyncStorage.setItem('mua_token', json.data.token).then(() => {
+                this.props.clearLoading();
+                navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+              }).catch(error => {
+                this.props.clearLoading();
+                if (onError) {
+                  onError(error);
+                }
+              });
+            } else {
+              this.props.clearLoading();
+              this.props.joinFailure();
+              Toast.showWithGravity(error.message.msg, Toast.SHORT, Toast.CENTER);
+            }
+          },
+          onFailure: (error) => {
+            this.props.clearLoading();
+            this.props.joinFailure();
+            Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+          }
+        });
+      },
+      onFailure: (error) => {
+        console.log('get user info failed', error);
+        this.props.clearLoading();
+        this.props.joinFailure();
+        Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+      },
+      label: 'Join'
+    });
   }
 
   renderItem({ checked, title, description, onPress }) {
@@ -127,7 +276,7 @@ class CreateAccount extends Component {
           visible={this.state.modalVisible}
           onAccept={(email) => {
             this.setState({ modalVisible: false });
-            this.props.joinWithInstagram(this.state.role, this.state.instagramToken, email, this.props.navigation, (reason) => Alert.alert(reason));
+            this.joinWithInstagram(this.state.role, this.state.instagramToken, email);
           }}
           onReject={() => this.setState({ modalVisible: false })}
         />
@@ -204,9 +353,11 @@ const mapStateToProps = ({
 });
 
 const mapDispatchToProps = (dispacth) => ({
-  joinWithFacebook: (role, onError) => dispacth(joinWithFacebook(role, onError)),
-  joinWithInstagram: (role, token, email, onError) => dispacth(joinWithInstagram(role, token, email, onError)),
-  joinWithInstagramFailure: () => dispacth({ type: types.JOIN_WITH_INSTAGRAM_FAILURE })
+  apiRequest: (params) => dispacth(apiRequest(params)),
+  setLoading: () => dispacth(setLoading()),
+  clearLoading: () => dispacth(clearLoading()),
+  joinSuccess: () => dispacth({ type: types.JOIN_SUCCESS }),
+  joinFailure: () => dispacth({ type: types.JOIN_FAILURE })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount);

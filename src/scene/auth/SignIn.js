@@ -14,7 +14,6 @@ import ThemeButton from '../../component/theme/Button';
 import EmailModal from '../../component/EmailModal';
 import { apiRequest } from '../../controller/api/actions';
 import { setLoading, clearLoading } from '../../controller/common/actions';
-import { signInWithFacebookSuccess, signInWithFacebookFailure, signInWithInstagram } from '../../controller/auth/actions';
 import * as types from '../../controller/auth/types';
 
 const Color = require('color');
@@ -25,9 +24,9 @@ class SignIn extends Component {
     this.state = {
       activeImage: 0,
       modalVisible: false,
-      instagramEmail: '',
-      instagramToken: ''
+      instagramEmail: ''
     };
+    this.instagramToken = '';
     this.images = [
       require('../../../asset/image/splash1.png'),
       require('../../../asset/image/splash2.png'),
@@ -49,7 +48,7 @@ class SignIn extends Component {
         if (result.isCancelled) {
           console.log('facebook login cancelled');
           this.props.clearLoading();
-          this.props.signInWithFacebookFailure();
+          this.props.signInFailure();
           return;
         }
         AccessToken.getCurrentAccessToken().then(
@@ -64,7 +63,7 @@ class SignIn extends Component {
               if (error) {
                 console.log('facebook get info failed', error);
                 this.props.clearLoading();
-                this.props.signInWithFacebookFailure();
+                this.props.signInFailure();
                 Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
                 return;
               }
@@ -81,7 +80,7 @@ class SignIn extends Component {
                   },
                   onSuccess: (json) => {
                     if (json.message.success) {
-                      this.props.signInWithFacebookSuccess({
+                      this.props.signInSuccess({
                         facebook_id: res.id,
                         username: res.name,
                         email: res.email,
@@ -90,20 +89,20 @@ class SignIn extends Component {
                       this.props.clearLoading();
                       this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
                     } else {
-                      this.props.signInWithFacebookFailure();
+                      this.props.signInFailure();
                       this.props.clearLoading();
                       Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
                     }
                   },
                   onFailure: (error) => {
-                    this.props.signInWithFacebookFailure();
+                    this.props.signInFailure();
                     this.props.clearLoading();
                     Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
                   },
                   label: 'Login'
                 });
               }).catch(error => {
-                this.props.signInWithFacebookFailure();
+                this.props.signInFailure();
                 this.props.clearLoading();
                 Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
               });
@@ -113,7 +112,7 @@ class SignIn extends Component {
           (reason) => {
             console.log('facebook get token failed', reason);
             this.props.clearLoading();
-            this.props.signInWithFacebookFailure();
+            this.props.signInFailure();
             Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
           }
         );
@@ -121,19 +120,80 @@ class SignIn extends Component {
       (reason) => {
         console.log('facebook login failed', reason);
         this.props.clearLoading();
-        this.props.signInWithFacebookFailure();
+        this.props.signInFailure();
         Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
       }
     ).catch(reason => {
       console.log('facebook login failed', reason);
       this.props.clearLoading();
-      this.props.signInWithFacebookFailure();
+      this.props.signInFailure();
       Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
     });
   }
 
   onClickInstagram = () => {
     this.instagramLogin.show();
+  }
+
+  signInWithInstagram(token, email) {
+    this.props.setLoading();
+    this.props.apiRequest({
+      callback: true,
+      baseURL: 'https://api.instagram.com/v1',
+      url: '/users/self/',
+      method: 'GET',
+      data: {
+        access_token: token
+      },
+      onSuccess: (json) => {
+        console.log('get user info successful', json.data);
+        const userId = json.data.id;
+        const userName = json.data.username;
+        AsyncStorage.getItem('mua_token').then(muaToken => {
+          this.props.apiRequest({
+            callback: true,
+            url: '/users/token.json',
+            method: 'POST',
+            data: {
+              type: 'instagram',
+              instagram_id: userId,
+              email
+            },
+            onSuccess: (json) => {
+              if (json.success) {
+                console.log('mua login successful', json);
+                this.props.signInSuccess({
+                  instagram_id: userId,
+                  username: userName,
+                  email,
+                  instagram_token: token
+                });
+                this.props.clearLoading();
+                this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+              } else {
+                console.log('mua login failed', json);
+                this.props.signInFailure();
+                this.props.clearLoading();
+                Toast.showWithGravity(json.data.message, Toast.SHORT, Toast.CENTER);
+              }
+            },
+            onFailure: (reason) => {
+              this.props.signInFailure();
+              this.props.clearLoading();
+              Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+            },
+            label: 'Login'
+          });
+        });
+      },
+      onFailure: (reason) => {
+        console.log('get user info failed', reason);
+        this.props.clearLoading();
+        this.props.signInWithInstagramFailure();
+        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+      },
+      label: 'Login'
+    });
   }
 
   onClickSignup = () => {
@@ -211,10 +271,8 @@ class SignIn extends Component {
           scopes={['basic']}
           onLoginSuccess={(token) => {
             console.log('Instagram login succeeded', token);
-            this.setState({
-              modalVisible: true,
-              instagramToken: token
-            });
+            this.setState({ modalVisible: true });
+            this.instagramToken = token;
           }}
           onLoginFailure={(reason) => {
             console.log('Instagram login failed', reason);
@@ -234,7 +292,7 @@ class SignIn extends Component {
           visible={this.state.modalVisible}
           onAccept={(email) => {
             this.setState({ modalVisible: false });
-            this.props.signInWithInstagram(this.state.instagramToken, email, this.props.navigation, (reason) => Alert.alert(reason));
+            this.signInWithInstagram(this.instagramToken, email);
           }}
           onReject={() => this.setState({ modalVisible: false })}
         />
@@ -315,10 +373,8 @@ const mapDispatchToProps = (dispacth) => ({
   apiRequest: (params) => dispacth(apiRequest(params)),
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
-  signInWithFacebookSuccess: (payload) => dispacth(signInWithFacebookSuccess(payload)),
-  signInWithFacebookFailure: () => dispacth(signInWithFacebookFailure()),
-  signInWithInstagram: (token, email, onError) => dispacth(signInWithInstagram(token, email, onError)),
-  signInWithInstagramFailure: () => dispacth({ type: types.SIGN_IN_WITH_INSTAGRAM_FAILURE })
+  signInSuccess: (payload) => dispacth({ type: types.SIGN_IN_SUCCESS, payload }),
+  signInFailure: () => dispacth({ type: types.SIGN_IN_FAILURE })
 });
 
 export default connect(null, mapDispatchToProps)(SignIn);
