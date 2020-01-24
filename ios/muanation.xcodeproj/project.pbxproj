@@ -61,6 +61,7 @@
 		A51CC2F02350A17200FA1BB7 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2D523509FB800FA1BB7 /* libRNCWebView.a */; };
 		A51CC2F12350A18300FA1BB7 /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2D223509FB800FA1BB7 /* libRNCookieManagerIOS.a */; };
 		A51CC2F22350A18B00FA1BB7 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2BE23509FB800FA1BB7 /* libFastImage.a */; };
+		A55E5CB423DB71E800D0D1AA /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A51CC2C623509FB800FA1BB7 /* libRCTFBSDK.a */; };
 		A5B0FE3A2367BBC40020FCE9 /* libfishhook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6841FA4F8DC00B85C8A /* libfishhook.a */; };
 		A5B0FE3B2367BBD50020FCE9 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		A5B0FE3C2367BBE60020FCE9 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
@@ -575,6 +576,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A55E5CB423DB71E800D0D1AA /* libRCTFBSDK.a in Frameworks */,
 				A5B0FE452367BC7C0020FCE9 /* libcxxreact.a in Frameworks */,
 				A5B0FE442367BC460020FCE9 /* libRCTActionSheet.a in Frameworks */,
 				A5B0FE432367BC3C0020FCE9 /* libRCTAnimation.a in Frameworks */,
@@ -1889,7 +1891,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.$(PRODUCT_NAME:rfc1034identifier).app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/muanation.app/muanation";
 			};
@@ -1922,7 +1924,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.$(PRODUCT_NAME:rfc1034identifier).app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/muanation.app/muanation";
 			};
@@ -1958,8 +1960,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.muanation.app;
-				PRODUCT_NAME = muanation;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.$(PRODUCT_NAME:rfc1034identifier).app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1993,8 +1995,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.muanation.app;
-				PRODUCT_NAME = muanation;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.$(PRODUCT_NAME:rfc1034identifier).app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
