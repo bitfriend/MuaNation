@@ -22,16 +22,16 @@ import {
 
 import { combineReducers } from 'redux';
 
-import commonReducer from './src/controllers/common/reducer';
-import authReducer from './src/controllers/auth/reducer';
-import artistReducer from './src/controllers/artist/reducer';
-import productReducer from './src/controllers/product/reducer';
-import relationReducer from './src/controllers/relation/reducer';
-import reviewReducer from './src/controllers/review/reducer';
-import discoverReducer from './src/controllers/discover/reducer';
-import calendarReducer from './src/controllers/calendar/reducer';
-import chatReducer from './src/controllers/chat/reducer';
-import serviceReducer from './src/controllers/service/reducer';
+import commonReducer from './src/controller/common/reducer';
+import authReducer from './src/controller/auth/reducer';
+import artistReducer from './src/controller/artist/reducer';
+import productReducer from './src/controller/product/reducer';
+import relationReducer from './src/controller/relation/reducer';
+import reviewReducer from './src/controller/review/reducer';
+import discoverReducer from './src/controller/discover/reducer';
+import calendarReducer from './src/controller/calendar/reducer';
+import chatReducer from './src/controller/chat/reducer';
+import serviceReducer from './src/controller/service/reducer';
 
 const appReducer = combineReducers({
   common: commonReducer,
@@ -46,43 +46,46 @@ const appReducer = combineReducers({
   service: serviceReducer
 });
 
-const store = createStore(appReducer, applyMiddleware(thunk));
-store.dispatch(getProducts());
-
-import Splash from './src/scenes/Splash';
-
-import SignIn from './src/scenes/auth/SignIn';
-import CreateAccount from './src/scenes/auth/CreateAccount';
-import ImportMedia from './src/scenes/auth/ImportMedia';
-import AccessLocation from './src/scenes/auth/AccessLocation';
-import SuggestedArtists from './src/scenes/auth/SuggestedArtists';
-
-import FixedTabBar from './src/components/FixedTabBar';
-import Artists from './src/scenes/featured/Artists';
-import Products from './src/scenes/featured/Products';
-
-import Artist from './src/scenes/featured/Artist';
-import Relations from './src/scenes/featured/Relations';
-import Reviews from './src/scenes/featured/Reviews';
-import SaleProduct from './src/scenes/featured/SaleProduct';
-import PopularProduct from './src/scenes/featured/PopularProduct';
-import Discover from './src/scenes/tab/Discover';
-import Bookings from './src/scenes/calendar/Bookings';
-import Booking from './src/scenes/calendar/Booking';
-import Notifications from './src/scenes/calendar/Notifications';
-import Notification from './src/scenes/calendar/Notification';
-import Account from './src/scenes/profile/Account';
-import AddService from './src/scenes/profile/AddService';
-import EditInfo from './src/scenes/profile/EditInfo';
-import Chats from './src/scenes/profile/Chats';
-import Chat from './src/scenes/profile/Chat';
-import Settings from './src/scenes/profile/Settings';
-
-import LoadingSpinner from './src/components/LoadingSpinner';
-import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { getProducts } from './src/controllers/product/actions';
+
+import apiMiddleware from './src/middleware/api';
+
+const store = createStore(appReducer, applyMiddleware(thunk, apiMiddleware));
+store.dispatch(getProducts());
+
+import Splash from './src/scene/Splash';
+
+import SignIn from './src/scene/auth/SignIn';
+import CreateAccount from './src/scene/auth/CreateAccount';
+import ImportMedia from './src/scene/auth/ImportMedia';
+import AccessLocation from './src/scene/auth/AccessLocation';
+import SuggestedArtists from './src/scene/auth/SuggestedArtists';
+
+import FixedTabBar from './src/component/FixedTabBar';
+import Artists from './src/scene/featured/Artists';
+import Products from './src/scene/featured/Products';
+
+import Artist from './src/scene/featured/Artist';
+import Relations from './src/scene/featured/Relations';
+import Reviews from './src/scene/featured/Reviews';
+import SaleProduct from './src/scene/featured/SaleProduct';
+import PopularProduct from './src/scene/featured/PopularProduct';
+import Discover from './src/scene/tab/Discover';
+import Bookings from './src/scene/calendar/Bookings';
+import Booking from './src/scene/calendar/Booking';
+import Notifications from './src/scene/calendar/Notifications';
+import Notification from './src/scene/calendar/Notification';
+import Account from './src/scene/profile/Account';
+import AddService from './src/scene/profile/AddService';
+import EditInfo from './src/scene/profile/EditInfo';
+import Chats from './src/scene/profile/Chats';
+import Chat from './src/scene/profile/Chat';
+import Settings from './src/scene/profile/Settings';
+
+import LoadingSpinner from './src/component/LoadingSpinner';
+import { Provider } from 'react-redux';
+import { getProducts } from './src/controller/product/actions';
 
 const transitionConfig = () => {
   return {
@@ -230,7 +233,7 @@ const FeaturedStackNav = createStackNavigator({
   }
 });
 
-function getTabeBarLabel(focused, tintColor, title) {
+function getTabBarLabel(focused, tintColor, title) {
   if (focused) {
     return <Text style={{
       textAlign: 'center',
@@ -254,7 +257,7 @@ const AppTabNav = createBottomTabNavigator({
   Featured: {
     screen: FeaturedStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Featured'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Featured'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="font-awesome" name="star" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -263,7 +266,7 @@ const AppTabNav = createBottomTabNavigator({
   Discover: {
     screen: DiscoverStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Discover'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Discover'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="ios-search" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -272,7 +275,7 @@ const AppTabNav = createBottomTabNavigator({
   Calendar: {
     screen: CalendarStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Calendar'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Calendar'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="ios-calendar" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -281,7 +284,7 @@ const AppTabNav = createBottomTabNavigator({
   Profile: {
     screen: ProfileStackNav,
     navigationOptions: {
-      tabBarLabel: ({ focused, tintColor }) => getTabeBarLabel(focused, tintColor, 'Profile'),
+      tabBarLabel: ({ focused, tintColor }) => getTabBarLabel(focused, tintColor, 'Profile'),
       tabBarIcon: ({ tintColor }) => (
         <Icon type="ionicon" name="md-person" size={EStyleSheet.value('25rem')} color={tintColor} />
       )
@@ -330,8 +333,8 @@ const getActiveRouteName = (state) => {
   return state.routeName;
 };
 
-import ThemeStatusBar from './src/components/theme/StatusBar';
-import { changeStatusBar } from './src/controllers/common/actions';
+import ThemeStatusBar from './src/component/theme/StatusBar';
+import { changeStatusBar } from './src/controller/common/actions';
 
 class App extends Component {
   render() {
