@@ -1,5 +1,7 @@
 import qs from 'query-string';
 import { isEmpty } from 'lodash/fp';
+import HttpStatus from 'http-status-codes';
+
 import { API_REQUEST } from '../controller/api/types';
 import { accessDenied, apiError, apiStart, apiEnd } from '../controller/api/actions';
 
@@ -29,45 +31,88 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
   if (!!label) {
     dispatch(apiStart(label));
   }
-  let operation = null;
+  let request = null;
 
   if (method === 'GET') {
     let path = baseURL + url;
     if (!isEmpty(data)) {
       path += '?' + qs.stringify(data);
     }
-    operation = fetch(path);
+    headers = headers || {};
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    request = fetch(path, { headers });
   } else if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
-    operation = fetch(baseURL + url, {
+    headers = headers || {};
+    if (!(data instanceof FormData)) {
+      headers['Content-Type'] = 'application/json;charset=UTF-8';
+    }
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    request = fetch(baseURL + url, {
       method,
-      body: JSON.stringify(data),
-      headers: headers || {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${accessToken}`
-      }
+      body: (data instanceof FormData) ? data : JSON.stringify(data),
+      headers
     });
   } else if (method === 'DELETE') {
-    operation = fetch(baseURL + url, {
-      method
+    headers = headers || {};
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    request = fetch(baseURL + url, {
+      method,
+      headers
     });
   }
 
-  if (!operation) {
+  if (!request) {
     return;
   }
-  operation.then(response => response.json()).then(json => {
-    if (callback) {
-      onSuccess(json);
+  request.then(response => {
+    if (response.ok) {
+      return response.json();
     } else {
-      dispatch(onSuccess(json));
+      const text = HttpStatus.getStatusText(response.status);
+      throw new Error(text);
+    }
+  }).then(json => {
+    if (json.success === false) {
+      if (json.errors) {
+        const text = Object.values(json.errors).join("\n");
+        if (callback) {
+          onFailure(text);
+        } else {
+          dispatch(onFailure(text));
+        }
+      } else if (json.error) {
+        if (callback) {
+          onFailure(json.error);
+        } else {
+          dispatch(onFailure(json.error));
+        }
+      } else {
+        throw new Error('Unknown Error');
+      }
+      return;
+    }
+    if (onSuccess) {
+      if (callback) {
+        onSuccess(json);
+      } else {
+        dispatch(onSuccess(json));
+      }
     }
   }).catch(error => {
     console.log(url, error);
     dispatch(apiError(error));
-    if (callback) {
-      onFailure(error);
-    } else {
-      dispatch(onFailure(error));
+    if (onFailure) {
+      if (callback) {
+        onFailure(error.message);
+      } else {
+        dispatch(onFailure(error.message));
+      }
     }
 
     if (error.response && error.response.status === 403) {
