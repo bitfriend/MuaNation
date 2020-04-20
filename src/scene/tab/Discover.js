@@ -238,213 +238,210 @@ class Discover extends Component {
     return null;
   }
 
-  render() {
-    const primaryColor = EStyleSheet.value('$primaryColor');
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <MapView
-            style={styles.map}
-            initialRegion={this.state.location && {
-              latitude: this.state.location.coords.latitude,
-              longitude: this.state.location.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
-            }}
-            ref={(c) => this.mapView = c}
-            onMapReady={() => {
-              // End the map loading
-              console.log('discover');
-              if (Platform.OS === 'android') {
-                this.props.clearLoading(); // This halts on iOS. Don't know why.
-              }
-            }}
-            onRegionChange={region => {
-              this.mapView.getCamera().then(camera => {
-                console.log('compass angle', camera.heading);
-              });
-            }}
-          >
-            {this.state.location && (
-              <Marker
-                coordinate={{
-                  latitude: this.state.location.coords.latitude,
-                  longitude: this.state.location.coords.longitude
-                }}
-                style={styles.locationMarker}
-                anchor={{ x: 0.5, y: 0.5 }}
-              >
-                <View style={{ ...styles.outerCircle, backgroundColor: Color(primaryColor).alpha(0.08).string() }} />
-                <View style={{ ...styles.innerCircle, backgroundColor: Color(primaryColor).alpha(0.12).string() }} />
-                <Image source={require('../../../asset/image/map-marker-blue.png')} style={styles.blueMarker} />
-              </Marker>
-            )}
-            {this.props.neighbours.map((neighbour, index) => (
-              <Marker key={index} coordinate={{
-                latitude: neighbour.latitude,
-                longitude: neighbour.longitude
-              }}>
-                <Image source={require('../../../asset/image/map-marker-pink.png')} style={styles.redMarker} />
-              </Marker>
-            ))}
-          </MapView>
-        </View>
-        <Animated.View style={{
-          width: '100%',
-          height: EStyleSheet.value('240rem'),
-          position: 'absolute',
-          bottom: 0,
-          transform: [{
-            translateY: this.animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [EStyleSheet.value('64rem'), 0]
-            })
-          }]
-        }}>
-          <View style={{
-            width: '100%',
-            height: '100%',
-            ...styles.panel
-          }}>
-            <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={styles.drawer} />
-            </TouchableOpacity>
-            <Input
-              containerStyle={searchStyles.container}
-              leftIcon={{
-                name: 'search',
-                type: 'font-awesome',
-                size: EStyleSheet.value('20rem'),
-                color: EStyleSheet.value('$input')
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          initialRegion={this.state.location && {
+            latitude: this.state.location.coords.latitude,
+            longitude: this.state.location.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}
+          ref={(c) => this.mapView = c}
+          onMapReady={() => {
+            // End the map loading
+            console.log('discover');
+            if (Platform.OS === 'android') {
+              this.props.clearLoading(); // This halts on iOS. Don't know why.
+            }
+          }}
+          onRegionChange={region => {
+            this.mapView.getCamera().then(camera => {
+              console.log('compass angle', camera.heading);
+            });
+          }}
+        >
+          {this.state.location && (
+            <Marker
+              coordinate={{
+                latitude: this.state.location.coords.latitude,
+                longitude: this.state.location.coords.longitude
               }}
-              leftIconContainerStyle={searchStyles.leftIconContainer}
-              placeholder="Search"
-              placeholderTextColor={EStyleSheet.value('$placeholder')}
-              inputContainerStyle={searchStyles.inputContainer}
-              inputStyle={searchStyles.input}
-            />
-            <View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.controlBar}>
-                  {this.state.criteria.category.selected.map((category, index) => this.state.editingCriterion === 'category' ? (
-                    <Button
-                      key={index}
-                      containerStyle={buttonStyle.container}
-                      buttonStyle={{
-                        ...buttonStyle.button,
-                        backgroundColor: EStyleSheet.value('$checkedButton'),
-                        borderColor: EStyleSheet.value('$checkedButton')
-                      }}
-                      title={category}
-                      titleStyle={{
-                        ...buttonStyle.title,
-                        color: EStyleSheet.value('$checkedButtonTitle')
-                      }}
-                      icon={{
-                        name: 'x',
-                        type: 'feather',
-                        size: EStyleSheet.value('14rem'),
-                        color: EStyleSheet.value('$checkedButtonTitle')
-                      }}
-                      iconContainerStyle={buttonStyle.rightIconContainer}
-                      iconRight
-                      onPress={() => this.props.deselectCategory(category)}
-                    />
-                  ) : (
-                    <Button
-                      key={index}
-                      containerStyle={buttonStyle.container}
-                      buttonStyle={{
-                        ...buttonStyle.button,
-                        backgroundColor: EStyleSheet.value('$uncheckedButton'),
-                        borderColor: EStyleSheet.value('$grey3Color')
-                      }}
-                      title={category}
-                      titleStyle={{
-                        ...buttonStyle.title,
-                        color: EStyleSheet.value('$uncheckedButtonTitle')
-                      }}
-                    />
-                  ))}
-                  <Button
-                    containerStyle={buttonStyle.container}
-                    buttonStyle={{
-                      ...buttonStyle.button,
-                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$uncheckedButton'),
-                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$grey3Color')
-                    }}
-                    title={this.state.editingCriterion === 'category' ? 'Done' : '+Add'}
-                    titleStyle={{
-                      ...buttonStyle.title,
-                      color: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    onPress={() => this.onCriterionClicked('category')}
-                  />
-                  <Button
-                    containerStyle={buttonStyle.container}
-                    buttonStyle={{
-                      ...buttonStyle.button,
-                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$uncheckedButton'),
-                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$grey3Color')
-                    }}
-                    title={`$${this.state.criteria.price.min} - ${this.state.criteria.price.max}`}
-                    titleStyle={{
-                      ...buttonStyle.title,
-                      color: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    onPress={() => this.onCriterionClicked('price')}
-                  />
-                  <Button
-                    containerStyle={buttonStyle.container}
-                    buttonStyle={{
-                      ...buttonStyle.button,
-                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$uncheckedButton'),
-                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$grey3Color')
-                    }}
-                    icon={{
-                      name: 'star',
-                      type: 'font-awesome',
-                      size: EStyleSheet.value('14rem'),
-                      color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    iconContainerStyle={buttonStyle.leftIconContainer}
-                    title={`${this.state.criteria.score.min}+`}
-                    titleStyle={{
-                      ...buttonStyle.title,
-                      color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    onPress={() => this.onCriterionClicked('score')}
-                  />
-                  <Button
-                    containerStyle={buttonStyle.container}
-                    buttonStyle={{
-                      ...buttonStyle.button,
-                      backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$uncheckedButton'),
-                      borderColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$grey3Color')
-                    }}
-                    icon={{
-                      name: 'compass',
-                      type: 'font-awesome',
-                      size: EStyleSheet.value('14rem'),
-                      color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    iconContainerStyle={buttonStyle.leftIconContainer}
-                    title={`${this.state.criteria.distance.max} miles`}
-                    titleStyle={{
-                      ...buttonStyle.title,
-                      color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
-                    }}
-                    onPress={() => this.onCriterionClicked('distance')}
-                  />
-                </View>
-              </ScrollView>
-            </View>
-            {this.renderPickerBar()}
-          </View>
-        </Animated.View>
+              style={styles.locationMarker}
+              anchor={{ x: 0.5, y: 0.5 }}
+            >
+              <View style={{ ...styles.outerCircle, backgroundColor: Color(EStyleSheet.value('$primaryColor')).alpha(0.08).string() }} />
+              <View style={{ ...styles.innerCircle, backgroundColor: Color(EStyleSheet.value('$primaryColor')).alpha(0.12).string() }} />
+              <Image source={require('../../../asset/image/map-marker-blue.png')} style={styles.blueMarker} />
+            </Marker>
+          )}
+          {this.props.neighbours.map((neighbour, index) => (
+            <Marker key={index} coordinate={{
+              latitude: neighbour.latitude,
+              longitude: neighbour.longitude
+            }}>
+              <Image source={require('../../../asset/image/map-marker-pink.png')} style={styles.redMarker} />
+            </Marker>
+          ))}
+        </MapView>
       </View>
-    );
-  }
+      <Animated.View style={{
+        width: '100%',
+        height: EStyleSheet.value('240rem'),
+        position: 'absolute',
+        bottom: 0,
+        transform: [{
+          translateY: this.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [EStyleSheet.value('64rem'), 0]
+          })
+        }]
+      }}>
+        <View style={{
+          width: '100%',
+          height: '100%',
+          ...styles.panel
+        }}>
+          <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
+            <View style={styles.drawer} />
+          </TouchableOpacity>
+          <Input
+            containerStyle={searchStyles.container}
+            leftIcon={{
+              name: 'search',
+              type: 'font-awesome',
+              size: EStyleSheet.value('20rem'),
+              color: EStyleSheet.value('$input')
+            }}
+            leftIconContainerStyle={searchStyles.leftIconContainer}
+            placeholder="Search"
+            placeholderTextColor={EStyleSheet.value('$placeholder')}
+            inputContainerStyle={searchStyles.inputContainer}
+            inputStyle={searchStyles.input}
+          />
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.controlBar}>
+                {this.state.criteria.category.selected.map((category, index) => this.state.editingCriterion === 'category' ? (
+                  <Button
+                    key={index}
+                    containerStyle={buttonStyle.container}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value('$checkedButton'),
+                      borderColor: EStyleSheet.value('$checkedButton')
+                    }}
+                    title={category}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value('$checkedButtonTitle')
+                    }}
+                    icon={{
+                      name: 'x',
+                      type: 'feather',
+                      size: EStyleSheet.value('14rem'),
+                      color: EStyleSheet.value('$checkedButtonTitle')
+                    }}
+                    iconContainerStyle={buttonStyle.rightIconContainer}
+                    iconRight
+                    onPress={() => this.props.deselectCategory(category)}
+                  />
+                ) : (
+                  <Button
+                    key={index}
+                    containerStyle={buttonStyle.container}
+                    buttonStyle={{
+                      ...buttonStyle.button,
+                      backgroundColor: EStyleSheet.value('$uncheckedButton'),
+                      borderColor: EStyleSheet.value('$grey3Color')
+                    }}
+                    title={category}
+                    titleStyle={{
+                      ...buttonStyle.title,
+                      color: EStyleSheet.value('$uncheckedButtonTitle')
+                    }}
+                  />
+                ))}
+                <Button
+                  containerStyle={buttonStyle.container}
+                  buttonStyle={{
+                    ...buttonStyle.button,
+                    backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$uncheckedButton'),
+                    borderColor: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButton' : '$grey3Color')
+                  }}
+                  title={this.state.editingCriterion === 'category' ? 'Done' : '+Add'}
+                  titleStyle={{
+                    ...buttonStyle.title,
+                    color: EStyleSheet.value(this.state.editingCriterion === 'category' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  onPress={() => this.onCriterionClicked('category')}
+                />
+                <Button
+                  containerStyle={buttonStyle.container}
+                  buttonStyle={{
+                    ...buttonStyle.button,
+                    backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$uncheckedButton'),
+                    borderColor: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButton' : '$grey3Color')
+                  }}
+                  title={`$${this.state.criteria.price.min} - ${this.state.criteria.price.max}`}
+                  titleStyle={{
+                    ...buttonStyle.title,
+                    color: EStyleSheet.value(this.state.editingCriterion === 'price' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  onPress={() => this.onCriterionClicked('price')}
+                />
+                <Button
+                  containerStyle={buttonStyle.container}
+                  buttonStyle={{
+                    ...buttonStyle.button,
+                    backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$uncheckedButton'),
+                    borderColor: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButton' : '$grey3Color')
+                  }}
+                  icon={{
+                    name: 'star',
+                    type: 'font-awesome',
+                    size: EStyleSheet.value('14rem'),
+                    color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  iconContainerStyle={buttonStyle.leftIconContainer}
+                  title={`${this.state.criteria.score.min}+`}
+                  titleStyle={{
+                    ...buttonStyle.title,
+                    color: EStyleSheet.value(this.state.editingCriterion === 'score' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  onPress={() => this.onCriterionClicked('score')}
+                />
+                <Button
+                  containerStyle={buttonStyle.container}
+                  buttonStyle={{
+                    ...buttonStyle.button,
+                    backgroundColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$uncheckedButton'),
+                    borderColor: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButton' : '$grey3Color')
+                  }}
+                  icon={{
+                    name: 'compass',
+                    type: 'font-awesome',
+                    size: EStyleSheet.value('14rem'),
+                    color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  iconContainerStyle={buttonStyle.leftIconContainer}
+                  title={`${this.state.criteria.distance.max} miles`}
+                  titleStyle={{
+                    ...buttonStyle.title,
+                    color: EStyleSheet.value(this.state.editingCriterion === 'distance' ? '$toggledButtonTitle' : '$uncheckedButtonTitle')
+                  }}
+                  onPress={() => this.onCriterionClicked('distance')}
+                />
+              </View>
+            </ScrollView>
+          </View>
+          {this.renderPickerBar()}
+        </View>
+      </Animated.View>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

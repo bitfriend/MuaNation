@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Badge, Icon } from 'react-native-elements';
@@ -18,7 +18,7 @@ LocaleConfig.locales['en'] = {
 };
 LocaleConfig.defaultLocale = 'en';
 
-class Bookings extends Component {
+class Bookings extends PureComponent {
   componentDidMount() {
     this.props.getBookings();
   }
@@ -28,15 +28,10 @@ class Bookings extends Component {
   }
 
   renderArrow = (direction) => {
-    switch (direction) {
-      case 'left':
-        return (
-          <Icon type="material" name="arrow-back" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$title')} />
-        );
-      case 'right':
-        return (
-          <Icon type="material" name="arrow-forward" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$title')} />
-        );
+    if (direction === 'left') {
+      return <Icon type="material" name="arrow-back" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$title')} />
+    } else if (direction === 'right') {
+      return <Icon type="material" name="arrow-forward" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$title')} />
     }
   }
 
@@ -67,28 +62,26 @@ class Bookings extends Component {
     );
   }
 
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <View style={listStyles.wrapper}>
-        <TouchableOpacity onPress={() => this.onPress(item)} style={[listStyles.container, this.props.appTheme.styles.shadow4]}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <Text style={listStyles.title}>{item.title}</Text>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <Text style={listStyles.symbol}>$</Text>
-              <Text style={listStyles.price}>{item.price.toFixed(2)}</Text>
-            </View>
+  renderItem = ({ item, index, separators }) => (
+    <View style={listStyles.wrapper}>
+      <TouchableOpacity onPress={() => this.onPress(item)} style={[listStyles.container, this.props.appTheme.styles.shadow4]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <Text style={listStyles.title}>{item.title}</Text>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Text style={listStyles.symbol}>$</Text>
+            <Text style={listStyles.price}>{item.price.toFixed(2)}</Text>
           </View>
-          <View style={listStyles.body}>
-            <Text style={listStyles.time}>{moment(item.createdAt).format('h:mm A')}</Text>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <Icon type="font-awesome" name="compass" size={EStyleSheet.value('16rem')} color={EStyleSheet.value('$primaryColor')} />
-              <Text style={listStyles.direction}>Get directions</Text>
-            </View>
+        </View>
+        <View style={listStyles.body}>
+          <Text style={listStyles.time}>{moment(item.createdAt).format('h:mm A')}</Text>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Icon type="font-awesome" name="compass" size={EStyleSheet.value('16rem')} color={EStyleSheet.value('$primaryColor')} />
+            <Text style={listStyles.direction}>Get directions</Text>
           </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+        </View>
+      </TouchableOpacity>
+    </View>
+  )
 
   render() {
     let dates = {};

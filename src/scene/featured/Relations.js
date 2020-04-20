@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 import { getFollowers, getFollowing } from '../../controller/relation/actions';
 
-class Relations extends Component {
+class Relations extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -44,43 +44,39 @@ class Relations extends Component {
     this.setState({ activeTab });
   }
 
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <View style={styles.item}>
-        <Image source={{ uri: item.avatar }} style={styles.avatar} />
-        <Text style={styles.name}>{item.fullName}</Text>
-        <ThemeButton
-          isPrimary={!item.followed}
-          buttonStyle={styles.button}
-          title={item.followed ? 'Unfollow' : 'Follow'}
-          titleStyle={styles.buttonTitle}
+  renderItem = ({ item, index, separators }) => (
+    <View style={styles.item}>
+      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <Text style={styles.name}>{item.fullName}</Text>
+      <ThemeButton
+        isPrimary={!item.followed}
+        buttonStyle={styles.button}
+        title={item.followed ? 'Unfollow' : 'Follow'}
+        titleStyle={styles.buttonTitle}
+      />
+    </View>
+  )
+
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader title={this.props.navigation.getParam('fullName')} />
+      <View style={styles.body}>
+        {this.tabs.map((tab, index) => (
+          <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
+            <Text style={[styles.tab, tab === this.state.activeTab ? styles.activeTab : styles.inactiveTab]}>{tab}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={this.props.relations}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       </View>
-    );
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader title={this.props.navigation.getParam('fullName')} />
-        <View style={styles.body}>
-          {this.tabs.map((tab, index) => (
-            <TouchableOpacity key={index} onPress={() => this.onTabChange(tab)} style={{ flex: 1 }}>
-              <Text style={[styles.tab, tab === this.state.activeTab ? styles.activeTab : styles.inactiveTab]}>{tab}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={this.props.relations}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderItem}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-          />
-        </View>
-      </View>
-    );
-  }
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

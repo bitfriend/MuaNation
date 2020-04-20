@@ -1,38 +1,34 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Image, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 
-const Color = require('color');
-
-export default class AccessLocation extends Component {
+export default class AccessLocation extends PureComponent {
   onClickAllow = () => {
     this.props.navigation.navigate('SuggestedArtists');
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader />
-        <View style={styles.caption}>
-          <Text style={styles.titleText}>Location access</Text>
-          <Text style={styles.smallText}>We want to help you find best services around, for that we need to know your current location</Text>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/ph-location.png')} />
-          <ThemeButton
-            buttonStyle={styles.button}
-            title="Allow location access"
-            titleStyle={styles.buttonTitle}
-            onPress={this.onClickAllow}
-          />
-        </View>
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader />
+      <View style={styles.caption}>
+        <Text style={styles.titleText}>Location access</Text>
+        <Text style={styles.smallText}>We want to help you find best services around, for that we need to know your current location</Text>
       </View>
-    )
-  }
+      <View style={{ flex: 1, alignItems: 'center' }}>
+        <Image resizeMode="contain" style={styles.banner} source={require('../../../asset/image/ph-location.png')} />
+        <ThemeButton
+          buttonStyle={styles.button}
+          title="Allow location access"
+          titleStyle={styles.buttonTitle}
+          onPress={this.onClickAllow}
+        />
+      </View>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

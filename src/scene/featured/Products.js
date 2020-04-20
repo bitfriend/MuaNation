@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
@@ -10,82 +10,76 @@ const saleImageWidth = 254;
 const popularImageWidth = EStyleSheet.value(`${(375 - 16 * 3) / 2}rem`);
 const popularImageHeight = popularImageWidth * 0.8;
 
-class Products extends Component {
-  renderSaleProduct = ({ item, index, separators }) => {
-    return (
-      <View style={saleStyles.itemWrapper}>
-        <View style={[saleStyles.item, this.props.appTheme.styles.shadow4]}>
-          <TouchableOpacity onPress={() => {
-            this.props.navigation.navigate('SaleProduct', { id: 0 });
-          }}>
-            <FastImage style={saleStyles.banner} source={{ uri: item.image }} resizeMode={FastImage.resizeMode.cover} />
-            <View style={saleStyles.body}>
-              <Text style={saleStyles.name}>{item.name}</Text>
-              <Text numberOfLines={2} ellipsizeMode="tail" style={saleStyles.overview}>{item.overview}</Text>
-              <View style={saleStyles.caption}>
-                <Text style={saleStyles.extra}>{item.extra}</Text>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={saleStyles.symbol}>$</Text>
-                  <Text style={saleStyles.price}>{item.price.toFixed(2)}</Text>
-                </View>
+class Products extends PureComponent {
+  renderSaleProduct = ({ item, index, separators }) => (
+    <View style={saleStyles.itemWrapper}>
+      <View style={[saleStyles.item, this.props.appTheme.styles.shadow4]}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('SaleProduct', { id: 0 });
+        }}>
+          <FastImage style={saleStyles.banner} source={{ uri: item.image }} resizeMode={FastImage.resizeMode.cover} />
+          <View style={saleStyles.body}>
+            <Text style={saleStyles.name}>{item.name}</Text>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={saleStyles.overview}>{item.overview}</Text>
+            <View style={saleStyles.caption}>
+              <Text style={saleStyles.extra}>{item.extra}</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Text style={saleStyles.symbol}>$</Text>
+                <Text style={saleStyles.price}>{item.price.toFixed(2)}</Text>
               </View>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  )
 
-  renderPopularProduct = ({ item, index, separators }) => {
-    return (
-      <TouchableOpacity style={{
-        ...popularStyles.item,
-        width: popularImageWidth // Must specify the width of item for multi-column list
-      }} onPress={() => {
-        this.props.navigation.navigate('PopularProduct', { id: 0 });
-      }}>
-        <FastImage
-          style={{
-            width: popularImageWidth,
-            height: popularImageHeight,
-            borderRadius: EStyleSheet.value('8rem')
-          }}
-          source={{ uri: item.image }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
-        <View style={popularStyles.caption}>
-          <Text style={popularStyles.name}>{item.name}</Text>
-          <Text style={popularStyles.price}>${item.price.toFixed(2)}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
+  renderPopularProduct = ({ item, index, separators }) => (
+    <TouchableOpacity style={{
+      ...popularStyles.item,
+      width: popularImageWidth // Must specify the width of item for multi-column list
+    }} onPress={() => {
+      this.props.navigation.navigate('PopularProduct', { id: 0 });
+    }}>
+      <FastImage
+        style={{
+          width: popularImageWidth,
+          height: popularImageHeight,
+          borderRadius: EStyleSheet.value('8rem')
+        }}
+        source={{ uri: item.image }}
+        resizeMode={FastImage.resizeMode.cover}
+      />
+      <View style={popularStyles.caption}>
+        <Text style={popularStyles.name}>{item.name}</Text>
+        <Text style={popularStyles.price}>${item.price.toFixed(2)}</Text>
+      </View>
+    </TouchableOpacity>
+  )
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>SALE</Text>
-        <View style={saleStyles.listWrapper}>
-          <FlatList
-            data={this.props.products}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderSaleProduct}
-            horizontal
-            ListHeaderComponent={() => <View style={saleStyles.listHeader} />}
-            ListFooterComponent={() => <View style={saleStyles.listFooter} />}
-          />
-        </View>
-        <Text style={styles.heading}>POPULAR</Text>
+  render = () => (
+    <View style={styles.container}>
+      <Text style={styles.heading}>SALE</Text>
+      <View style={saleStyles.listWrapper}>
         <FlatList
           data={this.props.products}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderPopularProduct}
-          numColumns={2}
-          style={popularStyles.list}
+          renderItem={this.renderSaleProduct}
+          horizontal
+          ListHeaderComponent={() => <View style={saleStyles.listHeader} />}
+          ListFooterComponent={() => <View style={saleStyles.listFooter} />}
         />
       </View>
-    );
-  }
+      <Text style={styles.heading}>POPULAR</Text>
+      <FlatList
+        data={this.props.products}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderPopularProduct}
+        numColumns={2}
+        style={popularStyles.list}
+      />
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

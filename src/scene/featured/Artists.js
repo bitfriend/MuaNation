@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,7 +10,7 @@ import { getFeaturedArtists, getArtists } from '../../controller/artist/actions'
 
 const criteria = [0, 1, 2, 3, 4];
 
-class Artists extends Component {
+class Artists extends PureComponent {
   componentDidMount() {
     this.props.getFeaturedArtists(error => {
       Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
@@ -24,94 +24,86 @@ class Artists extends Component {
     this.props.navigation.navigate('Artist');
   }
 
-  renderScore(score) {
-    return (
-      <Fragment>
-        {criteria.map((criterion, index) => (
-          <Icon
-            key={index}
-            type="font-awesome"
-            name="star"
-            size={EStyleSheet.value('16rem')}
-            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
-            containerStyle={styles.star}
-          />
-        ))}
-      </Fragment>
-    );
-  }
+  renderScore = (score) => (
+    <Fragment>
+      {criteria.map((criterion, index) => (
+        <Icon
+          key={index}
+          type="font-awesome"
+          name="star"
+          size={EStyleSheet.value('16rem')}
+          color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+          containerStyle={styles.star}
+        />
+      ))}
+    </Fragment>
+  )
 
-  renderCard = ({ item, index, separators }) => {
-    return (
-      <View style={styles.cardWrapper}>
-        <TouchableOpacity onPress={this.onPressCard} style={{
-          ...styles.card,
-          ...this.props.appTheme.styles.shadow4
-        }}>
-          <View style={{ flexDirection: 'row', width: '100%' }}>
-            <View style={styles.avatarWrapper}>
-              {!item.avatar ? (
-                <Image source={require('../../../asset/image/male.png')} style={styles.avatar} />
-              ) : (
-                <FastImage
-                  style={styles.avatar}
-                  source={{ uri: item.avatar }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-              )}
-            </View>
+  renderCard = ({ item, index, separators }) => (
+    <View style={styles.cardWrapper}>
+      <TouchableOpacity onPress={this.onPressCard} style={{
+        ...styles.card,
+        ...this.props.appTheme.styles.shadow4
+      }}>
+        <View style={{ flexDirection: 'row', width: '100%' }}>
+          <View style={styles.avatarWrapper}>
+            {!item.avatar ? (
+              <Image source={require('../../../asset/image/male.png')} style={styles.avatar} />
+            ) : (
+              <FastImage
+                style={styles.avatar}
+                source={{ uri: item.avatar }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            )}
           </View>
-          <Text style={styles.cardName}>{item.fullName}</Text>
-          <View style={styles.tagBar}>
-            {item.tags.map((tag, subIndex) => (
-              <Text key={subIndex} style={{
-                ...styles.tag,
-                marginRight: subIndex < item.tags.length - 1 ? EStyleSheet.value('4rem') : 0
-              }}>{tag}</Text>
-            ))}
-          </View>
-          <View style={styles.scoreReview}>
-            {this.renderScore(item.score)}
-            <Text style={styles.reviews}>{item.reviews} reviews</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <View style={styles.listItem}>
-        <FastImage style={styles.avatar} source={{ uri: item.avatar }} resizeMode={FastImage.resizeMode.cover} />
-        <Text style={styles.listName}>{item.fullName}</Text>
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.featuredWrapper}>
-          <FlatList
-            data={this.props.featuredArtists}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this.renderCard}
-            horizontal
-            ListHeaderComponent={() => <View style={styles.listMargin} />}
-            ListFooterComponent={() => <View style={styles.listMargin} />}
-          />
         </View>
+        <Text style={styles.cardName}>{item.fullName}</Text>
+        <View style={styles.tagBar}>
+          {item.tags.map((tag, subIndex) => (
+            <Text key={subIndex} style={{
+              ...styles.tag,
+              marginRight: subIndex < item.tags.length - 1 ? EStyleSheet.value('4rem') : 0
+            }}>{tag}</Text>
+          ))}
+        </View>
+        <View style={styles.scoreReview}>
+          {this.renderScore(item.score)}
+          <Text style={styles.reviews}>{item.reviews} reviews</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  )
+
+  renderItem = ({ item, index, separators }) => (
+    <View style={styles.listItem}>
+      <FastImage style={styles.avatar} source={{ uri: item.avatar }} resizeMode={FastImage.resizeMode.cover} />
+      <Text style={styles.listName}>{item.fullName}</Text>
+    </View>
+  )
+
+  render = () => (
+    <View style={styles.container}>
+      <View style={styles.featuredWrapper}>
         <FlatList
-          data={this.props.artists}
+          data={this.props.featuredArtists}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderItem}
-          ItemSeparatorComponent={() => (
-            <View style={styles.separator} />
-          )}
+          renderItem={this.renderCard}
+          horizontal
+          ListHeaderComponent={() => <View style={styles.listMargin} />}
+          ListFooterComponent={() => <View style={styles.listMargin} />}
         />
       </View>
-    );
-  }
+      <FlatList
+        data={this.props.artists}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={() => (
+          <View style={styles.separator} />
+        )}
+      />
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

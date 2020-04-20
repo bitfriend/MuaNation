@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -14,7 +14,7 @@ const imageWidth = EStyleSheet.value(`${(375 - 16 * 3) / 2}rem`);
 const imageHeight = imageWidth * 0.8;
 const criteria = [0, 1, 2, 3, 4];
 
-class Account extends Component {
+class Account extends PureComponent {
   componentDidMount() {
     const id = this.props.navigation.getParam('id');
     this.props.getArtist(id);
@@ -45,31 +45,27 @@ class Account extends Component {
     this.props.navigation.navigate('PopularProduct');
   }
 
-  renderSide(value, unit, category) {
-    return (
-      <TouchableOpacity style={sideStyles.container} onPress={() => this.onRelations(category)}>
-        <Text style={sideStyles.value}>{value}</Text>
-        <Text style={sideStyles.unit}>{unit}</Text>
-      </TouchableOpacity>
-    );
-  }
+  renderSide = (value, unit, category) => (
+    <TouchableOpacity style={sideStyles.container} onPress={() => this.onRelations(category)}>
+      <Text style={sideStyles.value}>{value}</Text>
+      <Text style={sideStyles.unit}>{unit}</Text>
+    </TouchableOpacity>
+  )
 
-  renderScore(score) {
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        {criteria.map((criterion, index) => (
-          <Icon
-            key={index}
-            type="font-awesome"
-            name="star"
-            size={EStyleSheet.value('16rem')}
-            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
-            containerStyle={reviewStyles.star}
-          />
-        ))}
-      </View>
-    );
-  }
+  renderScore = (score) => (
+    <View style={{ flexDirection: 'row' }}>
+      {criteria.map((criterion, index) => (
+        <Icon
+          key={index}
+          type="font-awesome"
+          name="star"
+          size={EStyleSheet.value('16rem')}
+          color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+          containerStyle={reviewStyles.star}
+        />
+      ))}
+    </View>
+  )
 
   renderCard() {
     const { avatar, followers, following, score, reviews } = this.props.currentArtist;
@@ -93,49 +89,45 @@ class Account extends Component {
     );
   }
 
-  renderButtons() {
-    return (
-      <View style={styles.buttonBar}>
-        <ThemeButton
-          title="Add service"
-          containerStyle={bookStyles.container}
-          buttonStyle={bookStyles.button}
-          titleStyle={bookStyles.title}
-          onPress={() => this.props.navigation.navigate('AddService')}
-        />
-        <ThemeButton
-          title="Edit info"
-          containerStyle={followStyles.container}
-          buttonStyle={followStyles.button}
-          titleStyle={followStyles.title}
-          isPrimary={false}
-          onPress={() => this.props.navigation.navigate('EditInfo')}
-        />
-      </View>
-    );
-  }
+  renderButtons = () => (
+    <View style={styles.buttonBar}>
+      <ThemeButton
+        title="Add service"
+        containerStyle={bookStyles.container}
+        buttonStyle={bookStyles.button}
+        titleStyle={bookStyles.title}
+        onPress={() => this.props.navigation.navigate('AddService')}
+      />
+      <ThemeButton
+        title="Edit info"
+        containerStyle={followStyles.container}
+        buttonStyle={followStyles.button}
+        titleStyle={followStyles.title}
+        isPrimary={false}
+        onPress={() => this.props.navigation.navigate('EditInfo')}
+      />
+    </View>
+  )
 
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <TouchableOpacity onPress={() => this.onPressItem(item)}>
-        <View style={styles.listItem}>
-          <FastImage
-            style={{
-              width: imageWidth,
-              height: imageHeight,
-              borderRadius: EStyleSheet.value('8rem')
-            }}
-            source={{ uri: item.image }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <View style={styles.caption}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.price}>${item.price}</Text>
-          </View>
+  renderItem = ({ item, index, separators }) => (
+    <TouchableOpacity onPress={() => this.onPressItem(item)}>
+      <View style={styles.listItem}>
+        <FastImage
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            borderRadius: EStyleSheet.value('8rem')
+          }}
+          source={{ uri: item.image }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <View style={styles.caption}>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.price}>${item.price}</Text>
         </View>
-      </TouchableOpacity>
-    );
-  }
+      </View>
+    </TouchableOpacity>
+  )
 
   render() {
     const { fullName, overview, tags, products } = this.props.currentArtist;

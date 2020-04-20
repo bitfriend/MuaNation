@@ -15,8 +15,6 @@ import { apiRequest } from '../../controller/api/actions';
 import { setLoading, clearLoading } from '../../controller/common/actions';
 import * as types from '../../controller/auth/types';
 
-const Color = require('color');
-
 class CreateAccount extends Component {
   state = {
     role: 'artist',
@@ -179,110 +177,106 @@ class CreateAccount extends Component {
     });
   }
 
-  renderItem({ checked, title, description, onPress }) {
-    return (
-      <TouchableOpacity
-        style={{
-          ...styles.card,
-          borderColor: EStyleSheet.value(checked ? '$secondaryColor' : '$grey3Color'),
-          ...this.props.appTheme.styles.shadow3
-        }}
-        onPress={onPress}
-      >
-        <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
-          <Text style={{
-            ...styles.caption,
-            color: EStyleSheet.value(checked ? '$secondaryColor' : '$grey0Color')
-          }}>{title}</Text>
-          {checked ? (
-            <Icon type="material" name="radio-button-checked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$secondaryColor')} />
-          ) : (
-            <Icon type="material" name="radio-button-unchecked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$label')} />
-          )}
-        </View>
-        <Text style={styles.overview}>{description}</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader />
-        <View style={styles.body}>
-          <Text style={styles.titleText}>Create an account</Text>
-          <Text style={styles.smallText}>Please select how do you want to use the app</Text>
-          <View style={{ flex: 1 }}>
-            {this.renderItem({
-              checked: this.state.role === 'artist',
-              title: 'As an Artist',
-              description: "I'll showcase and sell my services on the platform",
-              onPress: () => this.setState({ role: 'artist' })
-            })}
-            {this.renderItem({
-              checked: this.state.role === 'client',
-              title: 'As a Client',
-              description: "I'll find and book services from the best artists around",
-              onPress: () => this.setState({ role: 'client' })
-            })}
-          </View>
-          <View style={{ alignItems: 'center' }}>
-            <ThemeButton
-              buttonStyle={styles.button}
-              icon={{
-                name: 'facebook',
-                type: 'font-awesome',
-                size: EStyleSheet.value('20rem'),
-                containerStyle: styles.buttonIcon
-              }}
-              title="Join with Facebook"
-              titleStyle={styles.buttonTitle}
-              onPress={this.onClickFacebook}
-            />
-            <ThemeButton
-              buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
-              icon={{
-                name: 'instagram',
-                type: 'font-awesome',
-                size: EStyleSheet.value('20rem'),
-                containerStyle: styles.buttonIcon
-              }}
-              title="Join with Instagram"
-              titleStyle={styles.buttonTitle}
-              onPress={this.onClickInstagram}
-            />
-            <InstagramLogin
-              containerStyle={styles.instagram}
-              ref={c => this.instagramLogin = c}
-              clientId="2862949e166644b3a94fc2c483d744f2"
-              redirectUrl="https://muanation.com/"
-              scopes={['basic']}
-              onLoginSuccess={(token) => {
-                console.log('Instagram login succeeded', token);
-                this.setState({
-                  modalVisible: true,
-                  instagramToken: token
-                });
-              }}
-              onLoginFailure={(reason) => {
-                console.log('Instagram login failed', reason);
-                this.props.joinWithInstagramFailure();
-                Alert.alert(reason);
-              }}
-            />
-          </View>
-        </View>
-        <EmailModal
-          visible={this.state.modalVisible}
-          onAccept={(email) => {
-            this.setState({ modalVisible: false });
-            this.joinWithInstagram(this.state.role, this.state.instagramToken, email);
-          }}
-          onReject={() => this.setState({ modalVisible: false })}
-        />
+  renderItem = ({ checked, title, description, onPress }) => (
+    <TouchableOpacity
+      style={{
+        ...styles.card,
+        borderColor: EStyleSheet.value(checked ? '$secondaryColor' : '$grey3Color'),
+        ...this.props.appTheme.styles.shadow3
+      }}
+      onPress={onPress}
+    >
+      <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
+        <Text style={{
+          ...styles.caption,
+          color: EStyleSheet.value(checked ? '$secondaryColor' : '$grey0Color')
+        }}>{title}</Text>
+        {checked ? (
+          <Icon type="material" name="radio-button-checked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$secondaryColor')} />
+        ) : (
+          <Icon type="material" name="radio-button-unchecked" size={EStyleSheet.value('20rem')} color={EStyleSheet.value('$label')} />
+        )}
       </View>
-    );
-  }
+      <Text style={styles.overview}>{description}</Text>
+    </TouchableOpacity>
+  )
+
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader />
+      <View style={styles.body}>
+        <Text style={styles.titleText}>Create an account</Text>
+        <Text style={styles.smallText}>Please select how do you want to use the app</Text>
+        <View style={{ flex: 1 }}>
+          {this.renderItem({
+            checked: this.state.role === 'artist',
+            title: 'As an Artist',
+            description: "I'll showcase and sell my services on the platform",
+            onPress: () => this.setState({ role: 'artist' })
+          })}
+          {this.renderItem({
+            checked: this.state.role === 'client',
+            title: 'As a Client',
+            description: "I'll find and book services from the best artists around",
+            onPress: () => this.setState({ role: 'client' })
+          })}
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <ThemeButton
+            buttonStyle={styles.button}
+            icon={{
+              name: 'facebook',
+              type: 'font-awesome',
+              size: EStyleSheet.value('20rem'),
+              containerStyle: styles.buttonIcon
+            }}
+            title="Join with Facebook"
+            titleStyle={styles.buttonTitle}
+            onPress={this.onClickFacebook}
+          />
+          <ThemeButton
+            buttonStyle={{ ...styles.button, marginTop: EStyleSheet.value('16rem') }}
+            icon={{
+              name: 'instagram',
+              type: 'font-awesome',
+              size: EStyleSheet.value('20rem'),
+              containerStyle: styles.buttonIcon
+            }}
+            title="Join with Instagram"
+            titleStyle={styles.buttonTitle}
+            onPress={this.onClickInstagram}
+          />
+          <InstagramLogin
+            containerStyle={styles.instagram}
+            ref={c => this.instagramLogin = c}
+            clientId="2862949e166644b3a94fc2c483d744f2"
+            redirectUrl="https://muanation.com/"
+            scopes={['basic']}
+            onLoginSuccess={(token) => {
+              console.log('Instagram login succeeded', token);
+              this.setState({
+                modalVisible: true,
+                instagramToken: token
+              });
+            }}
+            onLoginFailure={(reason) => {
+              console.log('Instagram login failed', reason);
+              this.props.joinWithInstagramFailure();
+              Alert.alert(reason);
+            }}
+          />
+        </View>
+      </View>
+      <EmailModal
+        visible={this.state.modalVisible}
+        onAccept={(email) => {
+          this.setState({ modalVisible: false });
+          this.joinWithInstagram(this.state.role, this.state.instagramToken, email);
+        }}
+        onReject={() => this.setState({ modalVisible: false })}
+      />
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

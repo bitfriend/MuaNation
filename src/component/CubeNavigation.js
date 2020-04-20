@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Animated, Dimensions, Platform, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,7 @@ const perspective = windowWidth;
 const angle = Math.atan(perspective / (windowWidth / 2));
 const ratio = Platform.OS === 'ios' ? 2 : 1.2;
 
-export default class CubeNavigation extends Component {
+export default class CubeNavigation extends PureComponent {
   animatedValue = new Animated.Value(0)
 
   getTransformStyle(index) {

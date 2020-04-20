@@ -1,32 +1,30 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Text, TouchableHighlight, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
 const ViewPropTypes = require('react-native').ViewPropTypes || View.propTypes;
 
-export default class SliderMarker extends Component {
-  render() {
-    return (
-      <TouchableHighlight>
-        <Fragment>
-          <View style={this.props.enabled ? [
-            styles.markerStyle,
-            this.props.markerStyle,
-            this.props.pressed && styles.pressedMarkerStyle,
-            this.props.pressed && this.props.pressedMarkerStyle
-          ] : [
-            styles.markerStyle,
-            styles.disabled
-          ]} />
-          <Text style={[
-            styles.valueStyle,
-            this.props.pressed && styles.pressedValueStyle
-          ]}>{this.props.valuePrefix + this.props.currentValue + this.props.valueSuffix}</Text>
-        </Fragment>
-      </TouchableHighlight>
-    );
-  }
+export default class SliderMarker extends PureComponent {
+  render = () => (
+    <TouchableHighlight>
+      <Fragment>
+        <View style={this.props.enabled ? [
+          styles.markerStyle,
+          this.props.markerStyle,
+          this.props.pressed && styles.pressedMarkerStyle,
+          this.props.pressed && this.props.pressedMarkerStyle
+        ] : [
+          styles.markerStyle,
+          styles.disabled
+        ]} />
+        <Text style={[
+          styles.valueStyle,
+          this.props.pressed && styles.pressedValueStyle
+        ]}>{this.props.valuePrefix + this.props.currentValue + this.props.valueSuffix}</Text>
+      </Fragment>
+    </TouchableHighlight>
+  )
 }
 
 SliderMarker.propTypes = {

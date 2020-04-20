@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Image, Text, TextInput, View } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../component/SceneHeader';
 import { getChat } from '../../controller/chat/actions';
 
-class Chat extends Component {
+class Chat extends PureComponent {
   componentDidMount() {
     this.props.getChat(0);
   }
@@ -17,59 +17,55 @@ class Chat extends Component {
     return moment(time).format('h:mm a');
   }
 
-  renderItem = ({ item, index, separators }) => {
-    return (
+  renderItem = ({ item, index, separators }) => (
+    <View style={{
+      ...styles.listItem,
+      flexDirection: item.fromMe ? 'row-reverse' : 'row'
+    }}>
+      {!item.fromMe && (
+        <Image source={{ uri: this.props.avatar }} style={otherStyles.avatar} />
+      )}
       <View style={{
-        ...styles.listItem,
+        alignItems: 'center',
         flexDirection: item.fromMe ? 'row-reverse' : 'row'
       }}>
-        {!item.fromMe && (
-          <Image source={{ uri: this.props.avatar }} style={otherStyles.avatar} />
-        )}
-        <View style={{
-          alignItems: 'center',
-          flexDirection: item.fromMe ? 'row-reverse' : 'row'
-        }}>
-          <View style={[styles.message, item.fromMe ? meStyles.message : otherStyles.message]}>
-            <Text style={[styles.msgText, item.fromMe ? meStyles.msgText : otherStyles.msgText]}>{item.text}</Text>
-          </View>
-          <Text style={styles.time}>{this.getTimeText(item.time)}</Text>
+        <View style={[styles.message, item.fromMe ? meStyles.message : otherStyles.message]}>
+          <Text style={[styles.msgText, item.fromMe ? meStyles.msgText : otherStyles.msgText]}>{item.text}</Text>
         </View>
+        <Text style={styles.time}>{this.getTimeText(item.time)}</Text>
       </View>
-    );
-  }
+    </View>
+  )
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <SceneHeader title="Jane Smith" />
-        <FlatList
-          data={this.props.messages}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderItem}
-          ItemSeparatorComponent={() => (
-            <View style={styles.separator} />
-          )}
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <SceneHeader title="Jane Smith" />
+      <FlatList
+        data={this.props.messages}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={() => (
+          <View style={styles.separator} />
+        )}
+      />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          placeholder="Type your message"
+          placeholderTextColor={EStyleSheet.value('$placeholder')}
+          style={styles.input}
         />
-        <View style={styles.inputWrapper}>
-          <TextInput
-            placeholder="Type your message"
-            placeholderTextColor={EStyleSheet.value('$placeholder')}
-            style={styles.input}
-          />
-          <Button
-            icon={{
-              type: 'font-awesome',
-              name: 'paper-plane',
-              size: EStyleSheet.value('20rem'),
-              color: EStyleSheet.value('$secondaryColor')
-            }}
-            buttonStyle={styles.send}
-          />
-        </View>
+        <Button
+          icon={{
+            type: 'font-awesome',
+            name: 'paper-plane',
+            size: EStyleSheet.value('20rem'),
+            color: EStyleSheet.value('$secondaryColor')
+          }}
+          buttonStyle={styles.send}
+        />
       </View>
-    );
-  }
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -8,7 +8,7 @@ import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 import { getCategories } from '../../controller/service/actions';
 
-class AddService extends Component {
+class AddService extends PureComponent {
   state = {
     selectedIndex: -1
   }
@@ -19,70 +19,68 @@ class AddService extends Component {
 
   onAdd = () => {}
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <SceneHeader title="Add service" />
-        <ScrollView>
-          <TouchableOpacity style={photoStyles.icon}>
-            <Icon
-              type="font-awesome"
-              name="camera"
-              size={EStyleSheet.value('32rem')}
-              color={EStyleSheet.value('$label')}
-            />
-            <Text style={photoStyles.label}>Add photo(s)</Text>
-          </TouchableOpacity>
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <SceneHeader title="Add service" />
+      <ScrollView>
+        <TouchableOpacity style={photoStyles.icon}>
+          <Icon
+            type="font-awesome"
+            name="camera"
+            size={EStyleSheet.value('32rem')}
+            color={EStyleSheet.value('$label')}
+          />
+          <Text style={photoStyles.label}>Add photo(s)</Text>
+        </TouchableOpacity>
+        <TextInput
+          multiline={true}
+          placeholder="Type description"
+          placeholderTextColor={EStyleSheet.value('$label')}
+          style={styles.description}
+        ></TextInput>
+        <View style={styles.priceWrapper}>
           <TextInput
-            multiline={true}
-            placeholder="Type description"
+            placeholder="Price"
             placeholderTextColor={EStyleSheet.value('$label')}
-            style={styles.description}
+            style={styles.price}
           ></TextInput>
-          <View style={styles.priceWrapper}>
-            <TextInput
-              placeholder="Price"
-              placeholderTextColor={EStyleSheet.value('$label')}
-              style={styles.price}
-            ></TextInput>
-            <Text style={styles.symbol}>$</Text>
-          </View>
-          <Text style={styles.serviceType}>SERVICE TYPE</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.pickerBar}>
-              {this.props.categories.map((category, index) => (
-                <Button
-                  key={index}
-                  containerStyle={pickupStyles.container}
-                  buttonStyle={{
-                    ...pickupStyles.button,
-                    backgroundColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$uncheckedButton'),
-                    borderColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$grey3Color')
-                  }}
-                  title={category}
-                  titleStyle={{
-                    ...pickupStyles.title,
-                    color: EStyleSheet.value(index === this.state.selectedIndex ? '$whiteColor' : '$uncheckedButtonTitle')
-                  }}
-                  onPress={() => this.setState({ selectedIndex: index })}
-                />
-              ))}
-            </View>
-          </ScrollView>
-          <View style={{ flex: 1 }} />
-          <View style={buttonStyles.container}>
-            <ThemeButton
-              buttonStyle={buttonStyles.button}
-              title="Add"
-              titleStyle={buttonStyles.title}
-              onPress={this.onAdd}
-              isPrimary={false}
-            />
+          <Text style={styles.symbol}>$</Text>
+        </View>
+        <Text style={styles.serviceType}>SERVICE TYPE</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.pickerBar}>
+            {this.props.categories.map((category, index) => (
+              <Button
+                key={index}
+                containerStyle={pickupStyles.container}
+                buttonStyle={{
+                  ...pickupStyles.button,
+                  backgroundColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$uncheckedButton'),
+                  borderColor: EStyleSheet.value(index === this.state.selectedIndex ? '$grey0Color' : '$grey3Color')
+                }}
+                title={category}
+                titleStyle={{
+                  ...pickupStyles.title,
+                  color: EStyleSheet.value(index === this.state.selectedIndex ? '$whiteColor' : '$uncheckedButtonTitle')
+                }}
+                onPress={() => this.setState({ selectedIndex: index })}
+              />
+            ))}
           </View>
         </ScrollView>
-      </View>
-    );
-  }
+        <View style={{ flex: 1 }} />
+        <View style={buttonStyles.container}>
+          <ThemeButton
+            buttonStyle={buttonStyles.button}
+            title="Add"
+            titleStyle={buttonStyles.title}
+            onPress={this.onAdd}
+            isPrimary={false}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

@@ -1,36 +1,34 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import SceneHeader from '../../component/SceneHeader';
 
-export default class Settings extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <SceneHeader title="Settings" />
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemTitle}>Profile</Text>
-            <Icon
-              type="font-awesome"
-              name="chevron-right"
-              size={EStyleSheet.value('20rem')}
-              color={EStyleSheet.value('$title')}
-            />
-          </TouchableOpacity>
-          <View style={{ flex: 1 }} />
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemTitle}>Log out</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemTitle}>Delete account</Text>
-          </TouchableOpacity>
-        </View>
+export default class Settings extends PureComponent {
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <SceneHeader title="Settings" />
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.item}>
+          <Text style={styles.itemTitle}>Profile</Text>
+          <Icon
+            type="font-awesome"
+            name="chevron-right"
+            size={EStyleSheet.value('20rem')}
+            color={EStyleSheet.value('$title')}
+          />
+        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
+        <TouchableOpacity style={styles.item}>
+          <Text style={styles.itemTitle}>Log out</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.item}>
+          <Text style={styles.itemTitle}>Delete account</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

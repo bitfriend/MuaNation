@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 
-export default class FixedTabBar extends Component {
+export default class FixedTabBar extends PureComponent {
   onPress(routeName) {
     this.props.navigation.navigate(routeName);
   }
@@ -32,7 +32,7 @@ export default class FixedTabBar extends Component {
           <View style={wrapperStyle}>
             <Text style={labelStyle}>{label.charAt(0).toUpperCase()}</Text>
           </View>
-          <Text style={labelStyle}>{label.substring(1)}</Text>
+          <Text style={labelStyle}>{label.substr(1)}</Text>
         </View>
       </View>
     );

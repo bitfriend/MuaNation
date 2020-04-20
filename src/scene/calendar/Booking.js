@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,86 +13,84 @@ import { getBooking } from '../../controller/calendar/actions';
 const imageWidth = EStyleSheet.value(`${375 - 16 * 2}rem`);
 const imageHeight = imageWidth * 0.65;
 
-class Booking extends Component {
+class Booking extends PureComponent {
   componentDidMount() {
     this.props.getBooking();
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader title="Booking details" />
-        <ScrollView>
-          <FastImage
-            style={{
-              width: imageWidth,
-              height: imageHeight,
-              ...styles.banner
-            }}
-            source={{ uri: this.props.booking.image }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <View style={styles.body}>
-            <Text style={styles.title}>{this.props.booking.title}</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.symbol}>$</Text>
-              <Text style={styles.price}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
-            </View>
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader title="Booking details" />
+      <ScrollView>
+        <FastImage
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            ...styles.banner
+          }}
+          source={{ uri: this.props.booking.image }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <View style={styles.body}>
+          <Text style={styles.title}>{this.props.booking.title}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.symbol}>$</Text>
+            <Text style={styles.price}>{this.props.booking.price && this.props.booking.price.toFixed(2)}</Text>
           </View>
-          <Text style={{
-            ...styles.overview,
-            ...styles.label,
-            color: EStyleSheet.value('$label')
-          }}>{this.props.booking.overview}</Text>
-          <View style={styles.footer}>
-            <View style={styles.footerFirstLine}>
-              <Image source={{ uri: this.props.booking.avatar }} style={styles.avatar} />
-              <Text style={{
-                ...styles.label,
-                marginLeft: EStyleSheet.value('16rem'),
-                color: EStyleSheet.value('$title')
-              }}>by </Text>
-              <Text style={{
-                ...styles.label,
-                color: EStyleSheet.value('$title'),
-                fontWeight: 'bold'
-              }}>{this.props.booking.fullName}</Text>
-            </View>
-            <View style={styles.footerSecondLine}>
-              <Text style={{
-                ...styles.label,
-                marginLeft: EStyleSheet.value('64rem'),
-                color: EStyleSheet.value('$title')
-              }}>{moment(this.props.booking.createdAt).format('MMM d')} at </Text>
-              <Text style={{
-                ...styles.label,
-                flex: 1,
-                color: EStyleSheet.value('$title'),
-                fontWeight: 'bold'
-              }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
-              <ThemeButton
-                icon={{
-                  name: 'paper-plane',
-                  type: 'font-awesome',
-                  size: EStyleSheet.value('22rem')
-                }}
-                containerStyle={styles.chatContainer}
-                buttonStyle={styles.chat}
-              />
-            </View>
-            <Button
-              containerStyle={styles.cancelContainer}
-              buttonStyle={styles.cancel}
-              title="Cancel"
-              titleStyle={styles.cancelTitle}
-              TouchableComponent={TouchableOpacity}
-              onPress={() => this.props.navigation.pop()}
+        </View>
+        <Text style={{
+          ...styles.overview,
+          ...styles.label,
+          color: EStyleSheet.value('$label')
+        }}>{this.props.booking.overview}</Text>
+        <View style={styles.footer}>
+          <View style={styles.footerFirstLine}>
+            <Image source={{ uri: this.props.booking.avatar }} style={styles.avatar} />
+            <Text style={{
+              ...styles.label,
+              marginLeft: EStyleSheet.value('16rem'),
+              color: EStyleSheet.value('$title')
+            }}>by </Text>
+            <Text style={{
+              ...styles.label,
+              color: EStyleSheet.value('$title'),
+              fontWeight: 'bold'
+            }}>{this.props.booking.fullName}</Text>
+          </View>
+          <View style={styles.footerSecondLine}>
+            <Text style={{
+              ...styles.label,
+              marginLeft: EStyleSheet.value('64rem'),
+              color: EStyleSheet.value('$title')
+            }}>{moment(this.props.booking.createdAt).format('MMM d')} at </Text>
+            <Text style={{
+              ...styles.label,
+              flex: 1,
+              color: EStyleSheet.value('$title'),
+              fontWeight: 'bold'
+            }}>{moment(this.props.booking.createdAt).format('h:mm A')}</Text>
+            <ThemeButton
+              icon={{
+                name: 'paper-plane',
+                type: 'font-awesome',
+                size: EStyleSheet.value('22rem')
+              }}
+              containerStyle={styles.chatContainer}
+              buttonStyle={styles.chat}
             />
           </View>
-        </ScrollView>
-      </View>
-    );
-  }
+          <Button
+            containerStyle={styles.cancelContainer}
+            buttonStyle={styles.cancel}
+            title="Cancel"
+            titleStyle={styles.cancelTitle}
+            TouchableComponent={TouchableOpacity}
+            onPress={() => this.props.navigation.pop()}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

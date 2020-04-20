@@ -13,25 +13,23 @@ export default class CategoryBar extends PureComponent {
     this.props.onSelect(value);
   }
 
-  render() {
-    return (
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {this.props.tabs.map((tab, index) => (
-            <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
-              <Text style={[styles.tabItem, index === this.state.activeIndex ? {
-                ...styles.activeItem,
-                borderBottomColor: this.props.underlineColor,
-                color: this.props.activeTabColor
-              } : {
-                color: this.props.inactiveTabColor
-              }]}>{tab.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    );
-  }
+  render = () => (
+    <View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {this.props.tabs.map((tab, index) => (
+          <TouchableOpacity key={index} onPress={() => this.onPress(index, tab.value)}>
+            <Text style={[styles.tabItem, index === this.state.activeIndex ? {
+              ...styles.activeItem,
+              borderBottomColor: this.props.underlineColor,
+              color: this.props.activeTabColor
+            } : {
+              color: this.props.inactiveTabColor
+            }]}>{tab.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

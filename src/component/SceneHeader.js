@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Header } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
 
-class SceneHeader extends Component {
+class SceneHeader extends PureComponent {
   render() {
     let leftIcon = undefined;
     if (this.props.leftIcon === true) {
@@ -28,14 +28,16 @@ class SceneHeader extends Component {
           text: this.props.title,
           style: styles.center
         } : undefined}
-        rightComponent={this.props.rightIcon ? this.props.rightIcon : undefined}
+        rightComponent={this.props.rightIcon}
       />
     );
   }
 }
 
 SceneHeader.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  leftIcon: PropTypes.any,
+  rightIcon: PropTypes.object
 }
 
 SceneHeader.defaultProps = {

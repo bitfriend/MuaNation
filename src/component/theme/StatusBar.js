@@ -3,15 +3,13 @@ import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
 class ThemeStatusBar extends PureComponent {
-  render() {
-    return (
-      <StatusBar
-        backgroundColor={this.props.config.backgroundColor}
-        barStyle={this.props.config.barStyle}
-        translucent={this.props.config.translucent}
-      />
-    );
-  }
+  render = () => (
+    <StatusBar
+      backgroundColor={this.props.config.backgroundColor}
+      barStyle={this.props.config.barStyle}
+      translucent={this.props.config.translucent}
+    />
+  )
 }
 
 const mapStateToProps = ({

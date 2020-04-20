@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../component/SceneHeader';
 import { getChats } from '../../controller/chat/actions';
 
-class Chats extends Component {
+class Chats extends PureComponent {
   componentDidMount() {
     this.props.getChats(0);
   }
@@ -35,34 +35,30 @@ class Chats extends Component {
     return t.format('h:mm a');
   }
 
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <TouchableOpacity style={styles.listItem} onPress={() => this.props.navigation.navigate('Chat')}>
-        <Image source={{ uri: item.avatar }} style={styles.avatar} />
-        <View style={styles.body}>
-          <View style={styles.title}>
-            <Text style={styles.name}>{item.fullName}</Text>
-            <Text style={styles.time}>{this.getTimeText(item.last.time)}</Text>
-          </View>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>{item.last.text}</Text>
+  renderItem = ({ item, index, separators }) => (
+    <TouchableOpacity style={styles.listItem} onPress={() => this.props.navigation.navigate('Chat')}>
+      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <View style={styles.body}>
+        <View style={styles.title}>
+          <Text style={styles.name}>{item.fullName}</Text>
+          <Text style={styles.time}>{this.getTimeText(item.last.time)}</Text>
         </View>
-      </TouchableOpacity>
-    );
-  }
-
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <SceneHeader title="My messages" />
-        <FlatList
-          data={this.props.chats}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderItem}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-        />
+        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>{item.last.text}</Text>
       </View>
-    );
-  }
+    </TouchableOpacity>
+  )
+
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <SceneHeader title="My messages" />
+      <FlatList
+        data={this.props.chats}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

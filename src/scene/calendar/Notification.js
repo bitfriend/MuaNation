@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,7 +10,7 @@ import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 import { getNotification } from '../../controller/calendar/actions';
 
-class Notification extends Component {
+class Notification extends PureComponent {
   state = {
     rating: 0,
     comment: ''
@@ -20,90 +20,88 @@ class Notification extends Component {
     this.props.getNotification();
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader />
-        <ScrollView>
-          <Text style={styles.overview}>{this.props.notification.overview}</Text>
-          <View style={styles.card}>
-            <View style={styles.cardFirstLine}>
-              <Image source={{ uri: this.props.notification.avatar }} style={styles.avatar} />
-              <Text style={{
-                ...styles.label,
-                marginLeft: EStyleSheet.value('16rem'),
-                color: EStyleSheet.value('$title')
-              }}>
-                <Text>by </Text>
-                <Text style={{ fontWeight: 'bold' }}>{this.props.notification.fullName}</Text>
-              </Text>
-            </View>
-            <View style={styles.cardSecondLine}>
-              <Text style={{
-                ...styles.label,
-                flex: 1,
-                marginLeft: EStyleSheet.value('64rem'),
-                color: EStyleSheet.value('$title')
-              }}>
-                <Text>{moment(this.props.notification.createdAt).format('MMM d')} at </Text>
-                <Text style={{ fontWeight: 'bold' }}>{moment(this.props.notification.createdAt).format('h:mm A')}</Text>
-              </Text>
-              <ThemeButton
-                icon={{
-                  name: 'paper-plane',
-                  type: 'font-awesome',
-                  size: EStyleSheet.value('22rem')
-                }}
-                containerStyle={styles.chatContainer}
-                buttonStyle={styles.chat}
-              />
-            </View>
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader />
+      <ScrollView>
+        <Text style={styles.overview}>{this.props.notification.overview}</Text>
+        <View style={styles.card}>
+          <View style={styles.cardFirstLine}>
+            <Image source={{ uri: this.props.notification.avatar }} style={styles.avatar} />
+            <Text style={{
+              ...styles.label,
+              marginLeft: EStyleSheet.value('16rem'),
+              color: EStyleSheet.value('$title')
+            }}>
+              <Text>by </Text>
+              <Text style={{ fontWeight: 'bold' }}>{this.props.notification.fullName}</Text>
+            </Text>
           </View>
-          <View style={styles.separator} />
-          <Text style={styles.title}>Leave your review</Text>
-          <View style={styles.ratingWrapper}>
-            <StarRating
-              maxStars={5}
-              rating={this.state.rating}
-              selectedStar={(rating) => this.setState({ rating })}
-              containerStyle={styles.rating}
-              starSize={EStyleSheet.value('32rem')}
-              fullStarColor={EStyleSheet.value('$fullStar')}
-              emptyStar="star"
-              emptyStarColor={EStyleSheet.value('$emptyStar')}
-            />
-          </View>
-          <View style={styles.reviewWrapper}>
-            <View style={styles.reviewContainer}>
-              <Text style={{ ...styles.label, color: EStyleSheet.value('$label') }}>
-                <Text>The most professional nail care!</Text>
-                <Text>Thank you, Jane!</Text>
-              </Text>
-            </View>
-          </View>
-          <View style={actionStyles.container}>
-            <Button
-              buttonStyle={actionStyles.close}
-              icon={{
-                name: 'close',
-                type: 'material',
-                size: EStyleSheet.value('24rem'),
-                color: EStyleSheet.value('$grey0Color')
-              }}
-              TouchableComponent={TouchableOpacity}
-              onPress={() => this.props.navigation.pop()}
-            />
+          <View style={styles.cardSecondLine}>
+            <Text style={{
+              ...styles.label,
+              flex: 1,
+              marginLeft: EStyleSheet.value('64rem'),
+              color: EStyleSheet.value('$title')
+            }}>
+              <Text>{moment(this.props.notification.createdAt).format('MMM d')} at </Text>
+              <Text style={{ fontWeight: 'bold' }}>{moment(this.props.notification.createdAt).format('h:mm A')}</Text>
+            </Text>
             <ThemeButton
-              containerStyle={{ flex: 1 }}
-              buttonStyle={actionStyles.post}
-              title="Post review"
-              titleStyle={actionStyles.postTitle}
+              icon={{
+                name: 'paper-plane',
+                type: 'font-awesome',
+                size: EStyleSheet.value('22rem')
+              }}
+              containerStyle={styles.chatContainer}
+              buttonStyle={styles.chat}
             />
           </View>
-        </ScrollView>
-      </View>
-    );
-  }
+        </View>
+        <View style={styles.separator} />
+        <Text style={styles.title}>Leave your review</Text>
+        <View style={styles.ratingWrapper}>
+          <StarRating
+            maxStars={5}
+            rating={this.state.rating}
+            selectedStar={(rating) => this.setState({ rating })}
+            containerStyle={styles.rating}
+            starSize={EStyleSheet.value('32rem')}
+            fullStarColor={EStyleSheet.value('$fullStar')}
+            emptyStar="star"
+            emptyStarColor={EStyleSheet.value('$emptyStar')}
+          />
+        </View>
+        <View style={styles.reviewWrapper}>
+          <View style={styles.reviewContainer}>
+            <Text style={{ ...styles.label, color: EStyleSheet.value('$label') }}>
+              <Text>The most professional nail care!</Text>
+              <Text>Thank you, Jane!</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={actionStyles.container}>
+          <Button
+            buttonStyle={actionStyles.close}
+            icon={{
+              name: 'close',
+              type: 'material',
+              size: EStyleSheet.value('24rem'),
+              color: EStyleSheet.value('$grey0Color')
+            }}
+            TouchableComponent={TouchableOpacity}
+            onPress={() => this.props.navigation.pop()}
+          />
+          <ThemeButton
+            containerStyle={{ flex: 1 }}
+            buttonStyle={actionStyles.post}
+            title="Post review"
+            titleStyle={actionStyles.postTitle}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({

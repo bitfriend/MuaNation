@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Animated, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -12,7 +12,7 @@ import ThemeButton from '../../component/theme/Button';
 
 const drawerHeight = EStyleSheet.value('248rem');
 
-class SaleProduct extends Component {
+class SaleProduct extends PureComponent {
   state = {
     drawed: false
   }
@@ -46,65 +46,63 @@ class SaleProduct extends Component {
     }
   }
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ width: '100%', height: '100%' }}>
-          {this.props.images && (
-            <CubeNavigation>
-              {this.props.images.map(item => (
-                <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
-              ))}
-            </CubeNavigation>
-          )}
-        </View>
-        <Animated.View style={{
-          width: '100%',
-          height: drawerHeight,
-          transform: [{
-            translateY: this.animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
-            })
-          }]
-        }}>
-          <View style={styles.panel}>
-            <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={styles.drawer} />
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={productStyles.name}>{this.props.name}</Text>
-              <Text style={productStyles.extra}>{this.props.extra}</Text>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Text style={productStyles.symbol}>$</Text>
-                <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
-              </View>
-            </View>
-            <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
-            <View style={actionStyles.container}>
-              <Button
-                buttonStyle={actionStyles.close}
-                icon={{
-                  name: 'close',
-                  type: 'material',
-                  size: EStyleSheet.value('24rem'),
-                  color: EStyleSheet.value('$grey0Color')
-                }}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => this.props.navigation.pop()}
-              />
-              <ThemeButton
-                containerStyle={{ flex: 1 }}
-                buttonStyle={actionStyles.buy}
-                title="Buy"
-                titleStyle={actionStyles.buttonTitle}
-              />
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <View style={{ width: '100%', height: '100%' }}>
+        {this.props.images && (
+          <CubeNavigation>
+            {this.props.images.map((item, index) => (
+              <Image key={index} resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
+            ))}
+          </CubeNavigation>
+        )}
+      </View>
+      <Animated.View style={{
+        width: '100%',
+        height: drawerHeight,
+        transform: [{
+          translateY: this.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
+          })
+        }]
+      }}>
+        <View style={styles.panel}>
+          <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
+            <View style={styles.drawer} />
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={productStyles.name}>{this.props.name}</Text>
+            <Text style={productStyles.extra}>{this.props.extra}</Text>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <Text style={productStyles.symbol}>$</Text>
+              <Text style={productStyles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
             </View>
           </View>
-        </Animated.View>
-      </View>
-    );
-  }
+          <Text numberOfLines={2} style={productStyles.overview}>{this.props.overview}</Text>
+          <View style={actionStyles.container}>
+            <Button
+              buttonStyle={actionStyles.close}
+              icon={{
+                name: 'close',
+                type: 'material',
+                size: EStyleSheet.value('24rem'),
+                color: EStyleSheet.value('$grey0Color')
+              }}
+              TouchableComponent={TouchableOpacity}
+              onPress={() => this.props.navigation.pop()}
+            />
+            <ThemeButton
+              containerStyle={{ flex: 1 }}
+              buttonStyle={actionStyles.buy}
+              title="Buy"
+              titleStyle={actionStyles.buttonTitle}
+            />
+          </View>
+        </View>
+      </Animated.View>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({
@@ -127,24 +125,6 @@ const styles = EStyleSheet.create({
     height: '5rem',
     borderRadius: '2.5rem',
     backgroundColor: '$drawer'
-  }
-});
-
-const paginationStyles = EStyleSheet.create({
-  container: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    paddingBottom: '50rem'
-  },
-  dotContainer: {
-    marginHorizontal: '5rem'
-  },
-  dot: {
-    width: '7rem',
-    height: '7rem',
-    borderRadius: '3.5rem',
-    backgroundColor: '$container'
   }
 });
 

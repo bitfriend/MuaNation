@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { PureComponent } from 'react';
+import { Animated, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { compose } from 'redux';
@@ -14,7 +14,7 @@ const drawerHeight = EStyleSheet.value('402rem');
 
 const criteria = [0, 1, 2, 3, 4];
 
-class PopularProduct extends Component {
+class PopularProduct extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,117 +51,111 @@ class PopularProduct extends Component {
     }
   }
 
-  renderScore(score) {
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        {criteria.map((criterion, index) => (
-          <Icon
-            key={index}
-            type="font-awesome"
-            name="star"
-            size={EStyleSheet.value('16rem')}
-            color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
-            containerStyle={cardStyles.star}
-          />
-        ))}
-      </View>
-    );
-  }
+  renderScore = (score) => (
+    <View style={{ flexDirection: 'row' }}>
+      {criteria.map((criterion, index) => (
+        <Icon
+          key={index}
+          type="font-awesome"
+          name="star"
+          size={EStyleSheet.value('16rem')}
+          color={EStyleSheet.value(score > criterion ? '$fullStar' : '$emptyStar')}
+          containerStyle={cardStyles.star}
+        />
+      ))}
+    </View>
+  )
 
-  renderCard = ({ item, index, separators }) => {
-    return (
-      <View style={cardStyles.container}>
-        <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
-        <View style={cardStyles.body}>
-          <View style={{ width: '100%', flexDirection: 'row' }}>
-            <Text style={cardStyles.name}>{item.fullName}</Text>
-            {this.renderScore(item.score)}
-          </View>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={cardStyles.comment}>{item.comment}</Text>
+  renderCard = ({ item, index, separators }) => (
+    <View style={cardStyles.container}>
+      <Image source={{ uri: item.avatar }} style={cardStyles.avatar} />
+      <View style={cardStyles.body}>
+        <View style={{ width: '100%', flexDirection: 'row' }}>
+          <Text style={cardStyles.name}>{item.fullName}</Text>
+          {this.renderScore(item.score)}
         </View>
+        <Text numberOfLines={2} ellipsizeMode="tail" style={cardStyles.comment}>{item.comment}</Text>
       </View>
-    );
-  }
+    </View>
+  )
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ width: '100%', height: '100%' }}>
-          {this.props.images && (
-            <CubeNavigation>
-              {this.props.images.map(item => (
-                <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
-              ))}
-            </CubeNavigation>
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <View style={{ width: '100%', height: '100%' }}>
+        {this.props.images && (
+          <CubeNavigation>
+            {this.props.images.map(item => (
+              <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
+            ))}
+          </CubeNavigation>
+        )}
+      </View>
+      <Animated.View style={{
+        width: '100%',
+        height: drawerHeight,
+        transform: [{
+          translateY: this.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
+          })
+        }]
+      }}>
+        <View style={styles.panel}>
+          <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
+            <View style={styles.drawer} />
+          </TouchableOpacity>
+          <View style={styles.body}>
+            <Text style={styles.name}>{this.props.name}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.symbol}>$</Text>
+              <Text style={styles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
+            </View>
+          </View>
+          <ScrollView style={styles.overviewWrapper}>
+            <Text style={styles.overview}>{this.props.overview}</Text>
+          </ScrollView>
+          {this.props.reviews && (
+            <View style={listStyles.container}>
+              <FlatList
+                data={this.props.reviews}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={this.renderCard}
+                ListHeaderComponent={() => <View style={listStyles.header} />}
+                ListFooterComponent={() => <View style={listStyles.footer} />}
+                ItemSeparatorComponent={() => <View style={listStyles.separator} />}
+                horizontal
+              />
+            </View>
           )}
-        </View>
-        <Animated.View style={{
-          width: '100%',
-          height: drawerHeight,
-          transform: [{
-            translateY: this.animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
-            })
-          }]
-        }}>
-          <View style={styles.panel}>
-            <TouchableOpacity style={styles.drawerWrapper} onPress={this.onDrawed}>
-              <View style={styles.drawer} />
-            </TouchableOpacity>
-            <View style={styles.body}>
-              <Text style={styles.name}>{this.props.name}</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.symbol}>$</Text>
-                <Text style={styles.price}>{this.props.price && this.props.price.toFixed(2)}</Text>
-              </View>
-            </View>
-            <ScrollView style={styles.overviewWrapper}>
-              <Text style={styles.overview}>{this.props.overview}</Text>
-            </ScrollView>
-            {this.props.reviews && (
-              <View style={listStyles.container}>
-                <FlatList
-                  data={this.props.reviews}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={this.renderCard}
-                  ListHeaderComponent={() => <View style={listStyles.header} />}
-                  ListFooterComponent={() => <View style={listStyles.footer} />}
-                  ItemSeparatorComponent={() => <View style={listStyles.separator} />}
-                  horizontal
-                />
-              </View>
-            )}
-            <View style={actionStyles.container}>
-              <Button
-                buttonStyle={actionStyles.close}
-                icon={{
-                  name: 'close',
-                  type: 'material',
-                  size: EStyleSheet.value('24rem'),
-                  color: EStyleSheet.value('$grey0Color')
-                }}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => this.props.navigation.pop()}
-              />
-              <ThemeButton
-                containerStyle={{ flex: 1 }}
-                buttonStyle={actionStyles.book}
-                icon={{
-                  name: 'date-range',
-                  type: 'material',
-                  size: EStyleSheet.value('20rem')
-                }}
-                title="Book"
-                titleStyle={actionStyles.buttonTitle}
-                onPress={() => this.props.navigation.navigate('Booking')}
-              />
-            </View>
+          <View style={actionStyles.container}>
+            <Button
+              buttonStyle={actionStyles.close}
+              icon={{
+                name: 'close',
+                type: 'material',
+                size: EStyleSheet.value('24rem'),
+                color: EStyleSheet.value('$grey0Color')
+              }}
+              TouchableComponent={TouchableOpacity}
+              onPress={() => this.props.navigation.pop()}
+            />
+            <ThemeButton
+              containerStyle={{ flex: 1 }}
+              buttonStyle={actionStyles.book}
+              icon={{
+                name: 'date-range',
+                type: 'material',
+                size: EStyleSheet.value('20rem')
+              }}
+              title="Book"
+              titleStyle={actionStyles.buttonTitle}
+              onPress={() => this.props.navigation.navigate('Booking')}
+            />
           </View>
-        </Animated.View>
-      </View>
-    );
-  }
+        </View>
+      </Animated.View>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({
@@ -218,24 +212,6 @@ const styles = EStyleSheet.create({
     color: '$label',
     fontFamily: 'Roboto',
     fontSize: '18rem'
-  }
-});
-
-const paginationStyles = EStyleSheet.create({
-  container: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    paddingBottom: '50rem'
-  },
-  dotContainer: {
-    marginHorizontal: '5rem'
-  },
-  dot: {
-    width: '7rem',
-    height: '7rem',
-    borderRadius: '3.5rem',
-    backgroundColor: '$container'
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import moment from 'moment';
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import SceneHeader from '../../component/SceneHeader';
 import { getNotifications } from '../../controller/calendar/actions';
 
-class Notifications extends Component {
+class Notifications extends PureComponent {
   componentDidMount() {
     this.props.getNotifications();
   }
@@ -20,56 +20,52 @@ class Notifications extends Component {
     }
   }
 
-  renderItem = ({ item, index, separators }) => {
-    return (
-      <View style={styles.listItem}>
-        <Image source={{ uri: item.avatar }} style={styles.avatar} />
-        <View style={styles.itemBody}>
-          <View style={styles.overviewContainer}>
-            <Text numberOfLines={2} style={styles.overview}>
-              <Text style={{ fontWeight: 'bold' }}>{item.fullName}</Text>
-              <Text>{item.processed ? ' waiting for your review!' : ' changed time of booking, new time is '}</Text>
-              {!item.processed && (
-                <Text style={{ fontWeight: 'bold' }}>{moment(item.time).format('h:mm A, MMM D')}</Text>
-              )}
-            </Text>
-          </View>
-          <View style={styles.cardContainer}>
-            <TouchableOpacity onPress={() => this.onPress(item)} style={[styles.card, this.props.appTheme.styles.shadow4]}>
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={styles.title}>{item.title}</Text>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={styles.symbol}>$</Text>
-                  <Text style={styles.price}>{item.price.toFixed(2)}</Text>
-                </View>
+  renderItem = ({ item, index, separators }) => (
+    <View style={styles.listItem}>
+      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <View style={styles.itemBody}>
+        <View style={styles.overviewContainer}>
+          <Text numberOfLines={2} style={styles.overview}>
+            <Text style={{ fontWeight: 'bold' }}>{item.fullName}</Text>
+            <Text>{item.processed ? ' waiting for your review!' : ' changed time of booking, new time is '}</Text>
+            {!item.processed && (
+              <Text style={{ fontWeight: 'bold' }}>{moment(item.time).format('h:mm A, MMM D')}</Text>
+            )}
+          </Text>
+        </View>
+        <View style={styles.cardContainer}>
+          <TouchableOpacity onPress={() => this.onPress(item)} style={[styles.card, this.props.appTheme.styles.shadow4]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Text style={styles.title}>{item.title}</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Text style={styles.symbol}>$</Text>
+                <Text style={styles.price}>{item.price.toFixed(2)}</Text>
               </View>
-              <View style={styles.detailsContainer}>
-                <Text style={styles.time}>{moment(item.time).format('h:mm A')}</Text>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={styles.details}>View details</Text>
-                </View>
+            </View>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.time}>{moment(item.time).format('h:mm A')}</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Text style={styles.details}>View details</Text>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-    );
-  }
+    </View>
+  )
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <SceneHeader title="Notifications" />
-        <FlatList
-          data={this.props.notifications}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderItem}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          style={styles.list}
-        />
-      </View>
-    );
-  }
+  render = () => (
+    <View style={styles.container}>
+      <SceneHeader title="Notifications" />
+      <FlatList
+        data={this.props.notifications}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        style={styles.list}
+      />
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({
