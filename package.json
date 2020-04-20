@@ -14,7 +14,6 @@
     "http-status-codes": "^1.4.0",
     "moment": "^2.24.0",
     "react": "16.8.3",
-    "react-addons-shallow-compare": "^15.6.2",
     "react-native": "0.59.9",
     "react-native-calendars": "^1.212.0",
     "react-native-cookies": "^3.3.0",
@@ -26,6 +25,7 @@
     "react-native-instagram-login": "^1.1.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-maps": "^0.25.0",
+    "react-native-reanimated": "1.2.0",
     "react-native-simple-toast": "^0.1.1",
     "react-native-snap-carousel": "^3.8.4",
     "react-native-star-rating": "^1.1.0",
@@ -33,6 +33,7 @@
     "react-native-video": "^5.0.0",
     "react-native-webview": "5.12.1",
     "react-navigation": "^3.11.1",
+    "react-navigation-tabs": "^2.8.11",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"

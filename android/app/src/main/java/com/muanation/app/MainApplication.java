@@ -4,11 +4,10 @@ import android.app.Application;
 
 import com.facebook.CallbackManager;
 import com.facebook.react.ReactApplication;
+import com.swmansion.reanimated.ReanimatedPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
-
-
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -41,17 +40,18 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new FastImageViewPackage(),
-          new CookieManagerPackage(),
-          new RNCWebViewPackage(),
-          new FBSDKPackage(mCallbackManager),
-          new ReactVideoPackage(),
-          new MapsPackage(),
-          new LinearGradientPackage(),
-          new RNGestureHandlerPackage(),
-          new VectorIconsPackage(),
-          new AsyncStoragePackage()
+        new MainReactPackage(),
+        new ReanimatedPackage(),
+        new FastImageViewPackage(),
+        new CookieManagerPackage(),
+        new RNCWebViewPackage(),
+        new FBSDKPackage(mCallbackManager),
+        new ReactVideoPackage(),
+        new MapsPackage(),
+        new LinearGradientPackage(),
+        new RNGestureHandlerPackage(),
+        new VectorIconsPackage(),
+        new AsyncStoragePackage()
       );
     }
 

@@ -50,6 +50,8 @@ target 'muanation' do
   # pod 'GoogleMaps'  # Uncomment this line if you want to support GoogleMaps on iOS
   # pod 'Google-Maps-iOS-Utils' # Uncomment this line if you want to support GoogleMaps on iOS
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   target 'muanationTests' do
     inherit! :search_paths
     # Pods for testing

@@ -15,7 +15,6 @@ import { Icon, ThemeProvider } from 'react-native-elements';
 import {
   createAppContainer,
   createBottomTabNavigator,
-  createMaterialTopTabNavigator,
   createStackNavigator,
   createSwitchNavigator
 } from 'react-navigation';
@@ -139,6 +138,8 @@ const topTabStyles = EStyleSheet.create({
     backgroundColor: '$secondaryColor'
   }
 });
+
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 const FeaturedTabNav = createMaterialTopTabNavigator({
   Artists: {
