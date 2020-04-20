@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { compose } from 'redux';
@@ -10,18 +10,11 @@ import CubeNavigation from '../../component/CubeNavigation';
 import { getSaleProduct } from '../../controller/product/actions';
 import ThemeButton from '../../component/theme/Button';
 
-const Color = require('color');
-
-const drawerHeight = 248;
+const drawerHeight = EStyleSheet.value('248rem');
 
 class SaleProduct extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawed: false
-    };
-    this.windowWidth = Dimensions.get('window').width;
-    this.windowHeight = Dimensions.get('window').height;
+  state = {
+    drawed: false
   }
 
   animatedValue = new Animated.Value(0);
@@ -67,11 +60,11 @@ class SaleProduct extends Component {
         </View>
         <Animated.View style={{
           width: '100%',
-          height: EStyleSheet.value(drawerHeight + 'rem'),
+          height: drawerHeight,
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value(drawerHeight + 'rem')]
+              outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
             })
           }]
         }}>

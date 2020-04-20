@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
 import { compose } from 'redux';
@@ -7,14 +7,10 @@ import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
 const saleImageWidth = 254;
+const popularImageWidth = EStyleSheet.value(`${(375 - 16 * 3) / 2}rem`);
+const popularImageHeight = popularImageWidth * 0.8;
 
 class Products extends Component {
-  componentDidMount() {
-    const { width } = Dimensions.get('window');
-    this.popularImageWidth = (width - EStyleSheet.value('16rem') * 3) / 2;
-    this.popularImageHeight = this.popularImageWidth * 0.8;
-  }
-
   renderSaleProduct = ({ item, index, separators }) => {
     return (
       <View style={saleStyles.itemWrapper}>
@@ -44,14 +40,14 @@ class Products extends Component {
     return (
       <TouchableOpacity style={{
         ...popularStyles.item,
-        width: this.popularImageWidth // Must specify the width of item for multi-column list
+        width: popularImageWidth // Must specify the width of item for multi-column list
       }} onPress={() => {
         this.props.navigation.navigate('PopularProduct', { id: 0 });
       }}>
         <FastImage
           style={{
-            width: this.popularImageWidth,
-            height: this.popularImageHeight,
+            width: popularImageWidth,
+            height: popularImageHeight,
             borderRadius: EStyleSheet.value('8rem')
           }}
           source={{ uri: item.image }}

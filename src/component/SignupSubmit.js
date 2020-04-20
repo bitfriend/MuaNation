@@ -1,5 +1,5 @@
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
   StyleSheet,
@@ -17,7 +17,7 @@ import { signUp } from '../controller/auth/actions';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
+const DEVICE_WIDTH = Dimensions.get('window').width;
 const MARGIN = 200;
 
 class SignupSubmit extends Component {

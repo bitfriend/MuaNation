@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
@@ -10,13 +10,12 @@ import SceneHeader from '../../component/SceneHeader';
 import ThemeButton from '../../component/theme/Button';
 import { getBooking } from '../../controller/calendar/actions';
 
+const imageWidth = EStyleSheet.value(`${375 - 16 * 2}rem`);
+const imageHeight = imageWidth * 0.65;
+
 class Booking extends Component {
   componentDidMount() {
     this.props.getBooking();
-
-    const { width } = Dimensions.get('window');
-    this.imageWidth = width - EStyleSheet.value('16rem') * 2;
-    this.imageHeight = this.imageWidth * 0.65;
   }
 
   render() {
@@ -26,8 +25,8 @@ class Booking extends Component {
         <ScrollView>
           <FastImage
             style={{
-              width: this.imageWidth,
-              height: this.imageHeight,
+              width: imageWidth,
+              height: imageHeight,
               ...styles.banner
             }}
             source={{ uri: this.props.booking.image }}

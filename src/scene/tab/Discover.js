@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Animated, Dimensions, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Easing, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MapView, { Marker } from 'react-native-maps';
@@ -13,6 +13,8 @@ import { setLoading, clearLoading } from '../../controller/common/actions';
 import { fetchNeighbours, getCriteria, selectCategory, deselectCategory, setPriceRange, setMinScore, setMaxDistance } from '../../controller/discover/actions';
 
 const Color = require('color');
+
+const sliderLength = EStyleSheet.value(`${375 - 16 * 2}rem`);
 
 class Discover extends Component {
   state = {
@@ -33,9 +35,6 @@ class Discover extends Component {
   animatedValue = new Animated.Value(0);
 
   componentDidMount() {
-    this.windowWidth = Dimensions.get('window').width;
-    this.sliderLength = this.windowWidth - EStyleSheet.value('16rem') * 2;
-
     navigator.geolocation.getCurrentPosition(
       location => {
         this.setState({ location });
@@ -155,7 +154,7 @@ class Discover extends Component {
           <View style={styles.sliderWrapper}>
             <MultiSlider
               values={[this.state.criteria.price.min, this.state.criteria.price.max]}
-              sliderLength={this.sliderLength}
+              sliderLength={sliderLength}
               onValuesChange={(values) => this.setState({
                 criteria: {
                   ...this.state.criteria,
@@ -207,7 +206,7 @@ class Discover extends Component {
           <View style={styles.sliderWrapper}>
             <MultiSlider
               values={[this.state.criteria.distance.max]}
-              sliderLength={this.sliderLength}
+              sliderLength={sliderLength}
               onValuesChange={(values) => this.setState({
                 criteria: {
                   ...this.state.criteria,

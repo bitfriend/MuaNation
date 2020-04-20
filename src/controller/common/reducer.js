@@ -1,8 +1,8 @@
 import { Dimensions } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const { width: windowWidth } = Dimensions.get('window');
-const rem = windowWidth / 375;
+const windowWidth = Dimensions.get('window').width;
+const rem = windowWidth / 375; // Design was in width of 375 px
 
 // Pre-define $rem to calculate lightStyles and darkStyles
 EStyleSheet.build({

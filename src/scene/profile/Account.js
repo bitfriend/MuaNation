@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import FastImage from 'react-native-fast-image';
@@ -10,14 +10,12 @@ import ThemeButton from '../../component/theme/Button';
 import CategoryBar from '../../component/CategoryBar';
 import { getArtist, getArtistProducts } from '../../controller/artist/actions';
 
+const imageWidth = EStyleSheet.value(`${(375 - 16 * 3) / 2}rem`);
+const imageHeight = imageWidth * 0.8;
 const criteria = [0, 1, 2, 3, 4];
 
 class Account extends Component {
   componentDidMount() {
-    const { width } = Dimensions.get('window');
-    this.imageWidth = (width - EStyleSheet.value('16rem') * 3) / 2;
-    this.imageHeight = this.imageWidth * 0.8;
-
     const id = this.props.navigation.getParam('id');
     this.props.getArtist(id);
     this.props.getArtistProducts(id, '');
@@ -123,8 +121,8 @@ class Account extends Component {
         <View style={styles.listItem}>
           <FastImage
             style={{
-              width: this.imageWidth,
-              height: this.imageHeight,
+              width: imageWidth,
+              height: imageHeight,
               borderRadius: EStyleSheet.value('8rem')
             }}
             source={{ uri: item.image }}

@@ -1,18 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Animated, Dimensions, Easing, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { compose } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
+import CubeNavigation from '../../component/CubeNavigation';
 import { getPopularProduct } from '../../controller/product/actions';
 import ThemeButton from '../../component/theme/Button';
 
-const Color = require('color');
-
-const drawerHeight = 402;
+const drawerHeight = EStyleSheet.value('402rem');
 
 const criteria = [0, 1, 2, 3, 4];
 
@@ -20,11 +18,8 @@ class PopularProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeImage: 0,
       drawed: false
     };
-    this.windowWidth = Dimensions.get('window').width;
-    this.windowHeight = Dimensions.get('window').height;
   }
 
   animatedValue = new Animated.Value(0);
@@ -93,37 +88,20 @@ class PopularProduct extends Component {
       <View style={{ flex: 1 }}>
         <View style={{ width: '100%', height: '100%' }}>
           {this.props.images && (
-            <Fragment>
-              <Carousel
-                data={this.props.images}
-                renderItem={({ item, index }) => (
-                  <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
-                )}
-                sliderWidth={this.windowWidth}
-                itemWidth={this.windowWidth}
-                itemHeight={this.windowHeight}
-                onSnapToItem={(index) => this.setState({ activeImage: index })}
-              />
-              <Pagination
-                dotsLength={this.props.images.length}
-                activeDotIndex={this.state.activeImage}
-                containerStyle={paginationStyles.container}
-                dotContainerStyle={paginationStyles.dotContainer}
-                dotStyle={paginationStyles.dot}
-                inactiveDotStyle={paginationStyles.dot}
-                inactiveDotOpacity={0.3}
-                inactiveDotScale={1}
-              />
-            </Fragment>
+            <CubeNavigation>
+              {this.props.images.map(item => (
+                <Image resizeMode="cover" style={{ width: '100%', height: '100%' }} source={{ uri: item }} />
+              ))}
+            </CubeNavigation>
           )}
         </View>
         <Animated.View style={{
           width: '100%',
-          height: EStyleSheet.value(drawerHeight + 'rem'),
+          height: drawerHeight,
           transform: [{
             translateY: this.animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [-EStyleSheet.value('40rem'), -EStyleSheet.value(drawerHeight + 'rem')]
+              outputRange: [-EStyleSheet.value('40rem'), -drawerHeight]
             })
           }]
         }}>
