@@ -16,7 +16,7 @@ import { apiRequest } from '../../controller/api/actions';
 import { setLoading, clearLoading } from '../../controller/common/actions';
 import * as types from '../../controller/auth/types';
 
-const Color = require('color');
+const windowWidth = Dimensions.get('window').width;
 
 class SignIn extends Component {
   constructor(props) {
@@ -32,7 +32,6 @@ class SignIn extends Component {
       require('../../../asset/image/splash2.png'),
       require('../../../asset/image/splash3.png')
     ];
-    this.windowWidth = Dimensions.get('window').width;
   }
 
   componentDidMount() {
@@ -51,71 +50,58 @@ class SignIn extends Component {
           this.props.signInFailure();
           return;
         }
-        AccessToken.getCurrentAccessToken().then(
-          (result) => {
-            console.log('get token successful', result.accessToken);
-            const request = new GraphRequest('/me', {
-              accessToken: result.accessToken,
-              parameters: {
-                fields: { string: ['id', 'name', 'email'].join(',') }
-              }
-            }, (error, res) => {
-              if (error) {
-                console.log('facebook get info failed', error);
-                this.props.clearLoading();
-                this.props.signInFailure();
-                Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-                return;
-              }
-              console.log('facebook login successful', res);
-              AsyncStorage.getItem('mua_token').then(muaToken => {
-                this.props.apiRequest({
-                  callback: true,
-                  url: '/users/add.json',
-                  method: 'POST',
-                  data: {
-                    type: 'facebook',
+        AccessToken.getCurrentAccessToken().then(result => {
+          console.log('get token successful', result.accessToken);
+          const request = new GraphRequest('/me', {
+            accessToken: result.accessToken,
+            parameters: {
+              fields: { string: ['id', 'name', 'email'].join(',') }
+            }
+          }, (error, res) => {
+            if (error) {
+              console.log('facebook get info failed', error);
+              this.props.clearLoading();
+              this.props.signInFailure();
+              Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+              return;
+            }
+            console.log('facebook login successful', res);
+            this.props.apiRequest({
+              callback: true,
+              url: '/users/add.json',
+              method: 'POST',
+              data: {
+                type: 'facebook',
+                facebook_id: res.id,
+                email: res.email
+              },
+              onSuccess: (data) => {
+                AsyncStorage.setItem('mua_token', data.token).then(() => {
+                  this.props.signInSuccess({
                     facebook_id: res.id,
-                    email: res.email
-                  },
-                  onSuccess: (json) => {
-                    if (json.message.success) {
-                      this.props.signInSuccess({
-                        facebook_id: res.id,
-                        username: res.name,
-                        email: res.email,
-                        facebook_token: result.accessToken
-                      });
-                      this.props.clearLoading();
-                      this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
-                    } else {
-                      this.props.signInFailure();
-                      this.props.clearLoading();
-                      Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
-                    }
-                  },
-                  onFailure: (error) => {
-                    this.props.signInFailure();
-                    this.props.clearLoading();
-                    Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
-                  },
-                  label: 'Login'
+                    username: res.name,
+                    email: res.email,
+                    facebook_token: result.accessToken
+                  });
+                  this.props.clearLoading();
+                  this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
                 });
-              }).catch(error => {
+              },
+              onFailure: (error) => {
                 this.props.signInFailure();
                 this.props.clearLoading();
-                Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-              });
+                Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+              },
+              label: 'Login'
             });
-            new GraphRequestManager().addRequest(request).start();
-          },
-          (reason) => {
-            console.log('facebook get token failed', reason);
-            this.props.clearLoading();
-            this.props.signInFailure();
-            Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
-          }
-        );
+          });
+          new GraphRequestManager().addRequest(request).start();
+        }).catch((reason) => {
+          console.log('facebook get token failed', reason);
+          this.props.clearLoading();
+          this.props.signInFailure();
+          Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+        });
       },
       (reason) => {
         console.log('facebook login failed', reason);
@@ -149,41 +135,39 @@ class SignIn extends Component {
         console.log('get user info successful', json.data);
         const userId = json.data.id;
         const userName = json.data.username;
-        AsyncStorage.getItem('mua_token').then(muaToken => {
-          this.props.apiRequest({
-            callback: true,
-            url: '/users/token.json',
-            method: 'POST',
-            data: {
-              type: 'instagram',
-              instagram_id: userId,
-              email
-            },
-            onSuccess: (json) => {
-              if (json.success) {
-                console.log('mua login successful', json);
-                this.props.signInSuccess({
-                  instagram_id: userId,
-                  username: userName,
-                  email,
-                  instagram_token: token
-                });
-                this.props.clearLoading();
-                this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
-              } else {
-                console.log('mua login failed', json);
-                this.props.signInFailure();
-                this.props.clearLoading();
-                Toast.showWithGravity(json.data.message, Toast.SHORT, Toast.CENTER);
-              }
-            },
-            onFailure: (reason) => {
+        this.props.apiRequest({
+          callback: true,
+          url: '/users/token.json',
+          method: 'POST',
+          data: {
+            type: 'instagram',
+            instagram_id: userId,
+            email
+          },
+          onSuccess: (json) => {
+            if (json.success) {
+              console.log('mua login successful', json);
+              this.props.signInSuccess({
+                instagram_id: userId,
+                username: userName,
+                email,
+                instagram_token: token
+              });
+              this.props.clearLoading();
+              this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+            } else {
+              console.log('mua login failed', json);
               this.props.signInFailure();
               this.props.clearLoading();
-              Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
-            },
-            label: 'Login'
-          });
+              Toast.showWithGravity(json.data.message, Toast.SHORT, Toast.CENTER);
+            }
+          },
+          onFailure: (reason) => {
+            this.props.signInFailure();
+            this.props.clearLoading();
+            Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+          },
+          label: 'Login'
         });
       },
       onFailure: (reason) => {
@@ -216,7 +200,7 @@ class SignIn extends Component {
             renderItem={({ item, index }) => (
               <Image resizeMode="contain" style={styles.banner} source={item} />
             )}
-            sliderWidth={this.windowWidth}
+            sliderWidth={windowWidth}
             itemWidth={EStyleSheet.value('331rem')}
             onSnapToItem={(index) => this.setState({ activeImage: index })}
           />

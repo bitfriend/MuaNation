@@ -24,9 +24,10 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
     accessToken,
     onSuccess,
     onFailure,
-    label,
-    headers
+    label
   } = action.payload;
+
+  let { headers } = action.payload;
 
   if (!!label) {
     dispatch(apiStart(label));
@@ -46,14 +47,14 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
   } else if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
     headers = headers || {};
     if (!(data instanceof FormData)) {
-      headers['Content-Type'] = 'application/json;charset=UTF-8';
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
     if (accessToken) {
       headers['Authorization'] = `Bearer ${accessToken}`;
     }
     request = fetch(baseURL + url, {
       method,
-      body: (data instanceof FormData) ? data : JSON.stringify(data),
+      body: (data instanceof FormData) ? data : qs.stringify(data),
       headers
     });
   } else if (method === 'DELETE') {
@@ -78,9 +79,21 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
       throw new Error(text);
     }
   }).then(json => {
-    if (json.success === false) {
-      if (json.errors) {
-        const text = Object.values(json.errors).join("\n");
+    if (json.message.success) {
+      if (onSuccess) {
+        if (callback) {
+          onSuccess(json.data);
+        } else {
+          dispatch(onSuccess(json.data));
+        }
+      }
+    } else {
+      if (json.message.validation_errors) {
+        const errors = [];
+        for (let field in json.message.validation_errors) {
+          errors.push(Object.values(json.message.validation_errors[field]));
+        }
+        const text = errors.join("\n");
         if (callback) {
           onFailure(text);
         } else {
@@ -94,14 +107,6 @@ export default apiMiddleware = ({ dispatch }) => next => action => {
         }
       } else {
         throw new Error('Unknown Error');
-      }
-      return;
-    }
-    if (onSuccess) {
-      if (callback) {
-        onSuccess(json);
-      } else {
-        dispatch(onSuccess(json));
       }
     }
   }).catch(error => {
