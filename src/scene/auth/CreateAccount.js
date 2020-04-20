@@ -25,89 +25,66 @@ class CreateAccount extends Component {
 
   onClickFacebook = () => {
     this.props.setLoading();
-    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
-      (result) => {
-        if (result.isCancelled) {
-          console.log('facebook login cancelled');
-          this.props.clearLoading();
-          this.props.joinFailure();
-          return;
-        }
-        AccessToken.getCurrentAccessToken().then(
-          (result) => {
-            console.log('get token successful', result.accessToken);
-            const request = new GraphRequest('/me', {
-              accessToken: result.accessToken,
-              parameters: {
-                fields: { string: ['id', 'name', 'email'].join(',') }
-              }
-            }, (error, res) => {
-              if (error) {
-                console.log('facebook get info failed', error);
-                this.props.clearLoading();
-                this.props.joinFailure();
-                Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-                return;
-              }
-              console.log('facebook login successful', res);
-              this.props.apiRequest({
-                callback: true,
-                url: '/users/add.json',
-                method: 'POST',
-                data: {
-                  type: 'facebook',
-                  facebook_id: res.id,
-                  username: res.name,
-                  email: res.email,
-                  password: '1234567890',
-                  facebook_token: result.accessToken,
-                  role: this.state.role,
-                  active: 1
-                },
-                onSuccess: (json) => {
-                  if (json.message.success) {
-                    this.props.joinSuccess();
-                    AsyncStorage.setItem('mua_token', json.data.token).then(() => {
-                      this.props.clearLoading();
-                      this.props.navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
-                    }).catch(error => {
-                      this.props.clearLoading();
-                      Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-                    });
-                  } else {
-                    this.props.joinFailure();
-                    this.props.clearLoading();
-                    Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
-                  }
-                },
-                onFailure: (error) => {
-                  this.props.signInFailure();
-                  this.props.clearLoading();
-                  Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
-                },
-                label: 'Login'
-              });
-            });
-            new GraphRequestManager().addRequest(request).start();
-          },
-          (reason) => {
-            console.log('facebook get token failed', reason);
-            this.props.clearLoading();
-            this.props.joinFailure();
-            Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
-          }
-        );
-      },
-      (reason) => {
-        console.log('facebook login failed', reason);
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(result => {
+      if (result.isCancelled) {
         this.props.clearLoading();
-        this.props.joinFailure();
-        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+        return;
       }
-    ).catch(reason => {
-      console.log('facebook login failed', reason);
+      AccessToken.getCurrentAccessToken().then(result => {
+        const request = new GraphRequest('/me', {
+          accessToken: result.accessToken,
+          parameters: {
+            fields: { string: ['id', 'name', 'email'].join(',') }
+          }
+        }, (error, res) => {
+          if (error) {
+            this.props.clearLoading();
+            Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+            return;
+          }
+          this.props.apiRequest({
+            callback: true,
+            url: '/users/add.json',
+            method: 'POST',
+            data: {
+              type: 'facebook',
+              facebook_id: res.id,
+              username: res.name,
+              email: res.email,
+              password: '1234567890',
+              facebook_token: result.accessToken,
+              role: this.state.role,
+              active: 1
+            },
+            onSuccess: (json) => {
+              if (json.message.success) {
+                this.props.join();
+                AsyncStorage.setItem('mua_token', json.data.token).then(() => {
+                  this.props.clearLoading();
+                  this.props.navigation.dispatch(StackActions.push({ routeName: 'ImportMedia' }));
+                }).catch(error => {
+                  this.props.clearLoading();
+                  Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+                });
+              } else {
+                this.props.clearLoading();
+                Toast.showWithGravity(json.message.msg, Toast.SHORT, Toast.CENTER);
+              }
+            },
+            onFailure: (error) => {
+              this.props.clearLoading();
+              Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+            },
+            label: 'Login'
+          });
+        });
+        new GraphRequestManager().addRequest(request).start();
+      }).catch(reason => {
+        this.props.clearLoading();
+        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+      });
+    }).catch(reason => {
       this.props.clearLoading();
-      this.props.joinFailure();
       Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
     });
   }
@@ -128,7 +105,6 @@ class CreateAccount extends Component {
         access_token: token
       },
       onSuccess: (json) => {
-        console.log('get user info successful', res.data);
         this.props.apiRequest({
           callback: true,
           url: '/users/add.json',
@@ -156,21 +132,17 @@ class CreateAccount extends Component {
               });
             } else {
               this.props.clearLoading();
-              this.props.joinFailure();
               Toast.showWithGravity(error.message.msg, Toast.SHORT, Toast.CENTER);
             }
           },
           onFailure: (error) => {
             this.props.clearLoading();
-            this.props.joinFailure();
             Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
           }
         });
       },
       onFailure: (error) => {
-        console.log('get user info failed', error);
         this.props.clearLoading();
-        this.props.joinFailure();
         Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
       },
       label: 'Join'
@@ -350,8 +322,7 @@ const mapDispatchToProps = (dispacth) => ({
   apiRequest: (params) => dispacth(apiRequest(params)),
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
-  joinSuccess: () => dispacth({ type: types.JOIN_SUCCESS }),
-  joinFailure: () => dispacth({ type: types.JOIN_FAILURE })
+  join: () => dispacth({ type: types.JOIN })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount);

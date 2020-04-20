@@ -26,14 +26,12 @@ class PopularProduct extends PureComponent {
     this.props.getPopularProduct(id);
   }
 
-  onDrawed = () => {
-    Animated.timing(this.animatedValue, {
-      toValue: this.state.drawed ? 0 : 1,
-      duration: 500,
-      easing: Easing.ease,
-      useNativeDriver: true
-    }).start(() => this.setState({ drawed: !this.state.drawed }));
-  }
+  onDrawed = () => Animated.timing(this.animatedValue, {
+    toValue: this.state.drawed ? 0 : 1,
+    duration: 500,
+    easing: Easing.ease,
+    useNativeDriver: true
+  }).start(() => this.setState({ drawed: !this.state.drawed }))
 
   renderScore = (score) => (
     <View style={{ flexDirection: 'row' }}>

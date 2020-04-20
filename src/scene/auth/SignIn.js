@@ -41,77 +41,58 @@ class SignIn extends Component {
 
   onClickFacebook = () => {
     this.props.setLoading();
-    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
-      (result) => {
-        if (result.isCancelled) {
-          console.log('facebook login cancelled');
-          this.props.clearLoading();
-          this.props.signInFailure();
-          return;
-        }
-        AccessToken.getCurrentAccessToken().then(result => {
-          console.log('get token successful', result.accessToken);
-          const request = new GraphRequest('/me', {
-            accessToken: result.accessToken,
-            parameters: {
-              fields: { string: ['id', 'name', 'email'].join(',') }
-            }
-          }, (error, res) => {
-            if (error) {
-              console.log('facebook get info failed', error);
-              this.props.clearLoading();
-              this.props.signInFailure();
-              Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
-              return;
-            }
-            console.log('facebook login successful', res);
-            this.props.apiRequest({
-              callback: true,
-              url: '/users/add.json',
-              method: 'POST',
-              data: {
-                type: 'facebook',
-                facebook_id: res.id,
-                email: res.email
-              },
-              onSuccess: (data) => {
-                AsyncStorage.setItem('mua_token', data.token).then(() => {
-                  this.props.signInSuccess({
-                    facebook_id: res.id,
-                    username: res.name,
-                    email: res.email,
-                    facebook_token: result.accessToken
-                  });
-                  this.props.clearLoading();
-                  this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
-                });
-              },
-              onFailure: (error) => {
-                this.props.signInFailure();
-                this.props.clearLoading();
-                Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
-              },
-              label: 'Login'
-            });
-          });
-          new GraphRequestManager().addRequest(request).start();
-        }).catch((reason) => {
-          console.log('facebook get token failed', reason);
-          this.props.clearLoading();
-          this.props.signInFailure();
-          Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
-        });
-      },
-      (reason) => {
-        console.log('facebook login failed', reason);
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(result => {
+      if (result.isCancelled) {
         this.props.clearLoading();
-        this.props.signInFailure();
-        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+        return;
       }
-    ).catch(reason => {
-      console.log('facebook login failed', reason);
+      AccessToken.getCurrentAccessToken().then(result => {
+        const request = new GraphRequest('/me', {
+          accessToken: result.accessToken,
+          parameters: {
+            fields: { string: ['id', 'name', 'email'].join(',') }
+          }
+        }, (error, res) => {
+          if (error) {
+            this.props.clearLoading();
+            Toast.showWithGravity(error, Toast.SHORT, Toast.CENTER);
+            return;
+          }
+          this.props.apiRequest({
+            callback: true,
+            url: '/users/add.json',
+            method: 'POST',
+            data: {
+              type: 'facebook',
+              facebook_id: res.id,
+              email: res.email
+            },
+            onSuccess: (data) => {
+              AsyncStorage.setItem('mua_token', data.token).then(() => {
+                this.props.signIn({
+                  facebook_id: res.id,
+                  username: res.name,
+                  email: res.email,
+                  facebook_token: result.accessToken
+                });
+                this.props.clearLoading();
+                this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
+              });
+            },
+            onFailure: (error) => {
+              this.props.clearLoading();
+              Toast.showWithGravity(error.message, Toast.SHORT, Toast.CENTER);
+            },
+            label: 'Login'
+          });
+        });
+        new GraphRequestManager().addRequest(request).start();
+      }).catch((reason) => {
+        this.props.clearLoading();
+        Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
+      });
+    }).catch(reason => {
       this.props.clearLoading();
-      this.props.signInFailure();
       Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
     });
   }
@@ -131,7 +112,6 @@ class SignIn extends Component {
         access_token: token
       },
       onSuccess: (json) => {
-        console.log('get user info successful', json.data);
         const userId = json.data.id;
         const userName = json.data.username;
         this.props.apiRequest({
@@ -145,8 +125,7 @@ class SignIn extends Component {
           },
           onSuccess: (json) => {
             if (json.success) {
-              console.log('mua login successful', json);
-              this.props.signInSuccess({
+              this.props.signIn({
                 instagram_id: userId,
                 username: userName,
                 email,
@@ -155,14 +134,11 @@ class SignIn extends Component {
               this.props.clearLoading();
               this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'AppTabNav' }));
             } else {
-              console.log('mua login failed', json);
-              this.props.signInFailure();
               this.props.clearLoading();
               Toast.showWithGravity(json.data.message, Toast.SHORT, Toast.CENTER);
             }
           },
           onFailure: (reason) => {
-            this.props.signInFailure();
             this.props.clearLoading();
             Toast.showWithGravity(reason, Toast.SHORT, Toast.CENTER);
           },
@@ -356,8 +332,7 @@ const mapDispatchToProps = (dispacth) => ({
   apiRequest: (params) => dispacth(apiRequest(params)),
   setLoading: () => dispacth(setLoading()),
   clearLoading: () => dispacth(clearLoading()),
-  signInSuccess: (payload) => dispacth({ type: types.SIGN_IN_SUCCESS, payload }),
-  signInFailure: () => dispacth({ type: types.SIGN_IN_FAILURE })
+  signIn: (payload) => dispacth({ type: types.SIGN_IN, payload })
 });
 
 export default connect(null, mapDispatchToProps)(SignIn);

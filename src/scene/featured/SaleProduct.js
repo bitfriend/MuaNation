@@ -24,14 +24,12 @@ class SaleProduct extends PureComponent {
     this.props.getSaleProduct(id);
   }
 
-  onDrawed = () => {
-    Animated.timing(this.animatedValue, {
-      toValue: this.state.drawed ? 0 : 1,
-      duration: 500,
-      easing: Easing.ease,
-      useNativeDriver: true
-    }).start(() => this.setState({ drawed: !this.state.drawed }));
-  }
+  onDrawed = () => Animated.timing(this.animatedValue, {
+    toValue: this.state.drawed ? 0 : 1,
+    duration: 500,
+    easing: Easing.ease,
+    useNativeDriver: true
+  }).start(() => this.setState({ drawed: !this.state.drawed }))
 
   render = () => (
     <View style={{ flex: 1 }}>

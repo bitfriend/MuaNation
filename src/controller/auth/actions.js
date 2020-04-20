@@ -19,14 +19,12 @@ export const signOut = (username, password) => {
       body: qs.stringify({ username, password })
     }).then(async (response) => {
       try {
-        dispatch({ type: types.SIGN_OUT_SUCCESS });
+        dispatch({ type: types.SIGN_OUT });
         dispatch(clearLoading());
       } catch (error) {
-        dispatch({ type: types.SIGN_OUT_FAILURE });
         dispatch(clearLoading());
       }
     }).catch(error => {
-      dispatch({ type: types.SIGN_OUT_FAILURE });
       dispatch(clearLoading());
     });
   }

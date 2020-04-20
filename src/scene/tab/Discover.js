@@ -58,17 +58,15 @@ class Discover extends Component {
     }
   }
 
-  onDrawed = () => {
-    Animated.timing(this.animatedValue, {
-      toValue: this.state.drawed ? 0 : 1,
-      duration: 300,
-      easing: Easing.ease,
-      useNativeDriver: true
-    }).start(() => this.setState({
-      drawed: !this.state.drawed,
-      editingCriterion: this.state.drawed ? '' : 'category'
-    }));
-  }
+  onDrawed = () => Animated.timing(this.animatedValue, {
+    toValue: this.state.drawed ? 0 : 1,
+    duration: 300,
+    easing: Easing.ease,
+    useNativeDriver: true
+  }).start(() => this.setState({
+    drawed: !this.state.drawed,
+    editingCriterion: this.state.drawed ? '' : 'category'
+  }))
 
   onCriterionClicked(criterion) {
     if (this.state.editingCriterion === criterion) {
@@ -77,27 +75,23 @@ class Discover extends Component {
         duration: 300,
         easing: Easing.ease,
         useNativeDriver: true
-      }).start(() => {
-        this.setState({
-          drawed: false,
-          editingCriterion: ''
-        });
-      });
+      }).start(() => this.setState({
+        drawed: false,
+        editingCriterion: ''
+      }));
     } else {
-      if (!this.state.editingCriterion) {
+      if (!!this.state.editingCriterion) {
+        this.setState({ editingCriterion: criterion });
+      } else {
         Animated.timing(this.animatedValue, {
           toValue: this.state.drawed ? 0 : 1,
           duration: 300,
           easing: Easing.ease,
           useNativeDriver: true
-        }).start(() => {
-          this.setState({
-            drawed: !this.state.drawed,
-            editingCriterion: criterion
-          });
-        });
-      } else {
-        this.setState({ editingCriterion: criterion });
+        }).start(() => this.setState({
+          drawed: !this.state.drawed,
+          editingCriterion: criterion
+        }));
       }
     }
   }
