@@ -11,6 +11,30 @@ const popularImageWidth = EStyleSheet.value(`${(375 - 16 * 3) / 2}rem`);
 const popularImageHeight = popularImageWidth * 0.8;
 
 class Products extends PureComponent {
+  render = () => (
+    <View style={styles.container}>
+      <Text style={styles.heading}>SALE</Text>
+      <View style={saleStyles.listWrapper}>
+        <FlatList
+          data={this.props.products}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderSaleProduct}
+          horizontal
+          ListHeaderComponent={() => <View style={saleStyles.listHeader} />}
+          ListFooterComponent={() => <View style={saleStyles.listFooter} />}
+        />
+      </View>
+      <Text style={styles.heading}>POPULAR</Text>
+      <FlatList
+        data={this.props.products}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderPopularProduct}
+        numColumns={2}
+        style={popularStyles.list}
+      />
+    </View>
+  )
+
   renderSaleProduct = ({ item, index, separators }) => (
     <View style={saleStyles.itemWrapper}>
       <View style={[saleStyles.item, this.props.appTheme.styles.shadow4]}>
@@ -55,30 +79,6 @@ class Products extends PureComponent {
         <Text style={popularStyles.price}>${item.price.toFixed(2)}</Text>
       </View>
     </TouchableOpacity>
-  )
-
-  render = () => (
-    <View style={styles.container}>
-      <Text style={styles.heading}>SALE</Text>
-      <View style={saleStyles.listWrapper}>
-        <FlatList
-          data={this.props.products}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderSaleProduct}
-          horizontal
-          ListHeaderComponent={() => <View style={saleStyles.listHeader} />}
-          ListFooterComponent={() => <View style={saleStyles.listFooter} />}
-        />
-      </View>
-      <Text style={styles.heading}>POPULAR</Text>
-      <FlatList
-        data={this.props.products}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={this.renderPopularProduct}
-        numColumns={2}
-        style={popularStyles.list}
-      />
-    </View>
   )
 }
 

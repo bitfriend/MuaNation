@@ -19,20 +19,19 @@ import * as types from '../../controller/auth/types';
 const windowWidth = Dimensions.get('window').width;
 
 class SignIn extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeImage: 0,
-      modalVisible: false,
-      instagramEmail: ''
-    };
-    this.instagramToken = '';
-    this.images = [
-      require('../../../asset/image/splash1.png'),
-      require('../../../asset/image/splash2.png'),
-      require('../../../asset/image/splash3.png')
-    ];
+  state = {
+    activeImage: 0,
+    modalVisible: false,
+    instagramEmail: ''
   }
+
+  instagramToken = ''
+
+  images = [
+    require('../../../asset/image/splash1.png'),
+    require('../../../asset/image/splash2.png'),
+    require('../../../asset/image/splash3.png')
+  ]
 
   componentDidMount() {
     // CookieManager.clearAll().then((res) => {

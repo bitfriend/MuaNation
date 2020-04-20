@@ -15,14 +15,11 @@ const drawerHeight = EStyleSheet.value('402rem');
 const criteria = [0, 1, 2, 3, 4];
 
 class PopularProduct extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawed: false
-    };
+  state = {
+    drawed: false
   }
 
-  animatedValue = new Animated.Value(0);
+  animatedValue = new Animated.Value(0)
 
   componentDidMount() {
     const id = this.props.navigation.getParam('id');

@@ -24,6 +24,29 @@ class Artists extends PureComponent {
     this.props.navigation.navigate('Artist');
   }
 
+  render = () => (
+    <View style={styles.container}>
+      <View style={styles.featuredWrapper}>
+        <FlatList
+          data={this.props.featuredArtists}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderCard}
+          horizontal
+          ListHeaderComponent={() => <View style={styles.listMargin} />}
+          ListFooterComponent={() => <View style={styles.listMargin} />}
+        />
+      </View>
+      <FlatList
+        data={this.props.artists}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={() => (
+          <View style={styles.separator} />
+        )}
+      />
+    </View>
+  )
+
   renderScore = (score) => (
     <Fragment>
       {criteria.map((criterion, index) => (
@@ -79,29 +102,6 @@ class Artists extends PureComponent {
     <View style={styles.listItem}>
       <FastImage style={styles.avatar} source={{ uri: item.avatar }} resizeMode={FastImage.resizeMode.cover} />
       <Text style={styles.listName}>{item.fullName}</Text>
-    </View>
-  )
-
-  render = () => (
-    <View style={styles.container}>
-      <View style={styles.featuredWrapper}>
-        <FlatList
-          data={this.props.featuredArtists}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderCard}
-          horizontal
-          ListHeaderComponent={() => <View style={styles.listMargin} />}
-          ListFooterComponent={() => <View style={styles.listMargin} />}
-        />
-      </View>
-      <FlatList
-        data={this.props.artists}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={this.renderItem}
-        ItemSeparatorComponent={() => (
-          <View style={styles.separator} />
-        )}
-      />
     </View>
   )
 }

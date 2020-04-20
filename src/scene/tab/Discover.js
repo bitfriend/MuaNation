@@ -32,7 +32,7 @@ class Discover extends Component {
     }
   };
 
-  animatedValue = new Animated.Value(0);
+  animatedValue = new Animated.Value(0)
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(

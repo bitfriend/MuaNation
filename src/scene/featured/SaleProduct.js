@@ -17,7 +17,7 @@ class SaleProduct extends PureComponent {
     drawed: false
   }
 
-  animatedValue = new Animated.Value(0);
+  animatedValue = new Animated.Value(0)
 
   componentDidMount() {
     const id = this.props.navigation.getParam('id');

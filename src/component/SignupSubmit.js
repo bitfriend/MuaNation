@@ -21,17 +21,13 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 const MARGIN = 200;
 
 class SignupSubmit extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isLoading: false,
-    };
-
-    this.buttonAnimated = new Animated.Value(0);
-    this.growAnimated = new Animated.Value(0);
-    this.onPress = this.onPress.bind(this);
+  state = {
+    isLoading: false
   }
+
+  buttonAnimated = new Animated.Value(0)
+
+  growAnimated = new Animated.Value(0)
 
   componentWillReceiveProps(nextProps) {
 
@@ -46,7 +42,7 @@ class SignupSubmit extends Component {
     //this.props.callback();
   }
 
-  onPress() {
+  onPress = () => {
     if (this.state.isLoading) return;
 
     this.setState({isLoading: true});
