@@ -27,25 +27,12 @@ class PopularProduct extends PureComponent {
   }
 
   onDrawed = () => {
-    if (this.state.drawed) {
-      Animated.timing(this.animatedValue, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true
-      }).start(() => {
-        this.setState({ drawed: false });
-      });
-    } else {
-      Animated.timing(this.animatedValue, {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true
-      }).start(() => {
-        this.setState({ drawed: true });
-      });
-    }
+    Animated.timing(this.animatedValue, {
+      toValue: this.state.drawed ? 0 : 1,
+      duration: 500,
+      easing: Easing.ease,
+      useNativeDriver: true
+    }).start(() => this.setState({ drawed: !this.state.drawed }));
   }
 
   renderScore = (score) => (

@@ -64,12 +64,10 @@ class Discover extends Component {
       duration: 300,
       easing: Easing.ease,
       useNativeDriver: true
-    }).start(() => {
-      this.setState({
-        drawed: !this.state.drawed,
-        editingCriterion: this.state.drawed ? '' : 'category'
-      });
-    });
+    }).start(() => this.setState({
+      drawed: !this.state.drawed,
+      editingCriterion: this.state.drawed ? '' : 'category'
+    }));
   }
 
   onCriterionClicked(criterion) {
